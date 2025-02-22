@@ -1,4 +1,4 @@
-package com.example.flutter_offline_music
+package com.giatk.flutter_offline_music
 
 import io.flutter.embedding.android.FlutterActivity
 

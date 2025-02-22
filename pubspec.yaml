@@ -28,12 +28,14 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  audio_service: ^0.18.17
+  awesome_notifications: ^0.10.1
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
   flutter_foreground_task: ^8.17.0
-  flutter_local_notifications: ^18.0.1
   just_audio: ^0.9.46
+  just_audio_background: ^0.0.1-beta.15
   marquee: ^2.3.0
   permission_handler: ^11.3.1
   provider: ^6.1.2

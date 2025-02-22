@@ -40,7 +40,8 @@ class _RotatingDiscState extends State<RotatingDisc>
 
   @override
   Widget build(BuildContext context) {
-    final isPlaying = Provider.of<PlayerProvider>(context).isPlaying;
+    final isPlaying =
+        Provider.of<PlayerProvider>(context).audioHandler.player.playing;
     if (isPlaying) {
       play();
     } else {

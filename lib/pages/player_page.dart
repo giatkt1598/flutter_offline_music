@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/auto_scroll_text.dart';
 import 'package:flutter_offline_music/components/rotating_disc.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/foreground_service.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 
 class PlayerPage extends StatefulWidget {
@@ -18,21 +21,13 @@ class PlayerPage extends StatefulWidget {
 class _PlayerPageState extends State<PlayerPage> {
   @override
   void initState() {
-    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
-    if (widget.music.id != playerProvider.music?.id) {
-      playerProvider.stopAsync().then((_) {
-        playerProvider.setMusic(widget.music);
-        playerProvider.play();
+    final audioHandler =
+        Provider.of<PlayerProvider>(context, listen: false).audioHandler;
+    if (widget.music.path != audioHandler.currentMediaItem?.id) {
+      audioHandler.stop().then((_) {
+        audioHandler.playMusic(widget.music);
       });
     }
-    MusicForegroundService.startService(context)
-        .then((onValue) {
-          print('[cus]done1');
-        })
-        .onError((e, st) {
-          print('[cus]has err');
-        });
-
     super.initState();
   }
 
@@ -44,7 +39,7 @@ class _PlayerPageState extends State<PlayerPage> {
 
   @override
   Widget build(BuildContext context) {
-    final playerProvider = Provider.of<PlayerProvider>(context);
+    final audioHandler = Provider.of<PlayerProvider>(context).audioHandler;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -87,7 +82,7 @@ class _PlayerPageState extends State<PlayerPage> {
                             //   ),
                             // ),
                             AutoScrollText(
-                              text: playerProvider.music?.name ?? '',
+                              text: audioHandler.currentMediaItem?.title ?? '',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
@@ -96,7 +91,7 @@ class _PlayerPageState extends State<PlayerPage> {
                             Opacity(
                               opacity: 0.4,
                               child: Text(
-                                playerProvider.music?.author ??
+                                audioHandler.currentMediaItem?.artist ??
                                     '<Không rõ tác giả>',
                                 style: TextStyle(fontSize: 14),
                               ),
@@ -105,21 +100,27 @@ class _PlayerPageState extends State<PlayerPage> {
                           ],
                         ),
                         Slider(
-                          value: playerProvider.position.inSeconds.toDouble(),
+                          value: min(
+                            audioHandler.position.inSeconds.toDouble(),
+                            audioHandler.duration.inSeconds.toDouble(),
+                          ),
                           min: 0,
-                          max: playerProvider.duration.inSeconds.toDouble(),
-                          onChanged: playerProvider.seek,
+                          max: audioHandler.duration.inSeconds.toDouble(),
+                          onChanged:
+                              (value) => audioHandler.seek(
+                                Duration(seconds: value.toInt()),
+                              ),
                           padding: EdgeInsets.zero,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              formatDuration(playerProvider.position.inSeconds),
+                              formatDuration(audioHandler.position.inSeconds),
                             ),
                             Text(
                               formatDuration(
-                                playerProvider.player.duration?.inSeconds ?? 0,
+                                audioHandler.player.duration?.inSeconds ?? 0,
                               ),
                             ),
                           ],
@@ -131,13 +132,21 @@ class _PlayerPageState extends State<PlayerPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                          onPressed: null,
-                          icon: Icon(Icons.shuffle_sharp, color: Colors.black),
+                          onPressed: () {
+                            audioHandler.setShuffle(!audioHandler.isShuffle);
+                          },
+                          icon: Opacity(
+                            opacity: audioHandler.isShuffle ? 1 : 0.3,
+                            child: Icon(
+                              Icons.shuffle_sharp,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
                         IconButton(
                           onPressed:
-                              playerProvider.canPrevious
-                                  ? playerProvider.previous
+                              audioHandler.canPrevious
+                                  ? audioHandler.skipToPrevious
                                   : null,
                           icon: Icon(Icons.skip_previous_rounded),
                         ),
@@ -151,14 +160,14 @@ class _PlayerPageState extends State<PlayerPage> {
                           ),
                           child: IconButton(
                             onPressed: () {
-                              if (playerProvider.isPlaying) {
-                                playerProvider.pause();
+                              if (audioHandler.player.playing) {
+                                audioHandler.pause();
                               } else {
-                                playerProvider.play();
+                                audioHandler.play();
                               }
                             },
                             icon: Icon(
-                              playerProvider.player.playing
+                              audioHandler.player.playing
                                   ? Icons.pause
                                   : Icons.play_arrow,
                             ),
@@ -168,14 +177,34 @@ class _PlayerPageState extends State<PlayerPage> {
                         ),
                         IconButton(
                           onPressed:
-                              playerProvider.canNext
-                                  ? playerProvider.next
+                              audioHandler.canNext
+                                  ? audioHandler.skipToNext
                                   : null,
                           icon: Icon(Icons.skip_next_rounded),
                         ),
                         IconButton(
-                          onPressed: null,
-                          icon: Icon(Icons.loop_rounded),
+                          onPressed: () {
+                            switch (audioHandler.player.loopMode) {
+                              case LoopMode.off:
+                                audioHandler.player.setLoopMode(LoopMode.all);
+                                break;
+                              case LoopMode.all:
+                                audioHandler.player.setLoopMode(LoopMode.one);
+                                break;
+                              default:
+                                audioHandler.player.setLoopMode(LoopMode.off);
+                                break;
+                            }
+                          },
+                          icon:
+                              audioHandler.player.loopMode == LoopMode.all
+                                  ? Icon(Icons.repeat_rounded)
+                                  : audioHandler.player.loopMode == LoopMode.one
+                                  ? Icon(Icons.repeat_one_rounded)
+                                  : Opacity(
+                                    opacity: 0.3,
+                                    child: Icon(Icons.repeat_rounded),
+                                  ),
                         ),
                       ],
                     ),

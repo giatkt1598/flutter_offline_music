@@ -11,9 +11,10 @@ class SongListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final playerProvider = Provider.of<PlayerProvider>(context);
+    final audioHandler = Provider.of<PlayerProvider>(context).audioHandler;
     bool isCurrent =
-        playerProvider.music?.id == music.id && playerProvider.isPlaying;
+        audioHandler.currentMediaItem?.id == music.path &&
+        audioHandler.player.playing;
     void onPressed() {
       // Navigator.push(
       //   context,

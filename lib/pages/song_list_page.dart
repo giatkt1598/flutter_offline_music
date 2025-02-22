@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/song_list_item.dart';
 import 'package:flutter_offline_music/models/music.dart';
@@ -27,7 +28,15 @@ class _SongListPageState extends State<SongListPage> {
         _musics = rs;
       });
 
-      playerProvider.setPlaylist(rs);
+      if (playerProvider.audioHandler.playlist.isEmpty) {
+        playerProvider.audioHandler.setPlaylist(
+          rs
+              .map(
+                (e) => MediaItem(id: e.path, title: e.name, artist: e.author),
+              )
+              .toList(),
+        );
+      }
     });
     super.initState();
   }
@@ -40,7 +49,7 @@ class _SongListPageState extends State<SongListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final playerProvider = Provider.of<PlayerProvider>(context);
+    final audioHandler = Provider.of<PlayerProvider>(context).audioHandler;
 
     return Scrollbar(
       controller: _scrollController,
@@ -61,14 +70,13 @@ class _SongListPageState extends State<SongListPage> {
                     onPressed:
                         _musics.isNotEmpty
                             ? () {
-                              if (_musics.first.id !=
-                                  playerProvider.music?.id) {
-                                playerProvider.stopAsync().then((_) {
-                                  playerProvider.setMusic(_musics.first);
-                                  playerProvider.play();
+                              if (_musics.first.path !=
+                                  audioHandler.currentMediaItem?.id) {
+                                audioHandler.stop().then((_) {
+                                  audioHandler.playMusic(_musics.first);
                                 });
                               } else {
-                                playerProvider.seek(0);
+                                audioHandler.seek(Duration.zero);
                               }
                             }
                             : null,
