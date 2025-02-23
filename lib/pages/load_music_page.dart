@@ -6,7 +6,6 @@ import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/pages/music_in_folder_page.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 
@@ -19,7 +18,23 @@ class LoadMusicPage extends StatefulWidget {
 
 class _LoadMusicPageState extends State<LoadMusicPage> {
   final MusicService _musicService = MusicService();
-  List<String> musicFormats = ['.mp3', '.m4a'];
+  List<String> musicFormats = [
+    '.mp3', // MP3 - Phổ biến nhất
+    '.m4a', // MPEG-4 Audio
+    '.wma', // Windows Media Audio
+    '.flac', // Free Lossless Audio Codec (Không mất dữ liệu)
+    '.wav', // Waveform Audio File Format
+    '.aac', // Advanced Audio Codec
+    '.ogg', // Ogg Vorbis
+    '.opus', // Opus - Hiệu suất cao
+    '.aiff', // Audio Interchange File Format
+    '.alac', // Apple Lossless Audio Codec
+    '.dsd', // Direct Stream Digital
+    '.pcm', // Pulse Code Modulation
+    '.amr', // Adaptive Multi-Rate (dùng cho ghi âm)
+    '.mid', // MIDI (dùng cho nhạc cụ điện tử)
+    '.mp2', // MPEG Layer II (dùng trong phát sóng)
+  ];
   List<MusicFolder> _musicFolders = [];
 
   @override
@@ -58,7 +73,9 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
         var type = await FileSystemEntity.type(element.path);
         bool isMusicFile =
             type == FileSystemEntityType.file &&
-            musicFormats.any((x) => element.path.endsWith(x));
+            musicFormats.any(
+              (x) => element.path.toLowerCase().endsWith(x.toLowerCase()),
+            );
         if (isMusicFile) {
           result.add(element.parent.path);
         } else if (type == FileSystemEntityType.directory) {
