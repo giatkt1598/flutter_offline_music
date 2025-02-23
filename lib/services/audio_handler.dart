@@ -64,24 +64,6 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       }
 
       await _player.setFilePath(mediaItem.id);
-      _player.durationStream.listen((d) {
-        notifyListeners();
-      });
-
-      _player.positionStream.listen((p) {
-        if (position >= duration) {
-          if (player.loopMode == LoopMode.one) {
-            seek(Duration.zero);
-          } else if (canNext) {
-            skipToNext();
-          } else if (player.loopMode == LoopMode.all && _playlist.isNotEmpty) {
-            playMediaItem(_playlist.first);
-          } else {
-            stop();
-          }
-        }
-        notifyListeners();
-      });
     } else if (position >= duration) {
       seek(Duration.zero);
     }
@@ -110,14 +92,12 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   @override
   Future<void> skipToNext() async {
     if (!canNext) return;
-    await stop();
     await playMediaItem(_playlist[currentIndex + 1]);
   }
 
   @override
   Future<void> skipToPrevious() async {
     if (!canPrevious) return;
-    await stop();
     await playMediaItem(_playlist[currentIndex - 1]);
   }
 
@@ -151,30 +131,76 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     // return super.customAction(name, extras);
   }
 
-  _createAudioPlayer() {
-    _player.playerStateStream.listen((state) {
+  @override
+  void dispose() {
+    _player.dispose();
+    super.dispose();
+  }
+
+  void _createAudioPlayer() {
+    _player.durationStream.listen((d) {
+      notifyListeners();
+    });
+
+    _player.positionStream.listen((p) {
+      if (position >= duration && duration > Duration.zero) {
+        if (player.loopMode == LoopMode.one) {
+          seek(Duration.zero);
+        } else if (canNext) {
+          skipToNext();
+        } else if (player.loopMode == LoopMode.all && _playlist.isNotEmpty) {
+          playMediaItem(_playlist.first);
+        } else {
+          stop();
+        }
+      }
+      notifyListeners();
+    });
+    _notifyAudioHandlerAboutPlaybackEvents();
+  }
+
+  void _notifyAudioHandlerAboutPlaybackEvents() {
+    _player.playbackEventStream.listen((PlaybackEvent event) {
+      final playing = _player.playing;
       playbackState.add(
-        PlaybackState(
-          playing: state.playing,
+        playbackState.value.copyWith(
           controls: [
-            // MediaControl.rewind,
+            MediaControl.skipToPrevious,
             MediaControl(
               androidIcon:
-                  state.playing
+                  playing
                       ? MediaControl.pause.androidIcon
                       : MediaControl.play.androidIcon,
-              label: state.playing ? 'Tạm dừng' : 'Phát',
+              label: playing ? 'Tạm dừng' : 'Phát',
               action: MediaAction.playPause,
             ),
-            // MediaControl.stop,
-            MediaControl(
-              androidIcon: 'drawable/audio_service_stop',
-              label: 'Đóng',
-              action: MediaAction.custom,
-            ),
+            MediaControl.skipToNext,
           ],
-          androidCompactActionIndices: [0, 1],
-          processingState: AudioProcessingState.ready,
+          systemActions: const {MediaAction.seek},
+          androidCompactActionIndices: const [0, 1, 2],
+          processingState:
+              const {
+                ProcessingState.idle: AudioProcessingState.idle,
+                ProcessingState.loading: AudioProcessingState.loading,
+                ProcessingState.buffering: AudioProcessingState.buffering,
+                ProcessingState.ready: AudioProcessingState.ready,
+                ProcessingState.completed: AudioProcessingState.completed,
+              }[_player.processingState]!,
+          repeatMode:
+              const {
+                LoopMode.off: AudioServiceRepeatMode.none,
+                LoopMode.one: AudioServiceRepeatMode.one,
+                LoopMode.all: AudioServiceRepeatMode.all,
+              }[_player.loopMode]!,
+          shuffleMode:
+              (_player.shuffleModeEnabled)
+                  ? AudioServiceShuffleMode.all
+                  : AudioServiceShuffleMode.none,
+          playing: playing,
+          updatePosition: _player.position,
+          bufferedPosition: _player.bufferedPosition,
+          speed: _player.speed,
+          queueIndex: event.currentIndex!,
         ),
       );
     });
