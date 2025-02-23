@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_offline_music/pages/home_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
+import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/services/audio_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +12,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => PlayerProvider()),
+        ChangeNotifierProvider(create: (context) => SettingProvider()),
       ],
       child: const MyApp(),
     ),
@@ -29,7 +32,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      home: const HomePage(),
+      home: Stack(children: [const HomePage()]),
+      builder: EasyLoading.init(),
     );
   }
 }

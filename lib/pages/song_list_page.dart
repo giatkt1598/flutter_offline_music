@@ -27,6 +27,7 @@ class _SongListPageState extends State<SongListPage> {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
 
     _musicService.getListMusicAsync().then((rs) {
+      if (rs.isEmpty) return;
       int totalDurationInSeconds = rs
           .map((m) => m.lengthInSecond)
           .reduce((a, b) => a + b);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/pages/load_music_page.dart';
+import 'package:flutter_offline_music/pages/setting_page.dart';
 import 'package:flutter_offline_music/pages/song_list_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,7 +20,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           title: Text('G-Player'),
           actions: [
             IconButton(onPressed: null, icon: Icon(Icons.search)),
-            IconButton(onPressed: null, icon: Icon(Icons.settings)),
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const SettingPage()),
+                );
+              },
+              icon: Icon(Icons.settings),
+            ),
           ],
           bottom: TabBar(
             isScrollable: true,

@@ -201,7 +201,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
           updatePosition: _player.position,
           bufferedPosition: _player.bufferedPosition,
           speed: _player.speed,
-          queueIndex: event.currentIndex!,
+          queueIndex: event.currentIndex,
         ),
       );
     });

@@ -2,6 +2,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
+  static final String _databaseName = 'g_player.db';
   static Database? _database;
 
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -15,8 +16,14 @@ class DatabaseHelper {
     return _database!;
   }
 
-  Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'g_player.db');
+  static Future<void> resetDatabase() async {
+    String path = join(await getDatabasesPath(), _databaseName);
+    await deleteDatabase(path);
+    _database = await _initDatabase();
+  }
+
+  static Future<Database> _initDatabase() async {
+    String path = join(await getDatabasesPath(), _databaseName);
     // delete database to debug
     // await deleteDatabase(path);
     return openDatabase(

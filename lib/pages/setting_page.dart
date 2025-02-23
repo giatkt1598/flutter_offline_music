@@ -1,0 +1,290 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
+import 'package:flutter_offline_music/pages/home_page.dart';
+import 'package:flutter_offline_music/pages/language_list_page.dart';
+import 'package:flutter_offline_music/services/database_helper.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+
+class SettingPage extends StatefulWidget {
+  const SettingPage({super.key});
+
+  @override
+  State<SettingPage> createState() => _SettingPageState();
+}
+
+class _SettingPageState extends State<SettingPage> {
+  bool skipSilent = true;
+  ThemeMode themeMode = ThemeMode.system;
+  String appVersion = "";
+
+  @override
+  void initState() {
+    PackageInfo.fromPlatform().then((rs) {
+      setState(() {
+        appVersion = rs.version;
+      });
+    });
+
+    super.initState();
+  }
+
+  void handleDeleteData(BuildContext context) async {
+    bool confirmed = await showConfirmDialog(
+      context: context,
+      title: "Xóa dữ liệu",
+      message: "Xóa tất cả dữ liệu?",
+    );
+    if (confirmed) {
+      await DatabaseHelper.resetDatabase();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Đã xóa dữ liệu"),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      Navigator.of(
+        context,
+      ).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Cài đặt"), actions: []),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SettingGroup(title: 'Giao diện chủ đề'),
+              SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  for (var mode in [
+                    ThemeMode.system,
+                    ThemeMode.dark,
+                    ThemeMode.light,
+                  ])
+                    Column(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              themeMode = mode;
+                            });
+                          },
+                          child: SizedBox(
+                            width: 100,
+                            height: 140,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 238, 238, 238),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(4),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.1),
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          {
+                            ThemeMode.system: "Hệ thống",
+                            ThemeMode.dark: "Tối",
+                            ThemeMode.light: "Sáng",
+                          }[mode]!,
+                        ),
+                        Transform.translate(
+                          offset: Offset(0, -10),
+                          child: Radio(
+                            value: mode,
+                            groupValue: themeMode,
+                            onChanged: (val) {
+                              setState(() {
+                                themeMode = val!;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                onTap: () {
+                  Navigator.of(context).push(
+                    PageRouteBuilder(
+                      pageBuilder:
+                          (context, animation, secondaryAnimation) =>
+                              LanguageListPage(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) =>
+                              SlideTransition(
+                                position: Tween(
+                                  begin: Offset(1, 0),
+                                  end: Offset(0, 0),
+                                ).animate(animation),
+                                child: child,
+                              ),
+                    ),
+                  );
+                },
+                title: Row(
+                  children: [
+                    Expanded(child: Text('Ngôn ngữ')),
+                    Opacity(opacity: 0.4, child: Text('Tiếng việt')),
+                    Opacity(
+                      opacity: 0.4,
+                      child: Icon(Icons.keyboard_arrow_right_outlined),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(),
+              SizedBox(height: 8),
+              SettingGroup(title: 'Trình phát nhạc'),
+              SettingItemSwitch(
+                value: skipSilent,
+                onChanged:
+                    (val) => setState(() {
+                      skipSilent = val;
+                    }),
+                title: "Bỏ qua khoảng lặng",
+              ),
+              SettingItemSwitch(
+                value: skipSilent,
+                onChanged:
+                    (val) => setState(() {
+                      skipSilent = val;
+                    }),
+                title: "To/nhỏ dần khi phát/tạm dừng, chuyển bài",
+              ),
+              SettingItemSwitch(
+                value: skipSilent,
+                onChanged:
+                    (val) => setState(() {
+                      skipSilent = val;
+                    }),
+                title: "Tạm dừng khi app khác phát",
+              ),
+              SettingItemSwitch(
+                value: skipSilent,
+                onChanged:
+                    (val) => setState(() {
+                      skipSilent = val;
+                    }),
+                title: "Phát/tạm dừng, chuyển bài bằng tai nghe",
+              ),
+              SettingItemSwitch(
+                value: skipSilent,
+                onChanged:
+                    (val) => setState(() {
+                      skipSilent = val;
+                    }),
+                title: "Tự động quét nhạc",
+              ),
+              Divider(),
+              SizedBox(height: 8),
+              SettingGroup(title: 'Thông tin ứng dụng'),
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                onTap: () {},
+                title: Text('Giới thiệu'),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                onTap: () {},
+                title: Row(
+                  children: [
+                    Expanded(child: Text('Phiên bản')),
+                    Opacity(opacity: 0.4, child: Text(appVersion)),
+                  ],
+                ),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                onTap: () {},
+                title: Text('Liên hệ & hỗ trợ'),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                onTap: () => handleDeleteData(context),
+                title: Text('Xóa dữ liệu', style: TextStyle(color: Colors.red)),
+              ),
+
+              SizedBox(height: 100),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SettingGroup extends StatelessWidget {
+  const SettingGroup({super.key, required this.title});
+
+  final String title;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 0),
+      child: Text(
+        title,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+      ),
+    );
+  }
+}
+
+class SettingItemSwitch extends StatelessWidget {
+  final bool value;
+  final ValueChanged<bool> onChanged;
+  final String title;
+
+  const SettingItemSwitch({
+    super.key,
+    required this.value,
+    required this.onChanged,
+    required this.title,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 0),
+      minTileHeight: 4,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        spacing: 24,
+        children: [
+          Expanded(child: Text(title, style: TextStyle(fontSize: 14))),
+          Transform.translate(
+            offset: Offset(10, 0),
+            child: Transform.scale(
+              scale: 0.7,
+              child: SizedBox(
+                height: 30,
+                child: Switch(value: value, onChanged: onChanged),
+              ),
+            ),
+          ),
+        ],
+      ),
+      onTap: () {
+        onChanged(!value);
+      },
+    );
+  }
+}

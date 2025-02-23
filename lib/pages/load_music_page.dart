@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/pages/music_in_folder_page.dart';
@@ -83,6 +84,11 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
   @override
   Widget build(BuildContext context) {
     void scanMusic() async {
+      EasyLoading.show(
+        maskType: EasyLoadingMaskType.black,
+        status: 'Đang quét nhạc...',
+        dismissOnTap: false,
+      );
       if (await requestStoragePermission()) {
         await _musicService.deleteAllMusicFolderAsync();
         await _musicService.deleteAllMusicAsync(); //TODO: delete not exists
@@ -124,6 +130,7 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
       } else {
         print("Permission Denied");
       }
+      EasyLoading.dismiss();
     }
 
     return SingleChildScrollView(
