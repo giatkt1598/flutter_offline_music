@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/auto_scroll_text.dart';
 import 'package:flutter_offline_music/components/rotating_disc.dart';
+import 'package:flutter_offline_music/components/rotating_image_disc.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:just_audio/just_audio.dart';
@@ -94,7 +95,10 @@ class _PlayerPageState extends State<PlayerPage> {
                         ),
                       ],
                     ),
-                    RotatingDisc(),
+                    if (thumbnail != null)
+                      RotatingImageDisc(backgroundImageUrl: thumbnail)
+                    else
+                      RotatingDisc(),
                     Column(
                       children: [
                         Column(

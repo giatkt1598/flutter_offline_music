@@ -53,9 +53,9 @@ class _RotatingDiscState extends State<RotatingDisc>
           MediaQuery.of(context).size.width,
           MediaQuery.of(context).size.height,
         ) *
-        0.8;
+        0.87;
 
-    size = min(size, 300);
+    size = min(size, 400);
 
     return RotationTransition(
       turns: _controller,
