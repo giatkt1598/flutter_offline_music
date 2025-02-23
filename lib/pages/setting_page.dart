@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
+import 'package:flutter_offline_music/models/app_setting.dart';
 import 'package:flutter_offline_music/pages/home_page.dart';
 import 'package:flutter_offline_music/pages/language_list_page.dart';
+import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/services/database_helper.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:provider/provider.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -14,9 +17,7 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
   bool skipSilent = true;
-  ThemeMode themeMode = ThemeMode.system;
   String appVersion = "";
-
   @override
   void initState() {
     PackageInfo.fromPlatform().then((rs) {
@@ -50,6 +51,8 @@ class _SettingPageState extends State<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final settingProvider = Provider.of<SettingProvider>(context);
+    final appSetting = settingProvider.appSetting;
     return Scaffold(
       appBar: AppBar(title: Text("Cài đặt"), actions: []),
       body: SingleChildScrollView(
@@ -72,9 +75,7 @@ class _SettingPageState extends State<SettingPage> {
                       children: [
                         InkWell(
                           onTap: () {
-                            setState(() {
-                              themeMode = mode;
-                            });
+                            settingProvider.setting(themeMode: mode);
                           },
                           child: SizedBox(
                             width: 100,
@@ -109,11 +110,9 @@ class _SettingPageState extends State<SettingPage> {
                           offset: Offset(0, -10),
                           child: Radio(
                             value: mode,
-                            groupValue: themeMode,
+                            groupValue: appSetting.themeMode,
                             onChanged: (val) {
-                              setState(() {
-                                themeMode = val!;
-                              });
+                              settingProvider.setting(themeMode: val);
                             },
                           ),
                         ),
@@ -156,43 +155,38 @@ class _SettingPageState extends State<SettingPage> {
               SizedBox(height: 8),
               SettingGroup(title: 'Trình phát nhạc'),
               SettingItemSwitch(
-                value: skipSilent,
-                onChanged:
-                    (val) => setState(() {
-                      skipSilent = val;
-                    }),
+                value: appSetting.skipSilent,
+                onChanged: (val) {
+                  settingProvider.setting(skipSilent: val);
+                },
                 title: "Bỏ qua khoảng lặng",
               ),
               SettingItemSwitch(
-                value: skipSilent,
-                onChanged:
-                    (val) => setState(() {
-                      skipSilent = val;
-                    }),
+                value: appSetting.autoVolumnPausePlay,
+                onChanged: (val) {
+                  settingProvider.setting(autoVolumnPausePlay: val);
+                },
                 title: "To/nhỏ dần khi phát/tạm dừng, chuyển bài",
               ),
               SettingItemSwitch(
-                value: skipSilent,
-                onChanged:
-                    (val) => setState(() {
-                      skipSilent = val;
-                    }),
+                value: appSetting.pauseWhenOpenOtherApp,
+                onChanged: (val) {
+                  settingProvider.setting(pauseWhenOpenOtherApp: val);
+                },
                 title: "Tạm dừng khi app khác phát",
               ),
               SettingItemSwitch(
-                value: skipSilent,
-                onChanged:
-                    (val) => setState(() {
-                      skipSilent = val;
-                    }),
+                value: appSetting.useHeadsetControl,
+                onChanged: (val) {
+                  settingProvider.setting(useHeadsetControl: val);
+                },
                 title: "Phát/tạm dừng, chuyển bài bằng tai nghe",
               ),
               SettingItemSwitch(
-                value: skipSilent,
-                onChanged:
-                    (val) => setState(() {
-                      skipSilent = val;
-                    }),
+                value: appSetting.autoScanFiles,
+                onChanged: (val) {
+                  settingProvider.setting(autoScanFiles: val);
+                },
                 title: "Tự động quét nhạc",
               ),
               Divider(),

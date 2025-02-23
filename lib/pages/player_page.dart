@@ -136,10 +136,7 @@ class _PlayerPageState extends State<PlayerPage> {
                           },
                           icon: Opacity(
                             opacity: audioHandler.isShuffle ? 1 : 0.3,
-                            child: Icon(
-                              Icons.shuffle_sharp,
-                              color: Colors.black,
-                            ),
+                            child: Icon(Icons.shuffle_sharp),
                           ),
                         ),
                         IconButton(
@@ -153,7 +150,7 @@ class _PlayerPageState extends State<PlayerPage> {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: Colors.black,
+                              color: Theme.of(context).colorScheme.secondary,
                               width: 2,
                             ), // 👈 Viền đen
                           ),

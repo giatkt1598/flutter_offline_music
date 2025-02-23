@@ -8,13 +8,17 @@ import 'package:provider/provider.dart';
 
 Future<void> main() async {
   await AppAudioHandler.createInstance();
+  var initialThemeMode = (await SettingProvider().loadSetting()).themeMode;
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => PlayerProvider()),
-        ChangeNotifierProvider(create: (context) => SettingProvider()),
+        ChangeNotifierProvider(
+          create:
+              (context) => SettingProvider(initialThemeMode: initialThemeMode),
+        ),
       ],
-      child: const MyApp(),
+      child: MyApp(),
     ),
   );
 }
@@ -25,14 +29,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final appSetting = Provider.of<SettingProvider>(context).appSetting;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Trình phát nhạc',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      home: Stack(children: [const HomePage()]),
+      darkTheme: ThemeData.dark(),
+      themeMode: appSetting.themeMode,
+      home: const HomePage(),
       builder: EasyLoading.init(),
     );
   }
