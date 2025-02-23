@@ -1,26 +1,35 @@
 class Music {
   int id;
   int musicFolderId;
-  String name;
+  String title;
   String path;
-  String? author;
-  int lengthInSecond = 0;
+  String? artist;
+  int lengthInSecond;
+  Duration get duration => Duration(seconds: lengthInSecond);
+  String? thumbnail;
+  String? genre;
 
   Music({
     required this.id,
     required this.musicFolderId,
-    required this.name,
+    required this.title,
     required this.path,
+    this.artist,
+    this.lengthInSecond = 0,
+    this.thumbnail,
+    this.genre,
   });
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'musicFolderId': musicFolderId,
-      'name': name,
+      'title': title,
       'path': path,
-      'author': author,
+      'artist': artist,
       'lengthInSecond': lengthInSecond,
+      'thumbnail': thumbnail,
+      'genre': genre,
     };
   }
 
@@ -28,8 +37,12 @@ class Music {
     return Music(
       id: json['id'],
       musicFolderId: json['musicFolderId'],
-      name: json['name'],
+      title: json['title'],
       path: json['path'],
+      genre: json['genre'],
+      thumbnail: json['thumbnail'],
+      artist: json['artist'],
+      lengthInSecond: json['lengthInSecond'],
     );
   }
 }

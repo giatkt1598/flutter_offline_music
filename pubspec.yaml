@@ -28,8 +28,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  audio_metadata_reader: ^1.1.0
   audio_service: ^0.18.17
-  awesome_notifications: ^0.10.1
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter

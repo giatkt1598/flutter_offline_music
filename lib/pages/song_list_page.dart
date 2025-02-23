@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/song_list_item.dart';
@@ -18,21 +20,27 @@ class _SongListPageState extends State<SongListPage> {
 
   final MusicService _musicService = MusicService();
   List<Music> _musics = [];
+  int _totalMinutes = 0;
 
   @override
   void initState() {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
 
     _musicService.getListMusicAsync().then((rs) {
+      int totalDurationInSeconds = rs
+          .map((m) => m.lengthInSecond)
+          .reduce((a, b) => a + b);
+
       setState(() {
         _musics = rs;
+        _totalMinutes = totalDurationInSeconds ~/ 60;
       });
 
       if (playerProvider.audioHandler.playlist.isEmpty) {
         playerProvider.audioHandler.setPlaylist(
           rs
               .map(
-                (e) => MediaItem(id: e.path, title: e.name, artist: e.author),
+                (e) => MediaItem(id: e.path, title: e.title, artist: e.artist),
               )
               .toList(),
         );
@@ -50,7 +58,6 @@ class _SongListPageState extends State<SongListPage> {
   @override
   Widget build(BuildContext context) {
     final audioHandler = Provider.of<PlayerProvider>(context).audioHandler;
-
     return Scrollbar(
       controller: _scrollController,
       child: SingleChildScrollView(
@@ -58,7 +65,7 @@ class _SongListPageState extends State<SongListPage> {
         child: Column(
           children: [
             SizedBox(height: 12),
-            Text('20 bài hát ・ 45 phút'),
+            Text('${_musics.length} bài hát ・ $_totalMinutes phút'),
             SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -85,7 +92,22 @@ class _SongListPageState extends State<SongListPage> {
                 ),
                 SizedBox(
                   width: 120,
-                  child: OutlinedButton(onPressed: null, child: Text('Trộn')),
+                  child: OutlinedButton(
+                    onPressed:
+                        _musics.isNotEmpty
+                            ? () {
+                              audioHandler.setShuffle(true);
+                              audioHandler.stop().then((_) {
+                                audioHandler.playMediaItem(
+                                  audioHandler.playlist[Random().nextInt(
+                                    audioHandler.playlist.length - 1,
+                                  )],
+                                );
+                              });
+                            }
+                            : null,
+                    child: Text('Ngẫu nhiên'),
+                  ),
                 ),
               ],
             ),

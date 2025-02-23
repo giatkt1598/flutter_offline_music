@@ -5,7 +5,9 @@ import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/pages/music_in_folder_page.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 
 class LoadMusicPage extends StatefulWidget {
   const LoadMusicPage({super.key});
@@ -95,16 +97,21 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
 
           var musicPaths = getMusicFiles(musicFolderPath);
           for (String musicPath in musicPaths) {
-            String name = musicPath.substring(
+            String fileName = musicPath.substring(
               musicPath.lastIndexOf('/') + 1,
               musicPath.lastIndexOf('.'),
             );
+
+            final metadata = readMetadata(File(musicPath));
             await _musicService.insertMusicAsync(
               Music(
                 id: 0,
                 musicFolderId: musicFolderId,
-                name: name,
+                title: metadata.title ?? fileName,
                 path: musicPath,
+                artist: metadata.artist,
+                genre: metadata.genres.join(', '),
+                lengthInSecond: metadata.duration?.inSeconds ?? 0,
               ),
             );
           }

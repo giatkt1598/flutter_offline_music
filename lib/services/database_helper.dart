@@ -34,10 +34,12 @@ id INTEGER PRIMARY KEY AUTOINCREMENT
 CREATE TABLE Music(
 id INTEGER PRIMARY KEY AUTOINCREMENT
 , musicFolderId INTEGER
-, name TEXT NOT NULL
+, title TEXT NOT NULL
 , path TEXT NOT NULL
-, author TEXT
+, artist TEXT
 , lengthInSecond INTEGER
+, thumbnail TEXT
+, genre TEXT
 , FOREIGN KEY (musicFolderId) REFERENCES MusicFolder(id) ON DELETE CASCADE);
           ''');
       },

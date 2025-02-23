@@ -5,7 +5,6 @@ import 'package:flutter_offline_music/components/auto_scroll_text.dart';
 import 'package:flutter_offline_music/components/rotating_disc.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
-import 'package:flutter_offline_music/services/foreground_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 

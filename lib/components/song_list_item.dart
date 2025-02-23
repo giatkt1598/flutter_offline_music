@@ -77,7 +77,7 @@ class SongListItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        music.name,
+                        music.title,
                         style: TextStyle(
                           fontWeight:
                               isCurrent ? FontWeight.bold : FontWeight.normal,
@@ -89,7 +89,7 @@ class SongListItem extends StatelessWidget {
                       Opacity(
                         opacity: 0.4,
                         child: Text(
-                          music.author ?? '<Không rõ tác giả>',
+                          music.artist ?? '<Không rõ tác giả>',
                           style: TextStyle(fontSize: 12),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,

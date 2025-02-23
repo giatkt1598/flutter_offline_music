@@ -45,8 +45,8 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   Future<void> playMusic(Music music) async {
     MediaItem item = MediaItem(
       id: music.path,
-      title: music.name,
-      artist: music.author ?? '<Không rõ tác giả>',
+      title: music.title,
+      artist: music.artist ?? '<Không rõ tác giả>',
       album: 'Tất cả',
       artUri: Uri.parse(
         'https://img.vn/uploads/version/img24-png-20190726133727cbvncjKzsQ.png',
@@ -103,6 +103,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   bool get isShuffle => _player.shuffleModeEnabled;
   setShuffle(bool isShuffle) {
+    if (_playlist.length < 2) return;
     if (isShuffle) {
       _player.setShuffleModeEnabled(true);
       _playlist.shuffle();
