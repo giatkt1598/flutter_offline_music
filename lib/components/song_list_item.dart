@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/pages/player_page.dart';
@@ -39,6 +42,14 @@ class SongListItem extends StatelessWidget {
       );
     }
 
+    var thumbnail =
+        audioHandler.playlist
+            .firstWhere(
+              (x) => x.id == music.path,
+              orElse: () => MediaItem(id: '', title: ''),
+            )
+            .artUri
+            ?.toFilePath();
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 2, bottom: 6),
       child: Container(
@@ -51,21 +62,21 @@ class SongListItem extends StatelessWidget {
               child: SizedBox(
                 width: 40,
                 height: 40,
-                child: Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child:
-                      isCurrent
-                          ? Image.asset(
-                            'assets/music.gif',
-                            width: 20,
-                            height: 20,
-                          )
-                          : Icon(Icons.music_note_rounded),
-                ),
+                child:
+                    thumbnail != null
+                        ? ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: Image.file(File(thumbnail)),
+                        )
+                        : Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Icon(Icons.music_note_rounded),
+                        ),
               ),
             ),
             Expanded(

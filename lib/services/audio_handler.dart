@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
@@ -23,6 +25,23 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     _playlist.clear();
     _playlist.addAll(playlist);
     _originPlaylist = [...playlist];
+
+    getTemporaryDirectory().then((tempDir) {
+      for (var item in _playlist) {
+        final pic = getPicture(item.id);
+        if (pic != null) {
+          final imgName = 'album_art_${item.id.replaceAll('/', '_')}.jpg';
+          final albumArtPath = "${tempDir.path}/$imgName";
+          if (!File(albumArtPath).existsSync()) {
+            File(albumArtPath).writeAsBytesSync(pic.bytes);
+          }
+          _playlist[_playlist.indexOf(item)] = item.copyWith(
+            artUri: Uri.file(albumArtPath),
+          );
+        }
+      }
+      notifyListeners();
+    });
   }
 
   MediaItem? _currentMediaItem;
@@ -48,9 +67,6 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       title: music.title,
       artist: music.artist ?? '<Không rõ tác giả>',
       album: 'Tất cả',
-      artUri: Uri.parse(
-        'https://img.vn/uploads/version/img24-png-20190726133727cbvncjKzsQ.png',
-      ),
     );
     await playMediaItem(item);
   }
@@ -67,9 +83,21 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     } else if (position >= duration) {
       seek(Duration.zero);
     }
-    _currentMediaItem = mediaItem;
-    this.mediaItem.add(_currentMediaItem);
 
+    final pic = getPicture(mediaItem.id);
+    if (pic != null) {
+      final tempDir = await getTemporaryDirectory();
+      final imgName = 'album_art_${mediaItem.id.replaceAll('/', '_')}.jpg';
+      final albumArtPath = "${tempDir.path}/$imgName";
+      if (!File(albumArtPath).existsSync()) {
+        File(albumArtPath).writeAsBytesSync(pic.bytes);
+      }
+      _currentMediaItem = mediaItem.copyWith(artUri: Uri.file(albumArtPath));
+    } else {
+      _currentMediaItem = mediaItem;
+    }
+
+    this.mediaItem.add(_currentMediaItem);
     await play();
     notifyListeners();
   }
@@ -136,6 +164,19 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   void dispose() {
     _player.dispose();
     super.dispose();
+  }
+
+  Picture? getPicture(String? path) {
+    if (path == null) {
+      return null;
+    }
+    final metadata = readMetadata(File(path), getImage: true);
+    if (metadata.pictures.isNotEmpty) {
+      Picture pic = metadata.pictures.first;
+      return pic;
+    } else {
+      return null;
+    }
   }
 
   void _createAudioPlayer() {
