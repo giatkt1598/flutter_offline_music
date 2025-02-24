@@ -1,11 +1,13 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
-import 'package:flutter_offline_music/models/app_setting.dart';
-import 'package:flutter_offline_music/pages/home_page.dart';
 import 'package:flutter_offline_music/pages/language_list_page.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/services/database_helper.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class SettingPage extends StatefulWidget {
@@ -33,19 +35,28 @@ class _SettingPageState extends State<SettingPage> {
     bool confirmed = await showConfirmDialog(
       context: context,
       title: "Xóa dữ liệu",
-      message: "Xóa tất cả dữ liệu?",
+      message: "Xóa tất cả dữ liệu, sau khi xóa, bạn cần khởi động lại app?",
     );
     if (confirmed) {
+      Future<void> clearTemporaryDirectory() async {
+        final tempDir = await getTemporaryDirectory(); // Lấy thư mục tạm
+        if (tempDir.existsSync()) {
+          tempDir.deleteSync(recursive: true); // Xóa toàn bộ file & thư mục con
+        }
+      }
+
       await DatabaseHelper.resetDatabase();
+      await clearTemporaryDirectory();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Đã xóa dữ liệu"),
+          content: Text("Đã xóa dữ liệu, vui lòng khởi động lại app..."),
           duration: Duration(seconds: 2),
         ),
       );
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+
+      Timer(Duration(seconds: 1), () {
+        exit(0);
+      });
     }
   }
 
