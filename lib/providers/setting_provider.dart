@@ -5,8 +5,9 @@ import 'package:flutter_offline_music/models/app_setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingProvider extends ChangeNotifier {
-  AppSetting _appSetting = AppSetting();
+  static AppSetting _appSetting = AppSetting();
   AppSetting get appSetting => _appSetting;
+  static AppSetting get staticAppSetting => _appSetting;
 
   SettingProvider({ThemeMode? initialThemeMode}) {
     _appSetting.themeMode = initialThemeMode ?? _appSetting.themeMode;

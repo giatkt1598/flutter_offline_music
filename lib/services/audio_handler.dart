@@ -4,6 +4,8 @@ import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/models/music.dart';
+import 'package:flutter_offline_music/providers/setting_provider.dart';
+import 'package:flutter_offline_music/utilities/find_nonsilent_position.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -80,6 +82,15 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       }
 
       await _player.setFilePath(mediaItem.id);
+      if (SettingProvider.staticAppSetting.skipSilent) {
+        // print('[wave]start');
+        // var nonSilentPosition = await findNonSilentPosition(mediaItem.id);
+        // print('[wave]end');
+        // if (nonSilentPosition != null) {
+        //   print('[wave]${nonSilentPosition.start}');
+        //   await _player.seek(nonSilentPosition.start);
+        // }
+      }
     } else if (position >= duration) {
       seek(Duration.zero);
     }
