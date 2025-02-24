@@ -1,0 +1,17 @@
+{
+  "name": "flutter_offline_music",
+  "version": "1.0.0",
+  "description": "A new Flutter project.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "splash": "flutter pub run flutter_native_splash:create",
+    "icon": "flutter pub run flutter_launcher_icons:main"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

@@ -36,6 +36,7 @@ dependencies:
   flutter_easyloading: ^3.0.5
   flutter_foreground_task: ^8.17.0
   flutter_launcher_icons: ^0.14.3
+  flutter_native_splash: ^2.4.5
   just_audio: ^0.9.46
   just_audio_background: ^0.0.1-beta.15
   marquee: ^2.3.0
@@ -64,6 +65,7 @@ flutter:
     - assets/disc_2.png
     - assets/music.gif
     - assets/disc_hole.png
+    - assets/splash.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -95,3 +97,8 @@ flutter_launcher_icons:
   image_path: "assets/icon.png"
   adaptive_icon_foreground: "assets/icon.png" # Android 8+
   adaptive_icon_background: "assets/icon.png"
+
+flutter_native_splash:
+  color: "#ff405c" # Màu nền splash
+  android: true
+  ios: true
