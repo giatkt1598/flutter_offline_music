@@ -135,6 +135,7 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
                 artist: metadata.artist,
                 genre: metadata.genres.join(', '),
                 lengthInSecond: metadata.duration?.inSeconds ?? 0,
+                creationTime: (await File(musicPath).stat()).changed,
               ),
             );
           }

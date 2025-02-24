@@ -47,6 +47,7 @@ id INTEGER PRIMARY KEY AUTOINCREMENT
 , lengthInSecond INTEGER
 , thumbnail TEXT
 , genre TEXT
+, creationTime TEXT
 , FOREIGN KEY (musicFolderId) REFERENCES MusicFolder(id) ON DELETE CASCADE);
           ''');
       },

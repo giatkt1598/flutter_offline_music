@@ -8,6 +8,7 @@ class Music {
   Duration get duration => Duration(seconds: lengthInSecond);
   String? thumbnail;
   String? genre;
+  DateTime? creationTime;
 
   Music({
     required this.id,
@@ -18,6 +19,7 @@ class Music {
     this.lengthInSecond = 0,
     this.thumbnail,
     this.genre,
+    this.creationTime,
   });
 
   Map<String, dynamic> toJson() {
@@ -30,6 +32,7 @@ class Music {
       'lengthInSecond': lengthInSecond,
       'thumbnail': thumbnail,
       'genre': genre,
+      'creationTime': creationTime?.toIso8601String(),
     };
   }
 
@@ -43,6 +46,10 @@ class Music {
       thumbnail: json['thumbnail'],
       artist: json['artist'],
       lengthInSecond: json['lengthInSecond'],
+      creationTime:
+          json['creationTime'] != null
+              ? DateTime.parse(json['creationTime'])
+              : null,
     );
   }
 }

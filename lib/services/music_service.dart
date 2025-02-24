@@ -51,16 +51,20 @@ class MusicService {
     await (await _db).insert(tableMusic, values);
   }
 
-  Future<List<Music>> getListMusicAsync({int? musicFolderId}) async {
+  Future<List<Music>> getListMusicAsync({
+    int? musicFolderId,
+    String? orderBy,
+  }) async {
     final db = await _db;
     var queryRs =
         musicFolderId != null
             ? await db.query(
               tableMusic,
               where: 'musicFolderId = ?',
+              orderBy: orderBy,
               whereArgs: [musicFolderId],
             )
-            : await db.query(tableMusic);
+            : await db.query(tableMusic, orderBy: orderBy);
     var list = queryRs.map((e) => Music.fromJson(e)).toList();
     return list;
   }

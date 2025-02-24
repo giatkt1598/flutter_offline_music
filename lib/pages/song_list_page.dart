@@ -3,10 +3,13 @@ import 'dart:math';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/song_list_item.dart';
+import 'package:flutter_offline_music/components/song_list_sort_button.dart';
+import 'package:flutter_offline_music/constants/constant.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SongListPage extends StatefulWidget {
   const SongListPage({super.key});
@@ -19,34 +22,48 @@ class _SongListPageState extends State<SongListPage> {
   final _scrollController = ScrollController();
 
   final MusicService _musicService = MusicService();
-  List<Music> _musics = [];
   int _totalMinutes = 0;
+
+  String? sortField;
+  String? sortDirection;
+
+  fetchData({String? sortField, String? sortDirection}) async {
+    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
+    final pref = await SharedPreferences.getInstance();
+    setState(() {
+      this.sortField =
+          sortField ??
+          pref.getString(Constants.prefKeyAllSongSortField) ??
+          'creationTime';
+      this.sortDirection =
+          sortDirection ??
+          pref.getString(Constants.prefKeyAllSongSortDirection) ??
+          'desc';
+    });
+    if (sortField != null) {
+      pref.setString(Constants.prefKeyAllSongSortField, sortField);
+    }
+    if (sortDirection != null) {
+      pref.setString(Constants.prefKeyAllSongSortDirection, sortDirection);
+    }
+    final musics = await _musicService.getListMusicAsync(
+      orderBy: '${this.sortField} ${this.sortDirection}',
+    );
+
+    if (musics.isEmpty) return;
+    int totalDurationInSeconds = musics
+        .map((m) => m.lengthInSecond)
+        .reduce((a, b) => a + b);
+
+    setState(() {
+      playerProvider.setMusics(musics);
+      _totalMinutes = totalDurationInSeconds ~/ 60;
+    });
+  }
 
   @override
   void initState() {
-    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
-
-    _musicService.getListMusicAsync().then((rs) {
-      if (rs.isEmpty) return;
-      int totalDurationInSeconds = rs
-          .map((m) => m.lengthInSecond)
-          .reduce((a, b) => a + b);
-
-      setState(() {
-        _musics = rs;
-        _totalMinutes = totalDurationInSeconds ~/ 60;
-      });
-
-      if (playerProvider.audioHandler.playlist.isEmpty) {
-        playerProvider.audioHandler.setPlaylist(
-          rs
-              .map(
-                (e) => MediaItem(id: e.path, title: e.title, artist: e.artist),
-              )
-              .toList(),
-        );
-      }
-    });
+    fetchData();
     super.initState();
   }
 
@@ -58,7 +75,9 @@ class _SongListPageState extends State<SongListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final audioHandler = Provider.of<PlayerProvider>(context).audioHandler;
+    final playerProvider = Provider.of<PlayerProvider>(context);
+    final audioHandler = playerProvider.audioHandler;
+    final musics = playerProvider.musics;
     return Scrollbar(
       controller: _scrollController,
       child: SingleChildScrollView(
@@ -66,7 +85,7 @@ class _SongListPageState extends State<SongListPage> {
         child: Column(
           children: [
             SizedBox(height: 12),
-            Text('${_musics.length} bài hát ・ $_totalMinutes phút'),
+            Text('${musics.length} bài hát ・ $_totalMinutes phút'),
             SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -76,12 +95,12 @@ class _SongListPageState extends State<SongListPage> {
                   width: 120,
                   child: OutlinedButton(
                     onPressed:
-                        _musics.isNotEmpty
+                        musics.isNotEmpty
                             ? () {
-                              if (_musics.first.path !=
+                              if (musics.first.path !=
                                   audioHandler.currentMediaItem?.id) {
                                 audioHandler.stop().then((_) {
-                                  audioHandler.playMusic(_musics.first);
+                                  audioHandler.playMusic(musics.first);
                                 });
                               } else {
                                 audioHandler.seek(Duration.zero);
@@ -95,7 +114,7 @@ class _SongListPageState extends State<SongListPage> {
                   width: 120,
                   child: OutlinedButton(
                     onPressed:
-                        _musics.isNotEmpty
+                        musics.isNotEmpty
                             ? () {
                               audioHandler.setShuffle(true);
                               audioHandler.stop().then((_) {
@@ -113,8 +132,30 @@ class _SongListPageState extends State<SongListPage> {
               ],
             ),
             SizedBox(height: 12),
-            for (var item in _musics) SongListItem(music: item),
-
+            Row(
+              children: [
+                Expanded(child: Container()),
+                if (musics.isNotEmpty &&
+                    sortField != null &&
+                    sortDirection != null)
+                  SongListSortButton(
+                    initialSortDirection: sortDirection!,
+                    initialSortField: sortField!,
+                    onChanged:
+                        (sortField, sortDirection) => fetchData(
+                          sortDirection: sortDirection,
+                          sortField: sortField,
+                        ),
+                  ),
+              ],
+            ),
+            ListView.builder(
+              itemCount: musics.length,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemBuilder:
+                  (context, index) => SongListItem(music: musics[index]),
+            ),
             SizedBox(height: 40),
           ],
         ),
