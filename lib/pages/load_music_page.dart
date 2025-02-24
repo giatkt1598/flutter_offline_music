@@ -195,17 +195,21 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
                                   color: Colors.amber,
                                 ),
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(mf.name),
-                                  Opacity(
-                                    opacity: 0.5,
-                                    child: Text(
-                                      '${mf.musics.length} bài hát ・ ${mf.path}',
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(mf.name),
+                                    Opacity(
+                                      opacity: 0.5,
+                                      child: Text(
+                                        '${mf.musics.length} bài hát ・ ${mf.path}',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ],
                           ),

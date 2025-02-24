@@ -22,7 +22,7 @@ class _SongListPageState extends State<SongListPage> {
   final _scrollController = ScrollController();
 
   final MusicService _musicService = MusicService();
-  int _totalMinutes = 0;
+  Duration _totalDuration = Duration.zero;
 
   String? sortField;
   String? sortDirection;
@@ -57,8 +57,16 @@ class _SongListPageState extends State<SongListPage> {
 
     setState(() {
       playerProvider.setMusics(musics);
-      _totalMinutes = totalDurationInSeconds ~/ 60;
+      _totalDuration = Duration(seconds: totalDurationInSeconds);
     });
+  }
+
+  String fDuration(Duration duration) {
+    int minutes = duration.inMinutes;
+    if (minutes < 60) return '$minutes phút';
+    int hours = minutes ~/ 60;
+    minutes = minutes % 60;
+    return '$hours giờ $minutes phút';
   }
 
   @override
@@ -85,7 +93,7 @@ class _SongListPageState extends State<SongListPage> {
         child: Column(
           children: [
             SizedBox(height: 12),
-            Text('${musics.length} bài hát ・ $_totalMinutes phút'),
+            Text('${musics.length} bài hát ・ ${fDuration(_totalDuration)}'),
             SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

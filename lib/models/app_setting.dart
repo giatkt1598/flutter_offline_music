@@ -8,6 +8,7 @@ class AppSetting {
   bool autoScanFiles = false;
   bool pauseWhenOpenOtherApp = true;
   String languageCode = 'vi';
+  String playerBackgroundImage = '';
 
   AppSetting({
     this.themeMode = ThemeMode.system,
@@ -17,6 +18,7 @@ class AppSetting {
     this.autoScanFiles = false,
     this.pauseWhenOpenOtherApp = true,
     this.languageCode = 'vi',
+    this.playerBackgroundImage = '',
   });
 
   Map<String, dynamic> toJson() {
@@ -28,6 +30,7 @@ class AppSetting {
       'autoScanFiles': autoScanFiles,
       'pauseWhenOpenOtherApp': pauseWhenOpenOtherApp,
       'languageCode': languageCode,
+      'playerBackgroundImage': playerBackgroundImage,
     };
   }
 
@@ -40,6 +43,7 @@ class AppSetting {
       autoScanFiles: json['autoScanFiles'],
       pauseWhenOpenOtherApp: json['pauseWhenOpenOtherApp'],
       languageCode: json['languageCode'],
+      playerBackgroundImage: json['playerBackgroundImage'],
     );
   }
 }

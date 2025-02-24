@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               isScrollable: true,
               tabs: [
                 Tab(child: Text('Bài hát')),
-                Tab(child: Text('Danh sách phát')),
+                Tab(child: Text('Thư viện')),
                 Tab(child: Text('Thư mục')),
               ],
             ),
@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           body: TabBarView(
             children: [
               SongListPage(),
-              Center(child: Text("Tìm kiếm")),
+              Center(child: Text("Thư viện")),
               LoadMusicPage(),
             ],
           ),

@@ -22,6 +22,7 @@ class SettingProvider extends ChangeNotifier {
     bool? autoScanFiles,
     bool? pauseWhenOpenOtherApp,
     String? languageCode,
+    String? playerBackgroundImage,
   }) async {
     _appSetting.autoScanFiles = autoScanFiles ?? _appSetting.autoScanFiles;
     _appSetting.autoVolumnPausePlay =
@@ -33,6 +34,8 @@ class SettingProvider extends ChangeNotifier {
     _appSetting.themeMode = themeMode ?? _appSetting.themeMode;
     _appSetting.useHeadsetControl =
         useHeadsetControl ?? _appSetting.useHeadsetControl;
+    _appSetting.playerBackgroundImage =
+        playerBackgroundImage ?? _appSetting.playerBackgroundImage;
     final pref = await SharedPreferences.getInstance();
     pref.setString('appSetting', jsonEncode(_appSetting.toJson()));
 

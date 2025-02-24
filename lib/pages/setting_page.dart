@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
 import 'package:flutter_offline_music/pages/language_list_page.dart';
+import 'package:flutter_offline_music/pages/setting_player_background_page.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/services/database_helper.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -64,6 +65,13 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     final settingProvider = Provider.of<SettingProvider>(context);
     final appSetting = settingProvider.appSetting;
+    String? backgroundName = '';
+    if (appSetting.playerBackgroundImage.isEmpty) {
+      backgroundName = 'Tự động';
+    } else {
+      backgroundName =
+          'Hình ${SettingPlayerBackgroundPage.images.indexOf(appSetting.playerBackgroundImage) + 1}';
+    }
     return Scaffold(
       appBar: AppBar(title: Text("Cài đặt"), actions: []),
       body: SingleChildScrollView(
@@ -93,7 +101,7 @@ class _SettingPageState extends State<SettingPage> {
                             height: 140,
                             child: Container(
                               decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 238, 238, 238),
+                                color: const Color.fromARGB(255, 51, 51, 51),
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(4),
                                 ),
@@ -131,36 +139,10 @@ class _SettingPageState extends State<SettingPage> {
                     ),
                 ],
               ),
-              ListTile(
-                contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                onTap: () {
-                  Navigator.of(context).push(
-                    PageRouteBuilder(
-                      pageBuilder:
-                          (context, animation, secondaryAnimation) =>
-                              LanguageListPage(),
-                      transitionsBuilder:
-                          (context, animation, secondaryAnimation, child) =>
-                              SlideTransition(
-                                position: Tween(
-                                  begin: Offset(1, 0),
-                                  end: Offset(0, 0),
-                                ).animate(animation),
-                                child: child,
-                              ),
-                    ),
-                  );
-                },
-                title: Row(
-                  children: [
-                    Expanded(child: Text('Ngôn ngữ')),
-                    Opacity(opacity: 0.4, child: Text('Tiếng việt')),
-                    Opacity(
-                      opacity: 0.4,
-                      child: Icon(Icons.keyboard_arrow_right_outlined),
-                    ),
-                  ],
-                ),
+              SettingItemSelect(
+                settingName: 'Ngôn ngữ',
+                settingValue: 'Tiếng Việt',
+                settingPage: LanguageListPage(),
               ),
               Divider(),
               SizedBox(height: 8),
@@ -200,6 +182,11 @@ class _SettingPageState extends State<SettingPage> {
                 },
                 title: "Tự động quét nhạc",
               ),
+              SettingItemSelect(
+                settingName: 'Hình nền',
+                settingPage: SettingPlayerBackgroundPage(),
+                settingValue: backgroundName,
+              ),
               Divider(),
               SizedBox(height: 8),
               SettingGroup(title: 'Thông tin ứng dụng'),
@@ -233,6 +220,53 @@ class _SettingPageState extends State<SettingPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class SettingItemSelect extends StatelessWidget {
+  const SettingItemSelect({
+    super.key,
+    required this.settingName,
+    required this.settingPage,
+    required this.settingValue,
+  });
+
+  final String settingName;
+  final String settingValue;
+  final Widget settingPage;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 0),
+      onTap: () {
+        Navigator.of(context).push(
+          PageRouteBuilder(
+            pageBuilder:
+                (context, animation, secondaryAnimation) => settingPage,
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) =>
+                    SlideTransition(
+                      position: Tween(
+                        begin: Offset(1, 0),
+                        end: Offset(0, 0),
+                      ).animate(animation),
+                      child: child,
+                    ),
+          ),
+        );
+      },
+      title: Row(
+        children: [
+          Expanded(child: Text(settingName)),
+          Opacity(opacity: 0.4, child: Text(settingValue)),
+          Opacity(
+            opacity: 0.4,
+            child: Icon(Icons.keyboard_arrow_right_outlined),
+          ),
+        ],
       ),
     );
   }

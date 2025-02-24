@@ -15,7 +15,7 @@ class PlayerProvider extends ChangeNotifier {
             (e) => MediaItem(
               id: e.path,
               title: e.title,
-              artist: e.artist,
+              artist: e.artist ?? '<Không rõ tác giả>',
               album: 'Tất cả',
             ),
           )

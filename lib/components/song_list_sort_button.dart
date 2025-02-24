@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_offline_music/providers/player_provider.dart';
-import 'package:flutter_offline_music/services/music_service.dart';
-import 'package:provider/provider.dart';
 
 class SongListSortButton extends StatefulWidget {
   const SongListSortButton({
@@ -20,16 +17,16 @@ class SongListSortButton extends StatefulWidget {
 }
 
 class _SongListSortButtonState extends State<SongListSortButton> {
-  final MusicService _musicService = MusicService();
   final Map<String, Map<String, IconData>> sortFieldOptions = {
     "title": {"Tên bài hát": Icons.music_note_rounded},
     "artist": {"Tên nghệ sĩ": Icons.person_outline_outlined},
     "lengthInSecond": {"Độ dài": Icons.swap_horiz},
-    "creationTime": {"Thời gian tạo": Icons.calendar_today},
   };
 
   String sortField = '';
   String sortDirection = '';
+
+  String get sortBy => '$sortField $sortDirection';
   @override
   void initState() {
     sortField = widget.initialSortField;
@@ -51,7 +48,7 @@ class _SongListSortButtonState extends State<SongListSortButton> {
             builder:
                 (context, setState) => Container(
                   padding: EdgeInsets.all(16),
-                  height: 500,
+                  height: 800,
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,6 +57,8 @@ class _SongListSortButtonState extends State<SongListSortButton> {
                       for (var item in sortFieldOptions.entries)
                         ListTile(
                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                          minTileHeight: 30,
+
                           onTap: () {
                             setState(() {
                               sortField = item.key;
@@ -78,6 +77,54 @@ class _SongListSortButtonState extends State<SongListSortButton> {
                                 }),
                           ),
                         ),
+                      ListTile(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                        onTap: () {
+                          setState(() {
+                            sortField = 'creationTime';
+                            sortDirection = 'desc';
+                          });
+                          closeModal();
+                        },
+                        minTileHeight: 30,
+                        title: Text('Mới nhất'),
+                        leading: Icon(Icons.fiber_new_rounded),
+                        trailing: Radio(
+                          value: 'creationTime desc',
+                          groupValue: sortBy,
+                          onChanged:
+                              (val) => setState(() {
+                                sortField = val!;
+                                sortDirection = 'desc';
+
+                                closeModal();
+                              }),
+                        ),
+                      ),
+                      ListTile(
+                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                        minTileHeight: 30,
+                        onTap: () {
+                          setState(() {
+                            sortField = 'creationTime';
+                            sortDirection = 'asc';
+                          });
+                          closeModal();
+                        },
+                        title: Text('Cũ nhất'),
+                        leading: Icon(Icons.history),
+                        trailing: Radio(
+                          value: 'creationTime asc',
+                          groupValue: sortBy,
+                          onChanged:
+                              (val) => setState(() {
+                                sortField = val!;
+                                sortDirection = 'asc';
+
+                                closeModal();
+                              }),
+                        ),
+                      ),
                       Divider(),
                       SizedBox(height: 16),
                       ModalTitle(title: 'Theo thứ tự'),
