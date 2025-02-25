@@ -48,7 +48,7 @@ class _SongListSortButtonState extends State<SongListSortButton> {
             builder:
                 (context, setState) => Container(
                   padding: EdgeInsets.all(16),
-                  height: 800,
+                  height: 440,
                   width: MediaQuery.of(context).size.width,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,6 +132,7 @@ class _SongListSortButtonState extends State<SongListSortButton> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 0),
                         title: Text('Tăng dần (A ⇀ Z)'),
                         leading: Icon(Icons.arrow_upward_rounded),
+                        minTileHeight: 30,
                         onTap: () {
                           setState(() {
                             sortDirection = 'asc';
@@ -152,6 +153,7 @@ class _SongListSortButtonState extends State<SongListSortButton> {
                         contentPadding: EdgeInsets.symmetric(horizontal: 0),
                         title: Text('Giảm dần (Z ⇀ A)'),
                         leading: Icon(Icons.arrow_downward_rounded),
+                        minTileHeight: 30,
                         onTap: () {
                           setState(() {
                             sortDirection = 'desc';

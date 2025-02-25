@@ -1,3 +1,4 @@
+import 'package:flutter_offline_music/services/db_table.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -31,14 +32,15 @@ class DatabaseHelper {
       version: 1,
       onCreate: (db, version) async {
         await db.execute('''
-CREATE TABLE MusicFolder(
+CREATE TABLE ${DbTable.musicFolder}(
 id INTEGER PRIMARY KEY AUTOINCREMENT
 , path TEXT NOT NULL
-, name TEXT NOT NULL);
+, name TEXT NOT NULL
+)
           ''');
 
         await db.execute('''
-CREATE TABLE Music(
+CREATE TABLE ${DbTable.music}(
 id INTEGER PRIMARY KEY AUTOINCREMENT
 , musicFolderId INTEGER
 , title TEXT NOT NULL
@@ -48,7 +50,26 @@ id INTEGER PRIMARY KEY AUTOINCREMENT
 , thumbnail TEXT
 , genre TEXT
 , creationTime TEXT
-, FOREIGN KEY (musicFolderId) REFERENCES MusicFolder(id) ON DELETE CASCADE);
+, FOREIGN KEY (musicFolderId) REFERENCES ${DbTable.musicFolder}(id) ON DELETE CASCADE
+)
+          ''');
+
+        await db.execute('''
+CREATE TABLE ${DbTable.library}(
+id INTEGER PRIMARY KEY AUTOINCREMENT
+, title TEXT NOT NULL
+, creationTime TEXT
+)
+          ''');
+
+        await db.execute('''
+CREATE TABLE ${DbTable.musicLibrary}(
+musicId INTEGER
+, libraryId INTEGER
+, PRIMARY KEY (musicId, libraryId)
+, FOREIGN KEY (musicId) REFERENCES ${DbTable.music}(id) ON DELETE CASCADE
+, FOREIGN KEY (libraryId) REFERENCES ${DbTable.library}(id) ON DELETE CASCADE
+)
           ''');
       },
     );

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_offline_music/pages/home_page.dart';
+import 'package:flutter_offline_music/pages/library_list_page.dart';
+import 'package:flutter_offline_music/pages/music_select_to_library_page.dart';
 import 'package:flutter_offline_music/pages/splash_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
@@ -39,7 +41,10 @@ class MyApp extends StatelessWidget {
       ),
       darkTheme: ThemeData.dark(),
       themeMode: appSetting.themeMode,
-      home: const SplashPage(home: HomePage()),
+      home: const SplashPage(
+        // home: LibraryListPage(),
+        home: HomePage(),
+      ),
       builder: EasyLoading.init(),
     );
   }

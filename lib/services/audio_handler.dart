@@ -28,22 +28,16 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     _playlist.addAll(playlist);
     _originPlaylist = [...playlist];
 
-    getTemporaryDirectory().then((tempDir) {
+    addArtPictureToPlaylist() async {
       for (var item in _playlist) {
-        final pic = getPicture(item.id);
-        if (pic != null) {
-          final imgName = 'album_art_${item.id.replaceAll('/', '_')}.jpg';
-          final albumArtPath = "${tempDir.path}/$imgName";
-          if (!File(albumArtPath).existsSync()) {
-            File(albumArtPath).writeAsBytesSync(pic.bytes);
-          }
-          _playlist[_playlist.indexOf(item)] = item.copyWith(
-            artUri: Uri.file(albumArtPath),
-          );
-        }
+        var art = await getPictureFile(item.id);
+        if (art == null) continue;
+        _playlist[_playlist.indexOf(item)] = item.copyWith(artUri: art.uri);
       }
       notifyListeners();
-    });
+    }
+
+    addArtPictureToPlaylist();
   }
 
   MediaItem? _currentMediaItem;
@@ -95,18 +89,11 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       seek(Duration.zero);
     }
 
-    final pic = getPicture(mediaItem.id);
-    if (pic != null) {
-      final tempDir = await getTemporaryDirectory();
-      final imgName = 'album_art_${mediaItem.id.replaceAll('/', '_')}.jpg';
-      final albumArtPath = "${tempDir.path}/$imgName";
-      if (!File(albumArtPath).existsSync()) {
-        File(albumArtPath).writeAsBytesSync(pic.bytes);
-      }
-      _currentMediaItem = mediaItem.copyWith(artUri: Uri.file(albumArtPath));
-    } else {
-      _currentMediaItem = mediaItem;
-    }
+    var albumArtFile = await getPictureFile(mediaItem.id);
+    _currentMediaItem =
+        albumArtFile != null
+            ? mediaItem.copyWith(artUri: albumArtFile.uri)
+            : mediaItem;
 
     this.mediaItem.add(_currentMediaItem);
     await play();
@@ -188,6 +175,22 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     } else {
       return null;
     }
+  }
+
+  Future<File?> getPictureFile(String filePath) async {
+    final tempDir = await getTemporaryDirectory();
+    final imgName = 'album_art_${filePath.replaceAll('/', '_')}.jpg';
+    final albumArtPath = "${tempDir.path}/$imgName";
+    var albumArtFile = File(albumArtPath);
+    if (albumArtFile.existsSync()) {
+      return albumArtFile;
+    }
+    final pic = getPicture(filePath);
+    if (pic != null) {
+      albumArtFile.writeAsBytesSync(pic.bytes);
+      return albumArtFile;
+    }
+    return null;
   }
 
   void _createAudioPlayer() {

@@ -8,6 +8,7 @@ import 'package:flutter_offline_music/constants/constant.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
+import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -61,14 +62,6 @@ class _SongListPageState extends State<SongListPage> {
     });
   }
 
-  String fDuration(Duration duration) {
-    int minutes = duration.inMinutes;
-    if (minutes < 60) return '$minutes phút';
-    int hours = minutes ~/ 60;
-    minutes = minutes % 60;
-    return '$hours giờ $minutes phút';
-  }
-
   @override
   void initState() {
     fetchData();
@@ -100,7 +93,7 @@ class _SongListPageState extends State<SongListPage> {
               spacing: 8,
               children: [
                 SizedBox(
-                  width: 120,
+                  width: 140,
                   child: OutlinedButton(
                     onPressed:
                         musics.isNotEmpty
@@ -119,7 +112,7 @@ class _SongListPageState extends State<SongListPage> {
                   ),
                 ),
                 SizedBox(
-                  width: 120,
+                  width: 140,
                   child: OutlinedButton(
                     onPressed:
                         musics.isNotEmpty

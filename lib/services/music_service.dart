@@ -1,6 +1,7 @@
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/services/database_helper.dart';
+import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:sqflite/sqlite_api.dart';
 
 class MusicService {
@@ -27,8 +28,8 @@ class MusicService {
     await (await _db).delete(tableMusicFolder);
   }
 
-  Future<List<MusicFolder>> getMusicFolderListAsync() async {
-    var queryRs = await (await _db).query(tableMusicFolder);
+  Future<List<MusicFolder>> getMusicFolderListAsync({String? orderBy}) async {
+    var queryRs = await (await _db).query(tableMusicFolder, orderBy: orderBy);
     var list = queryRs.map((e) => MusicFolder.fromJson(e)).toList();
 
     var musics = await getListMusicAsync();
@@ -67,5 +68,13 @@ class MusicService {
             : await db.query(tableMusic, orderBy: orderBy);
     var list = queryRs.map((e) => Music.fromJson(e)).toList();
     return list;
+  }
+
+  calcTotalDuration(List<Music> list) {
+    int totalDurationInSeconds =
+        list.isEmpty
+            ? 0
+            : list.map((m) => m.lengthInSecond).reduce((a, b) => a + b);
+    return fDuration(Duration(seconds: totalDurationInSeconds));
   }
 }

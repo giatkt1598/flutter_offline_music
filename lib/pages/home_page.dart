@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/pages/library_list_page.dart';
 import 'package:flutter_offline_music/pages/load_music_page.dart';
 import 'package:flutter_offline_music/pages/setting_page.dart';
 import 'package:flutter_offline_music/pages/song_list_page.dart';
@@ -48,11 +49,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
           ),
           body: TabBarView(
-            children: [
-              SongListPage(),
-              Center(child: Text("Thư viện")),
-              LoadMusicPage(),
-            ],
+            children: [SongListPage(), LibraryListPage(), LoadMusicPage()],
           ),
         ),
       ),

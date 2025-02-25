@@ -33,12 +33,12 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   void handleDeleteData(BuildContext context) async {
-    bool confirmed = await showConfirmDialog(
+    bool? confirmed = await showConfirmDialog(
       context: context,
       title: "Xóa dữ liệu",
       message: "Xóa tất cả dữ liệu, sau khi xóa, bạn cần khởi động lại app?",
     );
-    if (confirmed) {
+    if (confirmed == true) {
       Future<void> clearTemporaryDirectory() async {
         final tempDir = await getTemporaryDirectory(); // Lấy thư mục tạm
         if (tempDir.existsSync()) {
