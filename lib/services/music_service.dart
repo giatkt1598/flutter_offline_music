@@ -1,6 +1,7 @@
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/services/database_helper.dart';
+import 'package:flutter_offline_music/services/db_table.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:sqflite/sqlite_api.dart';
 
@@ -50,6 +51,16 @@ class MusicService {
     var values = model.toJson();
     values['id'] = null;
     await (await _db).insert(tableMusic, values);
+  }
+
+  Future<Music> getMusicAsync({String? path}) async {
+    var list = await (await _db).query(
+      DbTable.music,
+      where: 'path = ?',
+      whereArgs: [path],
+    );
+
+    return Music.fromJson(list.first);
   }
 
   Future<List<Music>> getListMusicAsync({

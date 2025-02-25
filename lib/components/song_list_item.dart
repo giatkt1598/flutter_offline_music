@@ -52,7 +52,7 @@ class SongListItem extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: onPressed,
-              child: MusicThumbnail(music: music),
+              child: MusicThumbnail(musicPath: music.path),
             ),
             Expanded(
               child: GestureDetector(

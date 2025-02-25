@@ -4,6 +4,7 @@ import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/services/audio_handler.dart';
 
 class PlayerProvider extends ChangeNotifier {
+  bool isShowMiniPlayer = true;
   AppAudioHandler get audioHandler => AppAudioHandler.instance;
   List<Music> musics = [];
 

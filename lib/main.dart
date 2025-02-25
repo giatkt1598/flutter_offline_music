@@ -41,10 +41,7 @@ class MyApp extends StatelessWidget {
       ),
       darkTheme: ThemeData.dark(),
       themeMode: appSetting.themeMode,
-      home: const SplashPage(
-        // home: LibraryListPage(),
-        home: HomePage(),
-      ),
+      home: const SplashPage(home: HomePage()),
       builder: EasyLoading.init(),
     );
   }

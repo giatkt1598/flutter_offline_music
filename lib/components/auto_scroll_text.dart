@@ -4,8 +4,14 @@ import 'package:marquee/marquee.dart';
 class AutoScrollText extends StatelessWidget {
   final String text;
   final TextStyle? style;
+  final bool? isCenter;
 
-  const AutoScrollText({super.key, required this.text, this.style});
+  const AutoScrollText({
+    super.key,
+    required this.text,
+    this.style,
+    this.isCenter,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +31,11 @@ class AutoScrollText extends StatelessWidget {
 
         bool shouldScroll =
             textPainter.width >= containerWidth; // Check if text overflows
+        var staticText = Text(
+          text,
+          style: style,
+          overflow: TextOverflow.ellipsis, // Show "..." if it overflows
+        );
         return SizedBox(
           height: fontSize + 10, // Ensure text fits properly
           width: containerWidth,
@@ -45,14 +56,9 @@ class AutoScrollText extends StatelessWidget {
                     decelerationDuration: Duration(milliseconds: 500),
                     decelerationCurve: Curves.easeOut,
                   )
-                  : Center(
-                    child: Text(
-                      text,
-                      style: style,
-                      overflow:
-                          TextOverflow.ellipsis, // Show "..." if it overflows
-                    ),
-                  ),
+                  : isCenter == true
+                  ? Center(child: staticText)
+                  : staticText,
         );
       },
     );

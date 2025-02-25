@@ -77,15 +77,20 @@ class _LibraryListPageState extends State<LibraryListPage> {
           if (libraries.isNotEmpty)
             Expanded(
               child: ListView.builder(
-                itemCount: libraries.length,
-                itemBuilder:
-                    (context, index) => Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: LibraryListItem(
-                        library: libraries[index],
-                        onRefresh: loadLibraries,
-                      ),
+                itemCount: libraries.length + 1,
+                itemBuilder: (context, index) {
+                  if (libraries.length == index) {
+                    return SizedBox(height: 90);
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: LibraryListItem(
+                      library: libraries[index],
+                      onRefresh: loadLibraries,
                     ),
+                  );
+                },
               ),
             )
           else

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/components/mini_player.dart';
 import 'package:flutter_offline_music/pages/library_list_page.dart';
 import 'package:flutter_offline_music/pages/load_music_page.dart';
 import 'package:flutter_offline_music/pages/setting_page.dart';
@@ -13,8 +14,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  bool initMiniPlayer = false;
   @override
   Widget build(BuildContext context) {
+    if (!initMiniPlayer) {
+      setState(() {
+        initMiniPlayer = true;
+      });
+      Future.delayed(
+        Duration(seconds: 1),
+      ).then((_) => MiniPlayer.showMiniPlayer(context));
+    }
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, Object? result) {

@@ -180,6 +180,7 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
                 itemBuilder: (_, index) => MusicListItem(music: musics[index]),
               ),
             ),
+          SizedBox(height: 90),
         ],
       ),
     );
@@ -193,16 +194,7 @@ class MusicListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final audioHandler = Provider.of<PlayerProvider>(context).audioHandler;
 
-    getThumbnail() async {
-      return await audioHandler.getPictureFile(music.path);
-    }
-
     void playMusic() {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => PlayerPage()),
-      // );
-
       Navigator.of(context).push(
         PageRouteBuilder(
           pageBuilder:
@@ -231,7 +223,7 @@ class MusicListItem extends StatelessWidget {
               ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.3)
               : null,
       onTap: playMusic,
-      leading: MusicThumbnail(music: music),
+      leading: MusicThumbnail(musicPath: music.path),
       trailing: IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
       title: Padding(
         padding: const EdgeInsets.only(left: 8),

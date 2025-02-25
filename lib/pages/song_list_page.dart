@@ -154,10 +154,11 @@ class _SongListPageState extends State<SongListPage> {
               itemCount: musics.length,
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              itemBuilder:
-                  (context, index) => SongListItem(music: musics[index]),
+              itemBuilder: (context, index) {
+                return SongListItem(music: musics[index]);
+              },
             ),
-            SizedBox(height: 40),
+            SizedBox(height: 90),
           ],
         ),
       ),
