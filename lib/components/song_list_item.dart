@@ -5,6 +5,7 @@ import 'package:flutter_offline_music/pages/player_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:provider/provider.dart';
 
+@Deprecated('Use MusicListItem widget for instead')
 class SongListItem extends StatelessWidget {
   const SongListItem({super.key, required this.music});
 

@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -23,9 +24,21 @@ class _RotatingImageDiscState extends State<RotatingImageDisc>
 
   // Load image from file and convert it to `ui.Image`
   Future<ui.Image> loadImage(String path) async {
+    final Completer<ui.Image> completer = Completer();
+
+    if (path.startsWith('assets/')) {
+      // Load image as ByteData
+      final ByteData data = await rootBundle.load(path);
+
+      // Convert ByteData to Uint8List
+      final Uint8List bytes = data.buffer.asUint8List();
+
+      ui.decodeImageFromList(bytes, (ui.Image img) => completer.complete(img));
+      return completer.future;
+    }
+
     final File imageFile = File(path);
     final Uint8List imageBytes = await imageFile.readAsBytes();
-    final Completer<ui.Image> completer = Completer();
     ui.decodeImageFromList(
       imageBytes,
       (ui.Image img) => completer.complete(img),
@@ -73,45 +86,47 @@ class _RotatingImageDiscState extends State<RotatingImageDisc>
         0.85;
 
     size = min(size, 400);
-
     return RotationTransition(
       turns: _controller,
       child: FutureBuilder<ui.Image>(
         future: loadImage(widget.backgroundImageUrl),
         builder: (context, snapshot) {
           if (snapshot.data == null) return Container();
-          return Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                width: size,
-                height: size,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 10,
-                      spreadRadius: 2,
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: size,
+                    height: size,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10,
+                          spreadRadius: 2,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: ClipOval(
-                  child: CustomPaint(
-                    size: Size(size, size),
-                    painter: CircleTransparentPainter(snapshot.data!),
+                    child: ClipOval(
+                      child: CustomPaint(
+                        size: Size(size, size),
+                        painter: CircleTransparentPainter(snapshot.data!),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-
-              Image.asset(
-                'assets/disc_hole.png',
-                width: 120,
-                height: 120,
-                fit: BoxFit.cover,
-              ),
-              // 🔹 Overlay with Circular Transparent Cutout
-            ],
+                  Image.asset(
+                    'assets/disc_hole.png',
+                    width: constraints.maxWidth * 0.4,
+                    height: constraints.maxWidth * 0.4,
+                    fit: BoxFit.cover,
+                  ),
+                  // 🔹 Overlay with Circular Transparent Cutout
+                ],
+              );
+            },
           );
         },
       ),

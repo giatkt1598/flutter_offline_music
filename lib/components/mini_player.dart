@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/auto_scroll_text.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
+import 'package:flutter_offline_music/components/rotating_disc.dart';
 import 'package:flutter_offline_music/pages/player_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
@@ -109,6 +110,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
       );
     }
 
+    bool hasThumbnail = audioHandler.currentMediaItem?.artUri != null;
     return Container(
       width: MediaQuery.of(context).size.width - 12,
       height: 80,
@@ -146,11 +148,18 @@ class _MiniPlayerState extends State<MiniPlayer> {
                         playerProvider.hideMiniPlayer();
                       },
                       onTap: openPlayerPage,
-                      child: MusicThumbnail(
-                        musicPath: mediaItem.id,
-                        size: 50,
-                        boxShape: BoxShape.rectangle,
-                      ),
+                      child:
+                          hasThumbnail
+                              ? MusicThumbnail(
+                                musicPath: mediaItem.id,
+                                size: 50,
+                                boxShape: BoxShape.rectangle,
+                              )
+                              : SizedBox(
+                                height: 60,
+                                width: 60,
+                                child: RotatingDisc(),
+                              ),
                     ),
                     Expanded(
                       child: GestureDetector(

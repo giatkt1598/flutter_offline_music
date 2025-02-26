@@ -1,7 +1,20 @@
 {
-    "PlayerOrovider": {
+    "PlayerProvider": {
         "scope": "dart",
         "prefix": "pp",
         "body": "final playerProvider = Provider$0.of<PlayerProvider>(context, $1);"
+    },
+    "ThemeContext": {
+        "scope": "dart",
+        "prefix": "tc",
+        "body": "Theme.of(context).$0"
+    },
+    
+    "MediaQuery": {
+        "scope": "dart",
+        "prefix": "mq",
+        "body": "MediaQuery.of(context).size.$0"
     }
+
+    
 }

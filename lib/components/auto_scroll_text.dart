@@ -6,6 +6,7 @@ class AutoScrollText extends StatelessWidget {
   final TextStyle? style;
   final bool? isCenter;
   final double? containerWidth;
+  final bool? useDebug;
 
   const AutoScrollText({
     super.key,
@@ -13,6 +14,7 @@ class AutoScrollText extends StatelessWidget {
     this.style,
     this.isCenter,
     this.containerWidth,
+    this.useDebug,
   });
 
   @override
@@ -40,7 +42,8 @@ class AutoScrollText extends StatelessWidget {
           style: style,
           overflow: TextOverflow.ellipsis, // Show "..." if it overflows
         );
-        return SizedBox(
+
+        var result = SizedBox(
           height: fontSize + 10, // Ensure text fits properly
           width: currentContainerWidth,
           child:
@@ -64,6 +67,20 @@ class AutoScrollText extends StatelessWidget {
                   ? Center(child: staticText)
                   : staticText,
         );
+
+        if (useDebug == true) {
+          return Row(
+            children: [
+              Container(
+                width: currentContainerWidth,
+                color: Colors.amber,
+                child: result,
+              ),
+            ],
+          );
+        }
+
+        return result;
       },
     );
   }

@@ -1,11 +1,9 @@
 import 'dart:math';
 
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_offline_music/components/song_list_item.dart';
+import 'package:flutter_offline_music/components/music_list_item.dart';
 import 'package:flutter_offline_music/components/song_list_sort_button.dart';
 import 'package:flutter_offline_music/constants/constant.dart';
-import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
@@ -155,7 +153,7 @@ class _SongListPageState extends State<SongListPage> {
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return SongListItem(music: musics[index]);
+                return MusicListItem(music: musics[index]);
               },
             ),
             SizedBox(height: 90),

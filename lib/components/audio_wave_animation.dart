@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-import 'dart:math';
 
 class AudioWaveAnimation extends StatefulWidget {
   const AudioWaveAnimation({super.key});
