@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/components/add_music_item_to_library.dart';
 import 'package:flutter_offline_music/components/music_info.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/models/music.dart';
@@ -39,6 +40,28 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
               ],
             ),
           ),
+        );
+      },
+    );
+    playerProvider.showMiniPlayer();
+  }
+
+  showAddToLibraryModal() async {
+    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
+    playerProvider.hideMiniPlayer();
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.5,
+          minChildSize: 0.3,
+          maxChildSize: 0.7,
+          expand: false,
+          builder: (context, scrollController) {
+            return AddMusicItemToLibrary(music: widget.music);
+          },
         );
       },
     );
@@ -100,8 +123,11 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                   ),
                   ListMenuOption(
                     icon: Icons.playlist_add,
-                    title: 'Thêm vào danh sách phát',
-                    onTap: () {},
+                    title: 'Thêm vào thư viện',
+                    onTap: () {
+                      Navigator.pop(context, true);
+                      showAddToLibraryModal();
+                    },
                   ),
                   ListMenuOption(
                     icon: Icons.visibility_off_rounded,
@@ -151,7 +177,7 @@ class ListMenuOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      visualDensity: VisualDensity(vertical: -4),
+      visualDensity: VisualDensity(vertical: -2),
       onTap: () {
         onTap();
       },

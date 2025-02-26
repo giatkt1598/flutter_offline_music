@@ -17,7 +17,9 @@ class _LibraryListPageState extends State<LibraryListPage> {
   final libraryService = LibraryService();
 
   loadLibraries() async {
-    var list = await libraryService.getListAsync();
+    var list = await libraryService.getListAsync(
+      orderBy: 'lastModificationTime desc',
+    );
     if (!mounted) return;
     setState(() {
       libraries = list;

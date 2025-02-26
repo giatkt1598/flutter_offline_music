@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/components/library_thumbnail.dart';
 import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/pages/music_list_in_library_page.dart';
@@ -59,7 +60,10 @@ class LibraryListItem extends StatelessWidget {
                   height: 120,
                   width: 120,
                   child: Center(
-                    child: Transform.scale(scale: 2, child: LibraryThumbnail()),
+                    child: Transform.scale(
+                      scale: 2,
+                      child: LibraryThumbnail(library: library),
+                    ),
                   ),
                 ),
                 Text(
@@ -121,7 +125,7 @@ class LibraryListItem extends StatelessWidget {
     return ListTile(
       onTap: openMusicList,
       contentPadding: EdgeInsets.only(left: 16, right: 4),
-      leading: LibraryThumbnail(),
+      leading: LibraryThumbnail(library: library),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -146,27 +150,6 @@ class LibraryListItem extends StatelessWidget {
       trailing: IconButton(
         onPressed: showMenuOption,
         icon: Icon(Icons.more_vert),
-      ),
-    );
-  }
-}
-
-class LibraryThumbnail extends StatelessWidget {
-  const LibraryThumbnail({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 60,
-      height: 60,
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Icon(
-        Icons.library_music,
-        color: Theme.of(context).colorScheme.primary,
       ),
     );
   }

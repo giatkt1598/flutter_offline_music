@@ -59,6 +59,7 @@ CREATE TABLE ${DbTable.library}(
 id INTEGER PRIMARY KEY AUTOINCREMENT
 , title TEXT NOT NULL
 , creationTime TEXT
+, lastModificationTime TEXT
 )
           ''');
 

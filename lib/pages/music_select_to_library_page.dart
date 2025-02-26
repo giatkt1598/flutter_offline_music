@@ -30,6 +30,7 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
   List<Music> selectedMusics = [];
   String sortField = 'creationTime';
   String sortDirection = 'desc';
+  late Library library;
   @override
   void initState() {
     loadSelectedMusicList();
@@ -40,7 +41,8 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
   loadSelectedMusicList() async {
     var lib = await libraryService.getListAsync(id: widget.libraryId);
     setState(() {
-      selectedMusics = lib.first.musics;
+      library = lib.first;
+      selectedMusics = library.musics;
     });
   }
 
@@ -152,6 +154,9 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
             libraryId: widget.libraryId,
           );
         }
+
+        library.lastModificationTime = DateTime.now();
+        await libraryService.updateAsync(library);
         Navigator.pop(context);
       } finally {
         EasyLoading.dismiss();
