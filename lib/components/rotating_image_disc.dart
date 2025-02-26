@@ -58,8 +58,7 @@ class _RotatingImageDiscState extends State<RotatingImageDisc>
 
   @override
   Widget build(BuildContext context) {
-    final isPlaying =
-        Provider.of<PlayerProvider>(context).audioHandler.player.playing;
+    final isPlaying = Provider.of<PlayerProvider>(context).audioHandler.playing;
     if (isPlaying) {
       play();
     } else {

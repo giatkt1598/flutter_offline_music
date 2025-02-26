@@ -16,9 +16,10 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   final AudioPlayer _player = AudioPlayer();
   AudioPlayer get player => _player;
 
-  Duration get duration => _player.duration ?? Duration.zero;
+  Duration get _duration => _player.duration ?? Duration.zero;
 
-  Duration get position => _player.position;
+  Duration get _position => _player.position;
+  bool playing = false;
 
   final List<MediaItem> _playlist = [];
   List<MediaItem> get playlist => _playlist;
@@ -85,7 +86,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
         //   await _player.seek(nonSilentPosition.start);
         // }
       }
-    } else if (position >= duration) {
+    } else if (_position >= _duration) {
       seek(Duration.zero);
     }
 
@@ -199,7 +200,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     });
 
     _player.positionStream.listen((p) {
-      if (position >= duration && duration > Duration.zero) {
+      if (_position >= _duration && _duration > Duration.zero) {
         if (player.loopMode == LoopMode.one) {
           seek(Duration.zero);
         } else if (canNext) {
@@ -210,7 +211,10 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
           stop();
         }
       }
-      notifyListeners();
+      if (playing != _player.playing) {
+        playing = _player.playing;
+        notifyListeners();
+      }
     });
     _notifyAudioHandlerAboutPlaybackEvents();
   }

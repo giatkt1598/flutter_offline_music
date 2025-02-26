@@ -121,14 +121,14 @@ class _MiniPlayerState extends State<MiniPlayer> {
               ),
               child: IconButton(
                 onPressed: () {
-                  if (audioHandler.player.playing) {
+                  if (audioHandler.playing) {
                     audioHandler.pause();
                   } else {
                     audioHandler.play();
                   }
                 },
                 icon: Icon(
-                  audioHandler.player.playing ? Icons.pause : Icons.play_arrow,
+                  audioHandler.playing ? Icons.pause : Icons.play_arrow,
                   size: 40,
                 ),
               ),

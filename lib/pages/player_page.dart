@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
@@ -22,6 +23,10 @@ class PlayerPage extends StatefulWidget {
 }
 
 class _PlayerPageState extends State<PlayerPage> {
+  Duration duration = Duration.zero;
+  Duration position = Duration.zero;
+  late StreamSubscription<Duration?> durationSubscription;
+  late StreamSubscription<Duration?> positionSubscription;
   @override
   void initState() {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
@@ -32,7 +37,29 @@ class _PlayerPageState extends State<PlayerPage> {
         audioHandler.playMusic(widget.music);
       });
     }
+
+    setState(() {
+      durationSubscription = audioHandler.player.durationStream.listen((d) {
+        setState(() {
+          duration = d ?? Duration.zero;
+        });
+      });
+    });
+    setState(() {
+      positionSubscription = audioHandler.player.positionStream.listen((p) {
+        setState(() {
+          position = p;
+        });
+      });
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    durationSubscription.cancel();
+    positionSubscription.cancel();
+    super.dispose();
   }
 
   String formatDuration(int seconds) {
@@ -199,15 +226,11 @@ class _PlayerPageState extends State<PlayerPage> {
                                   ),
                                   Slider(
                                     value: min(
-                                      audioHandler.position.inSeconds
-                                          .toDouble(),
-                                      audioHandler.duration.inSeconds
-                                          .toDouble(),
+                                      position.inSeconds.toDouble(),
+                                      duration.inSeconds.toDouble(),
                                     ),
                                     min: 0,
-                                    max:
-                                        audioHandler.duration.inSeconds
-                                            .toDouble(),
+                                    max: duration.inSeconds.toDouble(),
                                     onChanged:
                                         (value) => audioHandler.seek(
                                           Duration(seconds: value.toInt()),
@@ -225,9 +248,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          formatDuration(
-                                            audioHandler.position.inSeconds,
-                                          ),
+                                          formatDuration(position.inSeconds),
                                         ),
                                         Text(
                                           formatDuration(
@@ -276,14 +297,14 @@ class _PlayerPageState extends State<PlayerPage> {
                                     ),
                                     child: IconButton(
                                       onPressed: () {
-                                        if (audioHandler.player.playing) {
+                                        if (audioHandler.playing) {
                                           audioHandler.pause();
                                         } else {
                                           audioHandler.play();
                                         }
                                       },
                                       icon: Icon(
-                                        audioHandler.player.playing
+                                        audioHandler.playing
                                             ? Icons.pause
                                             : Icons.play_arrow,
                                       ),
