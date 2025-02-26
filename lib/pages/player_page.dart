@@ -82,7 +82,6 @@ class _PlayerPageState extends State<PlayerPage> {
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
         playerProvider.isShowMiniPlayer = true;
-        print('[[]]$didPop');
       },
       child: Scaffold(
         body: Stack(
