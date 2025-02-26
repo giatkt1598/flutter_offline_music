@@ -63,6 +63,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       title: music.title,
       artist: music.artist ?? '<Không rõ tác giả>',
       album: 'Tất cả',
+      duration: music.duration,
     );
     await playMediaItem(item);
   }

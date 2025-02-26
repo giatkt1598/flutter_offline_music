@@ -86,6 +86,6 @@ class MusicService {
         list.isEmpty
             ? 0
             : list.map((m) => m.lengthInSecond).reduce((a, b) => a + b);
-    return fDuration(Duration(seconds: totalDurationInSeconds));
+    return fDurationLong(Duration(seconds: totalDurationInSeconds));
   }
 }

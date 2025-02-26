@@ -9,6 +9,7 @@ import 'package:flutter_offline_music/components/music_disc_illustrator.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
+import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 
@@ -22,9 +23,7 @@ class PlayerPage extends StatefulWidget {
 }
 
 class _PlayerPageState extends State<PlayerPage> {
-  Duration duration = Duration.zero;
   Duration position = Duration.zero;
-  late StreamSubscription<Duration?> durationSubscription;
   late StreamSubscription<Duration?> positionSubscription;
   @override
   void initState() {
@@ -38,13 +37,6 @@ class _PlayerPageState extends State<PlayerPage> {
     }
 
     setState(() {
-      durationSubscription = audioHandler.player.durationStream.listen((d) {
-        setState(() {
-          duration = d ?? Duration.zero;
-        });
-      });
-    });
-    setState(() {
       positionSubscription = audioHandler.player.positionStream.listen((p) {
         setState(() {
           position = p;
@@ -56,15 +48,8 @@ class _PlayerPageState extends State<PlayerPage> {
 
   @override
   void dispose() {
-    durationSubscription.cancel();
     positionSubscription.cancel();
     super.dispose();
-  }
-
-  String formatDuration(int seconds) {
-    int minutes = seconds ~/ 60;
-    int remainingSeconds = seconds % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 
   @override
@@ -78,6 +63,8 @@ class _PlayerPageState extends State<PlayerPage> {
         backgroundImage.isNotEmpty ||
         thumbnail != null ||
         Theme.of(context).brightness == Brightness.light;
+    final duration = audioHandler.currentMediaItem?.duration ?? Duration.zero;
+
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
         playerProvider.isShowMiniPlayer = true;
@@ -243,15 +230,15 @@ class _PlayerPageState extends State<PlayerPage> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          formatDuration(position.inSeconds),
+                                          fDurationHHMMSS(
+                                            position,
+                                            short: true,
+                                          ),
                                         ),
                                         Text(
-                                          formatDuration(
-                                            audioHandler
-                                                    .player
-                                                    .duration
-                                                    ?.inSeconds ??
-                                                0,
+                                          fDurationHHMMSS(
+                                            duration,
+                                            short: true,
                                           ),
                                         ),
                                       ],

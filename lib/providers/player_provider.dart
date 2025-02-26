@@ -28,6 +28,7 @@ class PlayerProvider extends ChangeNotifier {
               title: e.title,
               artist: e.artist ?? '<Không rõ tác giả>',
               album: 'Tất cả',
+              duration: e.duration,
             ),
           )
           .toList(),

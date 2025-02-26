@@ -6,6 +6,7 @@ import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/pages/music_in_folder_page.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 
@@ -110,6 +111,8 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
         await _musicService.deleteAllMusicFolderAsync();
         await _musicService.deleteAllMusicAsync(); //TODO: delete not exists
         List<String> musicFolderPaths = await getMusicFolders();
+
+        final player = AudioPlayer();
         for (String musicFolderPath in musicFolderPaths) {
           String dirName = musicFolderPath.substring(
             musicFolderPath.lastIndexOf('/') + 1,
@@ -125,6 +128,7 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
               musicPath.lastIndexOf('.'),
             );
 
+            Duration? duration = await player.setFilePath(musicPath);
             final metadata = readMetadata(File(musicPath));
             await _musicService.insertMusicAsync(
               Music(
@@ -134,12 +138,13 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
                 path: musicPath,
                 artist: metadata.artist,
                 genre: metadata.genres.join(', '),
-                lengthInSecond: metadata.duration?.inSeconds ?? 0,
+                lengthInSecond: duration?.inSeconds ?? 0,
                 creationTime: (await File(musicPath).stat()).changed,
               ),
             );
           }
         }
+        await player.dispose();
         var list = await _musicService.getMusicFolderListAsync();
         setState(() {
           _musicFolders = list;

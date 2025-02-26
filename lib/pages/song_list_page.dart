@@ -84,7 +84,7 @@ class _SongListPageState extends State<SongListPage> {
         child: Column(
           children: [
             SizedBox(height: 12),
-            Text('${musics.length} bài hát ・ ${fDuration(_totalDuration)}'),
+            Text('${musics.length} bài hát ・ ${fDurationLong(_totalDuration)}'),
             SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

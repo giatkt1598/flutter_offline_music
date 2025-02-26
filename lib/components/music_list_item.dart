@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/auto_scroll_text.dart';
+import 'package:flutter_offline_music/components/music_item_menu.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/pages/player_page.dart';
@@ -57,7 +58,7 @@ class MusicListItem extends StatelessWidget {
                 : null,
         onTap: playMusic,
         leading: MusicThumbnail(musicPath: music.path),
-        trailing: IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
+        trailing: MusicItemMenu(music: music),
         title: Padding(
           padding: const EdgeInsets.only(left: 8),
           child: Column(
