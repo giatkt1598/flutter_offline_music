@@ -5,17 +5,20 @@ class AutoScrollText extends StatelessWidget {
   final String text;
   final TextStyle? style;
   final bool? isCenter;
+  final double? containerWidth;
 
   const AutoScrollText({
     super.key,
     required this.text,
     this.style,
     this.isCenter,
+    this.containerWidth,
   });
 
   @override
   Widget build(BuildContext context) {
-    double containerWidth = MediaQuery.of(context).size.width;
+    double currentContainerWidth =
+        containerWidth ?? MediaQuery.of(context).size.width;
     double fontSize = style?.fontSize ?? 16;
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -27,10 +30,11 @@ class AutoScrollText extends StatelessWidget {
           ),
           maxLines: 1,
           textDirection: TextDirection.ltr,
-        )..layout(maxWidth: containerWidth);
+        )..layout(maxWidth: currentContainerWidth);
 
         bool shouldScroll =
-            textPainter.width >= containerWidth; // Check if text overflows
+            textPainter.width >=
+            currentContainerWidth; // Check if text overflows
         var staticText = Text(
           text,
           style: style,
@@ -38,7 +42,7 @@ class AutoScrollText extends StatelessWidget {
         );
         return SizedBox(
           height: fontSize + 10, // Ensure text fits properly
-          width: containerWidth,
+          width: currentContainerWidth,
           child:
               shouldScroll
                   ? Marquee(

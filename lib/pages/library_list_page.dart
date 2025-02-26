@@ -18,6 +18,7 @@ class _LibraryListPageState extends State<LibraryListPage> {
 
   loadLibraries() async {
     var list = await libraryService.getListAsync();
+    if (!mounted) return;
     setState(() {
       libraries = list;
     });
@@ -95,18 +96,22 @@ class _LibraryListPageState extends State<LibraryListPage> {
             )
           else
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 200),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    NoData(title: 'Chưa có thư viện nào!'),
-                    SizedBox(height: 12),
-                    OutlinedButton(
-                      onPressed: addNewLibrary,
-                      child: Text('Tạo mới'),
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 200),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        NoData(title: 'Chưa có thư viện nào!'),
+                        SizedBox(height: 12),
+                        OutlinedButton(
+                          onPressed: addNewLibrary,
+                          child: Text('Tạo mới'),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),

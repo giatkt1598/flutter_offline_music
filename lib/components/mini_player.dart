@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/auto_scroll_text.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
@@ -26,6 +28,54 @@ class MiniPlayer extends StatefulWidget {
 
 class _MiniPlayerState extends State<MiniPlayer> {
   final musicService = MusicService();
+  Duration duration = Duration.zero;
+  Duration position = Duration.zero;
+  late StreamSubscription<Duration?> durationSubscription;
+  late StreamSubscription<Duration?> positionSubscription;
+  final GlobalKey _sliderParentKey = GlobalKey();
+  double? sliderMaxWidth;
+  double? sliderWidth;
+  @override
+  void initState() {
+    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
+    final audioHandler = playerProvider.audioHandler;
+    setState(() {
+      durationSubscription = audioHandler.player.durationStream.listen((d) {
+        setState(() {
+          duration = d ?? Duration.zero;
+        });
+      });
+    });
+    setState(() {
+      positionSubscription = audioHandler.player.positionStream.listen((p) {
+        setState(() {
+          position = p;
+          if (sliderMaxWidth == null) {
+            if (_sliderParentKey.currentContext != null) {
+              final RenderBox renderBox =
+                  _sliderParentKey.currentContext!.findRenderObject()
+                      as RenderBox;
+              var rowWidth = renderBox.size.width;
+              sliderMaxWidth = rowWidth;
+            }
+          }
+
+          if (sliderMaxWidth != null && duration > Duration.zero) {
+            sliderWidth =
+                position.inSeconds / duration.inSeconds * sliderMaxWidth!;
+          }
+        });
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    durationSubscription.cancel();
+    positionSubscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,69 +127,104 @@ class _MiniPlayerState extends State<MiniPlayer> {
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          spacing: 4,
+
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+        child: Column(
+          key: _sliderParentKey,
           children: [
-            GestureDetector(
-              onTap: openPlayerPage,
-              child: MusicThumbnail(
-                musicPath: mediaItem.id,
-                size: 50,
-                boxShape: BoxShape.rectangle,
-              ),
-            ),
             Expanded(
-              child: GestureDetector(
-                onTap: openPlayerPage,
-                child: Container(
-                  height: 50,
-                  color: Colors.transparent,
-                  child: Column(
-                    children: [
-                      AutoScrollText(text: mediaItem.title),
-                      Opacity(
-                        opacity: 0.4,
-                        child: AutoScrollText(
-                          text: mediaItem.artist ?? '<Không rõ tác giả>',
-                          style: TextStyle(fontSize: 12),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  spacing: 4,
+                  children: [
+                    GestureDetector(
+                      onLongPress: () {
+                        playerProvider.hideMiniPlayer();
+                      },
+                      onTap: openPlayerPage,
+                      child: MusicThumbnail(
+                        musicPath: mediaItem.id,
+                        size: 50,
+                        boxShape: BoxShape.rectangle,
+                      ),
+                    ),
+                    Expanded(
+                      child: GestureDetector(
+                        onLongPress: () {
+                          playerProvider.hideMiniPlayer();
+                        },
+                        onTap: openPlayerPage,
+                        child: Container(
+                          height: 50,
+                          color: Colors.transparent,
+                          child: Column(
+                            children: [
+                              AutoScrollText(
+                                text: mediaItem.title,
+                                containerWidth:
+                                    MediaQuery.of(context).size.width - 100,
+                              ),
+                              Opacity(
+                                opacity: 0.4,
+                                child: AutoScrollText(
+                                  text:
+                                      mediaItem.artist ?? '<Không rõ tác giả>',
+                                  style: TextStyle(fontSize: 12),
+                                  containerWidth:
+                                      MediaQuery.of(context).size.width - 100,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ],
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: const Color.fromARGB(255, 240, 240, 240),
+                          width: 2,
+                        ), // 👈 Viền đen
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          if (audioHandler.playing) {
+                            audioHandler.pause();
+                          } else {
+                            audioHandler.play();
+                          }
+                        },
+                        icon: Icon(
+                          audioHandler.playing ? Icons.pause : Icons.play_arrow,
+                          size: 40,
+                        ),
+                      ),
+                    ),
+
+                    // IconButton(
+                    //   onPressed: () {},
+                    //   icon: Icon(Icons.skip_next_rounded, size: 40),
+                    // ),
+                  ],
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                Container(
+                  width: sliderWidth,
+                  height: 2,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
-              ),
+              ],
             ),
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: const Color.fromARGB(255, 240, 240, 240),
-                  width: 2,
-                ), // 👈 Viền đen
-              ),
-              child: IconButton(
-                onPressed: () {
-                  if (audioHandler.playing) {
-                    audioHandler.pause();
-                  } else {
-                    audioHandler.play();
-                  }
-                },
-                icon: Icon(
-                  audioHandler.playing ? Icons.pause : Icons.play_arrow,
-                  size: 40,
-                ),
-              ),
-            ),
-
-            // IconButton(
-            //   onPressed: () {},
-            //   icon: Icon(Icons.skip_next_rounded, size: 40),
-            // ),
           ],
         ),
       ),
