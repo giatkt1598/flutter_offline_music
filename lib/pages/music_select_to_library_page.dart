@@ -237,32 +237,36 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
               child: ListView.builder(
                 controller: _scrollController,
                 shrinkWrap: true,
-                itemCount: musics.length,
-                itemBuilder:
-                    (context, index) => Padding(
-                      padding: EdgeInsets.symmetric(vertical: 4),
-                      child: MusicItemSelect(
-                        music: musics[index],
-                        isSelected:
-                            selectedMusics.indexWhere(
-                              (x) => x.id == musics[index].id,
-                            ) >
-                            -1,
-                        onChanged: (isSelect) {
-                          setState(() {
-                            if (isSelect == true) {
-                              selectedMusics.add(musics[index]);
-                            } else if (isSelect == false) {
-                              selectedMusics.removeAt(
-                                selectedMusics.indexWhere(
-                                  (x) => x.id == musics[index].id,
-                                ),
-                              );
-                            }
-                          });
-                        },
-                      ),
+                itemCount: musics.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == musics.length) {
+                    return SizedBox(height: 90);
+                  }
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4),
+                    child: MusicItemSelect(
+                      music: musics[index],
+                      isSelected:
+                          selectedMusics.indexWhere(
+                            (x) => x.id == musics[index].id,
+                          ) >
+                          -1,
+                      onChanged: (isSelect) {
+                        setState(() {
+                          if (isSelect == true) {
+                            selectedMusics.add(musics[index]);
+                          } else if (isSelect == false) {
+                            selectedMusics.removeAt(
+                              selectedMusics.indexWhere(
+                                (x) => x.id == musics[index].id,
+                              ),
+                            );
+                          }
+                        });
+                      },
                     ),
+                  );
+                },
               ),
             ),
           ),

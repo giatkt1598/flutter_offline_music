@@ -3,8 +3,10 @@ import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/pages/music_list_in_library_page.dart';
 import 'package:flutter_offline_music/pages/music_select_to_library_page.dart';
+import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/library_service.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
+import 'package:provider/provider.dart';
 
 class LibraryListItem extends StatelessWidget {
   LibraryListItem({super.key, required this.library, required this.onRefresh});
@@ -40,6 +42,11 @@ class LibraryListItem extends StatelessWidget {
     }
 
     showMenuOption() async {
+      final playerProvider = Provider.of<PlayerProvider>(
+        context,
+        listen: false,
+      );
+      playerProvider.hideMiniPlayer();
       showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -98,7 +105,7 @@ class LibraryListItem extends StatelessWidget {
             ),
           );
         },
-      );
+      ).then((_) => playerProvider.showMiniPlayer());
     }
 
     openMusicList() {

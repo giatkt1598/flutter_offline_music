@@ -8,6 +8,16 @@ class PlayerProvider extends ChangeNotifier {
   AppAudioHandler get audioHandler => AppAudioHandler.instance;
   List<Music> musics = [];
 
+  void hideMiniPlayer() {
+    isShowMiniPlayer = false;
+    notifyListeners();
+  }
+
+  void showMiniPlayer() {
+    isShowMiniPlayer = true;
+    notifyListeners();
+  }
+
   setMusics(List<Music> musics) {
     this.musics = musics;
     audioHandler.setPlaylist(

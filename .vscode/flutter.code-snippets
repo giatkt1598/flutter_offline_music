@@ -1,0 +1,7 @@
+{
+    "PlayerOrovider": {
+        "scope": "dart",
+        "prefix": "pp",
+        "body": "final playerProvider = Provider$0.of<PlayerProvider>(context, $1);"
+    }
+}

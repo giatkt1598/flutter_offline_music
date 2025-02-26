@@ -7,18 +7,20 @@ import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:provider/provider.dart';
 
 class MiniPlayer extends StatefulWidget {
+  static OverlayEntry? _overlayEntry;
   const MiniPlayer({super.key});
 
   @override
   State<MiniPlayer> createState() => _MiniPlayerState();
 
-  static void showMiniPlayer(BuildContext context) {
-    OverlayEntry overlayEntry = OverlayEntry(
+  static void showMiniPlayer(BuildContext? context) {
+    if (_overlayEntry != null || context == null) return;
+    _overlayEntry = OverlayEntry(
       builder:
           (context) => Positioned(bottom: 12, left: 6, child: MiniPlayer()),
     );
 
-    Overlay.of(context).insert(overlayEntry);
+    Overlay.of(context).insert(_overlayEntry!);
   }
 }
 

@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/models/music.dart';
@@ -19,11 +16,6 @@ class SongListItem extends StatelessWidget {
     bool isCurrent =
         audioHandler.currentMediaItem?.id == music.path && audioHandler.playing;
     void onPressed() {
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => PlayerPage()),
-      // );
-
       Navigator.of(context).push(
         PageRouteBuilder(
           pageBuilder:
