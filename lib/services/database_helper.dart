@@ -34,8 +34,9 @@ class DatabaseHelper {
         await db.execute('''
 CREATE TABLE ${DbTable.musicFolder}(
 id INTEGER PRIMARY KEY AUTOINCREMENT
-, path TEXT NOT NULL
+, path TEXT NOT NULL UNIQUE
 , name TEXT NOT NULL
+, isHidden INTEGER NOT NULL DEFAULT 0
 )
           ''');
 
@@ -44,12 +45,13 @@ CREATE TABLE ${DbTable.music}(
 id INTEGER PRIMARY KEY AUTOINCREMENT
 , musicFolderId INTEGER
 , title TEXT NOT NULL
-, path TEXT NOT NULL
+, path TEXT NOT NULL UNIQUE
 , artist TEXT
 , lengthInSecond INTEGER
 , thumbnail TEXT
 , genre TEXT
 , creationTime TEXT
+, isHidden INTEGER NOT NULL DEFAULT 0
 , FOREIGN KEY (musicFolderId) REFERENCES ${DbTable.musicFolder}(id) ON DELETE CASCADE
 )
           ''');
@@ -75,4 +77,30 @@ musicId INTEGER
       },
     );
   }
+
+  static BuildQueryFilterResult buildQueryFilter(
+    Map<String, dynamic> whereData,
+  ) {
+    List<String> whereClauses = [];
+    List<dynamic> whereArgs = [];
+
+    for (var clause in whereData.keys) {
+      if (whereData[clause] != null) {
+        whereClauses.add(clause);
+        whereArgs.add(whereData[clause]);
+      }
+    }
+
+    return BuildQueryFilterResult(
+      where: whereClauses.isEmpty ? null : whereClauses.join(' AND '),
+      whereArgs: whereArgs.isEmpty ? null : whereArgs,
+    );
+  }
+}
+
+class BuildQueryFilterResult {
+  final String? where;
+  final List<Object?>? whereArgs;
+
+  BuildQueryFilterResult({required this.where, required this.whereArgs});
 }

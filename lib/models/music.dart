@@ -9,6 +9,7 @@ class Music {
   String? thumbnail;
   String? genre;
   DateTime? creationTime;
+  bool isHidden;
 
   Music({
     required this.id,
@@ -20,6 +21,7 @@ class Music {
     this.thumbnail,
     this.genre,
     this.creationTime,
+    this.isHidden = false,
   });
 
   Map<String, dynamic> toJson() {
@@ -33,6 +35,7 @@ class Music {
       'thumbnail': thumbnail,
       'genre': genre,
       'creationTime': creationTime?.toIso8601String(),
+      'isHidden': isHidden ? 1 : 0,
     };
   }
 
@@ -46,10 +49,8 @@ class Music {
       thumbnail: json['thumbnail'],
       artist: json['artist'],
       lengthInSecond: json['lengthInSecond'],
-      creationTime:
-          json['creationTime'] != null
-              ? DateTime.parse(json['creationTime'])
-              : null,
+      creationTime: DateTime.tryParse(json['creationTime'] ?? ''),
+      isHidden: json['isHidden'] == 1,
     );
   }
 }

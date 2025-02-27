@@ -3,7 +3,7 @@ import 'package:flutter_offline_music/components/mini_player.dart';
 import 'package:flutter_offline_music/pages/library_list_page.dart';
 import 'package:flutter_offline_music/pages/load_music_page.dart';
 import 'package:flutter_offline_music/pages/setting_page.dart';
-import 'package:flutter_offline_music/pages/song_list_page.dart';
+import 'package:flutter_offline_music/pages/full_music_list_page.dart';
 import 'package:flutter_offline_music/utilities/app_background_helper.dart';
 
 class HomePage extends StatefulWidget {
@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
           ),
           body: TabBarView(
-            children: [SongListPage(), LibraryListPage(), LoadMusicPage()],
+            children: [FullMusicListPage(), LibraryListPage(), LoadMusicPage()],
           ),
         ),
       ),

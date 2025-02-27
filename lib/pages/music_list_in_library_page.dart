@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/components/music_list.dart';
 import 'package:flutter_offline_music/components/music_list_item.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/models/library.dart';
@@ -184,10 +185,9 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
             )
           else
             Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: musics.length,
-                itemBuilder: (_, index) => MusicListItem(music: musics[index]),
+              child: MusicList(
+                musics: musics,
+                onChanged: (value) => setState(() {}),
               ),
             ),
           SizedBox(height: 90),

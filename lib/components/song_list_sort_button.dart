@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/providers/player_provider.dart';
+import 'package:provider/provider.dart';
 
 class SongListSortButton extends StatefulWidget {
   const SongListSortButton({
@@ -36,7 +38,9 @@ class _SongListSortButtonState extends State<SongListSortButton> {
 
   @override
   Widget build(BuildContext context) {
+    final playerProvider = Provider.of<PlayerProvider>(context);
     showModal() async {
+      playerProvider.hideMiniPlayer();
       await showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -176,6 +180,7 @@ class _SongListSortButtonState extends State<SongListSortButton> {
           );
         },
       );
+      playerProvider.showMiniPlayer();
 
       widget.onChanged(sortField, sortDirection);
     }

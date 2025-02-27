@@ -4,17 +4,21 @@ import 'package:flutter_offline_music/components/music_info.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
+import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:provider/provider.dart';
 
 class MusicItemMenu extends StatefulWidget {
-  const MusicItemMenu({super.key, required this.music});
+  const MusicItemMenu({super.key, required this.music, this.afterToggleHide});
 
   final Music music;
+  final Function? afterToggleHide;
   @override
   State<MusicItemMenu> createState() => _MusicItemMenuState();
 }
 
 class _MusicItemMenuState extends State<MusicItemMenu> {
+  final musicService = MusicService();
+
   showMusicInfo() async {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     playerProvider.hideMiniPlayer();
@@ -66,6 +70,14 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
       },
     );
     playerProvider.showMiniPlayer();
+  }
+
+  toggleHide() async {
+    widget.music.isHidden = !widget.music.isHidden;
+    await musicService.updateMusicAsync(widget.music);
+    if (widget.afterToggleHide != null) {
+      widget.afterToggleHide!();
+    }
   }
 
   showMenu() async {
@@ -130,9 +142,15 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                     },
                   ),
                   ListMenuOption(
-                    icon: Icons.visibility_off_rounded,
-                    title: 'Ẩn khỏi danh sách',
-                    onTap: () {},
+                    icon:
+                        widget.music.isHidden
+                            ? Icons.visibility
+                            : Icons.visibility_off_rounded,
+                    title: widget.music.isHidden ? 'Hiển thị' : 'Ẩn',
+                    onTap: () async {
+                      await toggleHide();
+                      Navigator.pop(context, true);
+                    },
                   ),
                   Opacity(opacity: .3, child: Divider()),
                   ListMenuOption(

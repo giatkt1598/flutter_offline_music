@@ -64,7 +64,7 @@ class _LibraryListPageState extends State<LibraryListPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 12),
                   child: Text(
-                    '4 thư viện',
+                    '${libraries.length} thư viện',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
