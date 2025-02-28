@@ -157,6 +157,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       _stopTime = DateTime.now().add(duration);
       _countDownStopTime();
     }
+    notifyListeners();
   }
 
   void _countDownStopTime() {

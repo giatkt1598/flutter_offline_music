@@ -11,10 +11,16 @@ import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:provider/provider.dart';
 
 class MusicItemMenu extends StatefulWidget {
-  const MusicItemMenu({super.key, required this.music, this.afterToggleHide});
+  const MusicItemMenu({
+    super.key,
+    required this.music,
+    this.afterToggleHide,
+    this.showMiniPlayer = true,
+  });
 
   final Music music;
   final Function? afterToggleHide;
+  final bool showMiniPlayer;
   @override
   State<MusicItemMenu> createState() => _MusicItemMenuState();
 }
@@ -50,7 +56,9 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
         );
       },
     );
-    playerProvider.showMiniPlayer();
+    if (widget.showMiniPlayer) {
+      playerProvider.showMiniPlayer();
+    }
   }
 
   showAddToLibraryModal() async {
@@ -72,7 +80,9 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
         );
       },
     );
-    playerProvider.showMiniPlayer();
+    if (widget.showMiniPlayer) {
+      playerProvider.showMiniPlayer();
+    }
   }
 
   toggleHide() async {
@@ -102,7 +112,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
               DurationPicker(
                 value: newDuration,
                 onChanged: (du) {
-                  newDuration = du;
+                  newDuration = du == Duration.zero ? null : du;
                 },
               ),
               SizedBox(
@@ -143,12 +153,17 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
         );
       },
     );
-    playerProvider.showMiniPlayer();
+    if (widget.showMiniPlayer) {
+      playerProvider.showMiniPlayer();
+    }
   }
 
   showMenu() async {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     playerProvider.hideMiniPlayer();
+    final bool hasStopTime = playerProvider.audioHandler.stopTime != null;
+    final Duration? stopDuration = playerProvider.audioHandler.stopTime
+        ?.difference(DateTime.now());
     bool? hideMiniPlayer = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
@@ -208,8 +223,10 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                     },
                   ),
                   ListMenuOption(
+                    iconColor: hasStopTime ? Colors.green : null,
                     icon: Icons.alarm_rounded,
-                    title: 'Hẹn giờ tắt nhạc',
+                    title:
+                        'Hẹn giờ ngủ${hasStopTime ? ' - Còn lại ${fDurationLong(stopDuration!)}' : ''}',
                     onTap: () {
                       Navigator.pop(context, true);
                       setStopTime();
@@ -242,7 +259,9 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
       },
     );
     if (hideMiniPlayer != true) {
-      playerProvider.showMiniPlayer();
+      if (widget.showMiniPlayer) {
+        playerProvider.showMiniPlayer();
+      }
     }
   }
 

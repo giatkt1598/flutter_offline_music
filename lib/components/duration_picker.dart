@@ -20,6 +20,7 @@ class _DurationPickerState extends State<DurationPicker> {
     "30 phút": Duration(minutes: 30),
     "1 giờ": Duration(hours: 1),
     "2 giờ": Duration(hours: 2),
+    "Tắt": Duration.zero,
   };
 
   _handleValueChanged() {

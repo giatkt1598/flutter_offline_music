@@ -5,6 +5,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/auto_scroll_text.dart';
+import 'package:flutter_offline_music/components/countdown.dart';
 import 'package:flutter_offline_music/components/music_disc_illustrator.dart';
 import 'package:flutter_offline_music/components/music_item_menu.dart';
 import 'package:flutter_offline_music/models/music.dart';
@@ -161,6 +162,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                     ],
                                   ),
                                   MusicItemMenu(
+                                    showMiniPlayer: false,
                                     music: widget.music,
                                     afterToggleHide: () {
                                       playerProvider.musics.removeWhere(
@@ -176,6 +178,8 @@ class _PlayerPageState extends State<PlayerPage> {
                               ),
                             ),
                           ),
+                          if (audioHandler.stopTime != null)
+                            Countdown(endTime: audioHandler.stopTime),
                           MusicDiscIllustrator(),
                           Column(
                             children: [
