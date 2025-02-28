@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:flutter_offline_music/components/add_music_item_to_library.dart';
 import 'package:flutter_offline_music/components/duration_picker.dart';
 import 'package:flutter_offline_music/components/music_info.dart';
