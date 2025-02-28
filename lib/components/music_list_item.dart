@@ -36,6 +36,7 @@ class MusicListItem extends StatelessWidget {
 
     final isCurrent = audioHandler.currentMediaItem?.id == music.path;
 
+    final double borderWidth = 5.0;
     return Container(
       decoration:
           isCurrent
@@ -43,13 +44,16 @@ class MusicListItem extends StatelessWidget {
                 border: Border(
                   left: BorderSide(
                     color: Theme.of(context).colorScheme.primary,
-                    width: 5,
+                    width: borderWidth,
                   ),
                 ),
               )
               : null,
       child: ListTile(
-        contentPadding: EdgeInsets.only(right: 0, left: 8),
+        contentPadding: EdgeInsets.only(
+          right: 0,
+          left: 8 - (isCurrent ? borderWidth : 0),
+        ),
         horizontalTitleGap: 0,
         tileColor:
             isCurrent
