@@ -52,6 +52,8 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   bool get canNext =>
       _playlist.isNotEmpty && currentIndex + 1 < _playlist.length;
 
+  StreamSubscription<Duration>? positionSubscription;
+
   AppAudioHandler() {
     _createAudioPlayer();
   }
@@ -107,12 +109,63 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   @override
   Future<void> play() async {
-    await _player.play();
+    if (SettingProvider.staticAppSetting.autoVolumnPausePlay) {
+      innerPlay() async {
+        positionSubscription?.pause();
+        playing = true;
+        notifyListeners();
+
+        await _player.setVolume(0.1);
+        _player.play();
+
+        await fadeOutAudio(reverse: true);
+        positionSubscription?.resume();
+      }
+
+      innerPlay();
+    } else {
+      await _player.setVolume(1);
+      await _player.play();
+    }
   }
 
   @override
-  Future<void> pause() {
-    return _player.pause();
+  Future<void> pause() async {
+    positionSubscription?.pause();
+    if (SettingProvider.staticAppSetting.autoVolumnPausePlay) {
+      playing = false;
+      notifyListeners();
+      await fadeOutAudio();
+    }
+    await _player.pause();
+    positionSubscription?.resume();
+  }
+
+  Future<void> fadeOutAudio({bool reverse = false}) {
+    Completer completer = Completer<void>();
+    double volume = reverse ? 0.0 : 1.0;
+    int steps = 20;
+    Duration stepDuration = Duration(milliseconds: 50); // 20 step * 50ms = 1s
+
+    Timer.periodic(stepDuration, (timer) {
+      if (!reverse) {
+        volume -= 1.0 / steps;
+        if (volume <= 0) {
+          volume = 0;
+          timer.cancel();
+          completer.complete();
+        }
+      } else {
+        volume += (1.0 / steps);
+        if (volume >= 1) {
+          volume = 1;
+          timer.cancel();
+          completer.complete();
+        }
+      }
+      _player.setVolume(volume);
+    });
+    return completer.future;
   }
 
   @override
@@ -123,12 +176,14 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   @override
   Future<void> skipToNext() async {
     if (!canNext) return;
+    await pause();
     await playMediaItem(_playlist[currentIndex + 1]);
   }
 
   @override
   Future<void> skipToPrevious() async {
     if (!canPrevious) return;
+    await pause();
     await playMediaItem(_playlist[currentIndex - 1]);
   }
 
@@ -232,7 +287,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       notifyListeners();
     });
 
-    _player.positionStream.listen((p) {
+    positionSubscription = _player.positionStream.listen((p) {
       if (_position >= _duration && _duration > Duration.zero) {
         if (player.loopMode == LoopMode.one) {
           seek(Duration.zero);
