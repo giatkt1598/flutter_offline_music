@@ -9,7 +9,8 @@
   },
   "scripts": {
     "splash": "flutter pub run flutter_native_splash:create",
-    "icon": "flutter pub run flutter_launcher_icons:main"
+    "icon": "flutter pub run flutter_launcher_icons:main",
+    "apk": "flutter build apk --release"
   },
   "keywords": [],
   "author": "",

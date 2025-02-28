@@ -1,10 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 import 'package:flutter_offline_music/components/add_music_item_to_library.dart';
+import 'package:flutter_offline_music/components/duration_picker.dart';
 import 'package:flutter_offline_music/components/music_info.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
+import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:provider/provider.dart';
 
 class MusicItemMenu extends StatefulWidget {
@@ -80,6 +84,69 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
     }
   }
 
+  setStopTime() async {
+    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
+    final audioHandler = playerProvider.audioHandler;
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        Duration? newDuration = audioHandler.stopTime?.difference(
+          DateTime.now(),
+        );
+
+        return SizedBox(
+          height: 400,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              DurationPicker(
+                value: newDuration,
+                onChanged: (du) {
+                  newDuration = du;
+                },
+              ),
+              SizedBox(
+                width: 120,
+                child: OutlinedButton(
+                  onPressed: () {
+                    audioHandler.setStopTime(duration: newDuration);
+                    String message = '';
+                    if (newDuration != null && newDuration! > Duration.zero) {
+                      message = 'Tắt nhạc sau ${fDurationLong(newDuration!)}';
+                    } else {
+                      message = "Đã tắt hẹn giờ";
+                    }
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(message),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                    Navigator.pop(context);
+                  },
+                  child: Text('OK'),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  'Hủy',
+                  style: TextStyle(
+                    color: Theme.of(context).textTheme.titleMedium?.color,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    playerProvider.showMiniPlayer();
+  }
+
   showMenu() async {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     playerProvider.hideMiniPlayer();
@@ -139,6 +206,14 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                     onTap: () {
                       Navigator.pop(context, true);
                       showAddToLibraryModal();
+                    },
+                  ),
+                  ListMenuOption(
+                    icon: Icons.alarm_rounded,
+                    title: 'Hẹn giờ tắt nhạc',
+                    onTap: () {
+                      Navigator.pop(context, true);
+                      setStopTime();
                     },
                   ),
                   ListMenuOption(

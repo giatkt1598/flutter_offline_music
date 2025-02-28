@@ -212,7 +212,6 @@ WHERE (:isHidden IS NULL OR :isHidden = 1 OR ${DbTable.musicFolder}.isHidden = 0
       await deleteMusicFolderAsync(folder.id);
     }
 
-    final player = AudioPlayer();
     for (String musicFolderPath in musicFolderPaths) {
       String dirName = musicFolderPath.substring(
         musicFolderPath.lastIndexOf('/') + 1,
@@ -241,7 +240,6 @@ WHERE (:isHidden IS NULL OR :isHidden = 1 OR ${DbTable.musicFolder}.isHidden = 0
           musicPath.lastIndexOf('.'),
         );
 
-        Duration? duration = await player.setFilePath(musicPath);
         final metadata = readMetadata(File(musicPath));
         await insertMusicAsync(
           Music(
@@ -251,13 +249,12 @@ WHERE (:isHidden IS NULL OR :isHidden = 1 OR ${DbTable.musicFolder}.isHidden = 0
             path: musicPath,
             artist: metadata.artist,
             genre: metadata.genres.join(', '),
-            lengthInSecond: duration?.inSeconds ?? 0,
+            lengthInSecond: metadata.duration?.inSeconds ?? 0,
             creationTime: (await File(musicPath).stat()).changed,
           ),
         );
       }
     }
-    await player.dispose();
     var list = await getMusicFolderListAsync();
     return list;
   }

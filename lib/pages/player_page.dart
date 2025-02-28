@@ -6,6 +6,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/auto_scroll_text.dart';
 import 'package:flutter_offline_music/components/music_disc_illustrator.dart';
+import 'package:flutter_offline_music/components/music_item_menu.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
@@ -159,9 +160,17 @@ class _PlayerPageState extends State<PlayerPage> {
                                       Text('-'),
                                     ],
                                   ),
-                                  IconButton(
-                                    onPressed: null,
-                                    icon: Icon(Icons.more_vert),
+                                  MusicItemMenu(
+                                    music: widget.music,
+                                    afterToggleHide: () {
+                                      playerProvider.musics.removeWhere(
+                                        (x) => x.id == widget.music.id,
+                                      );
+                                      playerProvider.setMusics(
+                                        playerProvider.musics,
+                                      );
+                                      Navigator.of(context).pop();
+                                    },
                                   ),
                                 ],
                               ),

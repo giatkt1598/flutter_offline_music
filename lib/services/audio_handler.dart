@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
@@ -16,9 +17,12 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   AudioPlayer get player => _player;
 
   Duration get _duration => _player.duration ?? Duration.zero;
-
   Duration get _position => _player.position;
   bool playing = false;
+
+  DateTime? _stopTime;
+  DateTime? get stopTime => _stopTime;
+  Timer? _timerStop;
 
   final List<MediaItem> _playlist = [];
   List<MediaItem> get playlist => _playlist;
@@ -145,6 +149,30 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     }
   }
 
+  setStopTime({Duration? duration}) {
+    if (duration == null) {
+      // off feature auto stop
+      _stopTime = null;
+    } else {
+      _stopTime = DateTime.now().add(duration);
+      _countDownStopTime();
+    }
+  }
+
+  void _countDownStopTime() {
+    final period = Duration(milliseconds: 500);
+    _timerStop?.cancel();
+    _timerStop = Timer.periodic(period, (timer) {
+      if (!timer.isActive || _stopTime == null) return;
+
+      if (_stopTime!.difference(DateTime.now()) <= Duration.zero) {
+        stop();
+        _stopTime = null;
+        _timerStop?.cancel();
+      }
+    });
+  }
+
   @override
   Future<void> rewind() async {
     // Ví dụ: Quay lại 10 giây
@@ -162,6 +190,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   @override
   void dispose() {
     _player.dispose();
+    _timerStop?.cancel();
     super.dispose();
   }
 
@@ -196,6 +225,9 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   void _createAudioPlayer() {
     _player.durationStream.listen((d) {
+      if (currentMediaItem != null) {
+        _currentMediaItem = _currentMediaItem!.copyWith(duration: d);
+      }
       notifyListeners();
     });
 
@@ -217,6 +249,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       }
     });
     _notifyAudioHandlerAboutPlaybackEvents();
+    _countDownStopTime();
   }
 
   void _notifyAudioHandlerAboutPlaybackEvents() {
