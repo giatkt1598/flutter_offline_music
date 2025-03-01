@@ -11,7 +11,8 @@
     "splash": "flutter pub run flutter_native_splash:create",
     "icon": "flutter pub run flutter_launcher_icons:main",
     "apk": "flutter build apk --release",
-    "build": "yarn apk"
+    "build": "yarn apk",
+    "lint": "dart fix --apply"
   },
   "keywords": [],
   "author": "",

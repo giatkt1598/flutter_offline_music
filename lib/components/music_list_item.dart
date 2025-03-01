@@ -5,6 +5,8 @@ import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/pages/player_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
+import 'package:flutter_offline_music/shared/shared_data.dart';
+import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:provider/provider.dart';
 
 class MusicListItem extends StatelessWidget {
@@ -16,21 +18,31 @@ class MusicListItem extends StatelessWidget {
     final audioHandler = Provider.of<PlayerProvider>(context).audioHandler;
 
     void playMusic() {
-      Navigator.of(context).push(
-        PageRouteBuilder(
-          pageBuilder:
-              (context, animation, secondaryAnimation) =>
-                  PlayerPage(music: music),
-          transitionsBuilder:
-              (context, animation, secondaryAnimation, child) =>
-                  SlideTransition(
-                    position: Tween(
-                      begin: Offset(0, 1),
-                      end: Offset(0, 0),
-                    ).animate(animation),
-                    child: child,
-                  ),
-        ),
+      // Navigator.of(context).push(
+      //   PageRouteBuilder(
+      //     pageBuilder:
+      //         (context, animation, secondaryAnimation) =>
+      //             PlayerPage(music: music),
+      //     transitionsBuilder:
+      //         (context, animation, secondaryAnimation, child) =>
+      //             SlideTransition(
+      //               position: Tween(
+      //                 begin: Offset(0, 1),
+      //                 end: Offset(0, 0),
+      //               ).animate(animation),
+      //               child: child,
+      //             ),
+      //   ),
+      // );
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return SizedBox(
+            height: SharedData.fullHeight - SharedData.statusBarHeight,
+            child: PlayerPage(music: music),
+          );
+        },
       );
     }
 

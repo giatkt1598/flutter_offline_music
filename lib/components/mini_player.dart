@@ -7,6 +7,7 @@ import 'package:flutter_offline_music/components/rotating_disc.dart';
 import 'package:flutter_offline_music/pages/player_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
+import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:provider/provider.dart';
 
 class MiniPlayer extends StatefulWidget {
@@ -92,21 +93,15 @@ class _MiniPlayerState extends State<MiniPlayer> {
 
     openPlayerPage() async {
       var music = await musicService.getMusicAsync(path: mediaItem.id);
-      Navigator.of(context).push(
-        PageRouteBuilder(
-          pageBuilder:
-              (context, animation, secondaryAnimation) =>
-                  PlayerPage(music: music),
-          transitionsBuilder:
-              (context, animation, secondaryAnimation, child) =>
-                  SlideTransition(
-                    position: Tween(
-                      begin: Offset(0, 1),
-                      end: Offset(0, 0),
-                    ).animate(animation),
-                    child: child,
-                  ),
-        ),
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return SizedBox(
+            height: SharedData.fullHeight - SharedData.statusBarHeight,
+            child: PlayerPage(music: music),
+          );
+        },
       );
     }
 

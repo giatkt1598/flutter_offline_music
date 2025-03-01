@@ -5,12 +5,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/auto_scroll_text.dart';
+import 'package:flutter_offline_music/components/blur_image.dart';
 import 'package:flutter_offline_music/components/countdown.dart';
 import 'package:flutter_offline_music/components/music_disc_illustrator.dart';
 import 'package:flutter_offline_music/components/music_item_menu.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
+import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
@@ -60,10 +62,10 @@ class _PlayerPageState extends State<PlayerPage> {
     final audioHandler = playerProvider.audioHandler;
     final settingProvider = Provider.of<SettingProvider>(context);
     final thumbnail = audioHandler.currentMediaItem?.artUri?.toFilePath();
-    final backgroundImage = settingProvider.appSetting.playerBackgroundImage;
+    final backgroundImage =
+        thumbnail ?? settingProvider.appSetting.playerBackgroundImage;
     bool isDarkBottom =
         backgroundImage.isNotEmpty ||
-        thumbnail != null ||
         Theme.of(context).brightness == Brightness.light;
     final duration = audioHandler.currentMediaItem?.duration ?? Duration.zero;
 
@@ -74,33 +76,40 @@ class _PlayerPageState extends State<PlayerPage> {
       child: Scaffold(
         body: Stack(
           children: [
-            if (thumbnail != null)
-              Image.file(
-                File(thumbnail), // Change to your image
-                fit: BoxFit.cover, // Ensures it covers the screen
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                alignment: Alignment.center,
-              )
-            else if (backgroundImage.isNotEmpty)
-              Image.asset(
-                backgroundImage,
-                fit: BoxFit.cover, // Ensures it covers the screen
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                alignment: Alignment.center,
-              ),
-            if (thumbnail != null || backgroundImage.isNotEmpty)
-              BackdropFilter(
-                filter: ImageFilter.blur(
-                  sigmaX: 20,
-                  sigmaY: 20,
-                ), // ✅ Blur intensity
-                child: Container(
-                  color: Colors.black.withValues(
-                    alpha: 0.2,
-                  ), // Optional overlay for contrast
-                ),
+            // if (thumbnail != null)
+            //   Image.file(
+            //     File(thumbnail), // Change to your image
+            //     fit: BoxFit.cover, // Ensures it covers the screen
+            //     width: MediaQuery.of(context).size.width,
+            //     height: MediaQuery.of(context).size.height,
+            //     alignment: Alignment.center,
+            //   )
+            // else if (backgroundImage.isNotEmpty)
+            //   Image.asset(
+            //     backgroundImage,
+            //     fit: BoxFit.cover, // Ensures it covers the screen
+            //     width: MediaQuery.of(context).size.width,
+            //     height: MediaQuery.of(context).size.height,
+            //     alignment: Alignment.center,
+            //   ),
+            // if (thumbnail != null || backgroundImage.isNotEmpty)
+            //   BackdropFilter(
+            //     filter: ImageFilter.blur(
+            //       sigmaX: 20,
+            //       sigmaY: 20,
+            //     ), // ✅ Blur intensity
+            //     child: Container(
+            //       color: Colors.black.withValues(
+            //         alpha: 0.2,
+            //       ), // Optional overlay for contrast
+            //     ),
+            //   ),
+            if (backgroundImage.isNotEmpty)
+              BlurImageWidget(
+                imagePath: backgroundImage,
+                size: Size(SharedData.fullWidth, SharedData.fullHeight),
+                sigmaX: 20,
+                sigmaY: 20,
               ),
             if (isDarkBottom)
               Container(

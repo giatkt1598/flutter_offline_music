@@ -4,6 +4,7 @@ import 'package:flutter_offline_music/pages/library_list_page.dart';
 import 'package:flutter_offline_music/pages/load_music_page.dart';
 import 'package:flutter_offline_music/pages/setting_page.dart';
 import 'package:flutter_offline_music/pages/full_music_list_page.dart';
+import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:flutter_offline_music/utilities/app_background_helper.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,8 +16,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   bool initMiniPlayer = false;
+
   @override
   Widget build(BuildContext context) {
+    SharedData.fullHeight = MediaQuery.of(context).size.height;
+    SharedData.fullWidth = MediaQuery.of(context).size.width;
+    SharedData.statusBarHeight = MediaQuery.of(context).padding.top;
     if (!initMiniPlayer) {
       setState(() {
         initMiniPlayer = true;
