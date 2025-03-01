@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:just_waveform/just_waveform.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -24,11 +25,11 @@ Future<NonSilentFoundedResult?> findNonSilentPosition(String filePath) async {
   final completer = Completer<NonSilentFoundedResult>();
   late StreamSubscription<WaveformProgress> progressDone;
   progressDone = waveformStream.listen((progress) {
-    print('[wave]${progress.progress}');
+    logDebug('[wave]${progress.progress}');
     if (progress.waveform != null) {
       Duration start = _findFirstNonSilent(progress.waveform!);
       if (start != Duration.zero) {
-        print('[wave]done');
+        logDebug('[wave]done');
         completer.complete(NonSilentFoundedResult(start, Duration.zero));
         progressDone.cancel();
       }

@@ -2,6 +2,7 @@ import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/models/music_library.dart';
 import 'package:flutter_offline_music/services/database_helper.dart';
 import 'package:flutter_offline_music/services/db_table.dart';
+import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:sqflite/sqflite.dart';
 
 class LibraryService {
@@ -36,7 +37,7 @@ class LibraryService {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     } catch (e) {
-      print('[addMusicToLibraryAsync] $e');
+      logDebug('[addMusicToLibraryAsync] $e');
       rethrow;
     }
   }
@@ -65,7 +66,7 @@ class LibraryService {
             whereArgs.isNotEmpty ? whereArgs : null, // Prevent SQL errors
       );
     } catch (e) {
-      print('[removeMusicInLibraryAsync] $e');
+      logDebug('[removeMusicInLibraryAsync] $e');
       rethrow;
     }
   }

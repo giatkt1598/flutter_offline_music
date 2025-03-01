@@ -5,7 +5,7 @@ class AudioWaveAnimation extends StatefulWidget {
   const AudioWaveAnimation({super.key});
 
   @override
-  _AudioWaveAnimationState createState() => _AudioWaveAnimationState();
+  State<AudioWaveAnimation> createState() => _AudioWaveAnimationState();
 }
 
 class _AudioWaveAnimationState extends State<AudioWaveAnimation>

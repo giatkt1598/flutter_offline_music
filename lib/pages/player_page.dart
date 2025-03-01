@@ -179,8 +179,20 @@ class _PlayerPageState extends State<PlayerPage> {
                             ),
                           ),
                           if (audioHandler.stopTime != null)
-                            Countdown(endTime: audioHandler.stopTime),
-                          MusicDiscIllustrator(),
+                            DefaultTextStyle(
+                              style: TextStyle(fontSize: 10),
+                              child: Opacity(
+                                opacity: 0.5,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Dừng sau '),
+                                    Countdown(endTime: audioHandler.stopTime),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          Expanded(child: MusicDiscIllustrator()),
                           Column(
                             children: [
                               Column(

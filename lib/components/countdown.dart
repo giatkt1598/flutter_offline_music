@@ -63,8 +63,8 @@ class _CountdownState extends State<Countdown> {
   Widget build(BuildContext context) {
     final txt =
         duration > Duration(minutes: 5)
-            ? '${duration.inHours} giờ ${duration.inMinutes % 60} phút'
-            : '${duration.inMinutes} phút ${duration.inSeconds % 60} giây';
+            ? '${duration.inHours > 0 ? '${duration.inHours} giờ ' : ''}${duration.inMinutes % 60} phút'
+            : '${duration.inMinutes > 0 ? '${duration.inMinutes} phút ' : ''}${duration.inSeconds % 60} giây';
     return Text(txt);
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/hidden_music_folder_info.dart';
 import 'package:flutter_offline_music/components/menu_popover.dart';
 import 'package:flutter_offline_music/components/music_list.dart';
-import 'package:flutter_offline_music/components/song_list_item.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/providers/music_folder_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';

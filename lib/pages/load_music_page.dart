@@ -7,6 +7,7 @@ import 'package:flutter_offline_music/pages/music_in_folder_page.dart';
 import 'package:flutter_offline_music/providers/music_folder_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/permission_service.dart';
+import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:provider/provider.dart';
 
 class LoadMusicPage extends StatefulWidget {
@@ -68,7 +69,7 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
           _musicFolders = list;
         });
       } else {
-        print("Permission Denied");
+        logDebug("Permission Denied");
       }
       EasyLoading.dismiss();
     }

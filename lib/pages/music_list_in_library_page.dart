@@ -1,9 +1,7 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/music_list.dart';
-import 'package:flutter_offline_music/components/music_list_item.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/pages/music_select_to_library_page.dart';

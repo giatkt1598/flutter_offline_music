@@ -10,7 +10,8 @@
   "scripts": {
     "splash": "flutter pub run flutter_native_splash:create",
     "icon": "flutter pub run flutter_launcher_icons:main",
-    "apk": "flutter build apk --release"
+    "apk": "flutter build apk --release",
+    "build": "yarn apk"
   },
   "keywords": [],
   "author": "",

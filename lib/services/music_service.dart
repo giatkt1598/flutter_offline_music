@@ -6,7 +6,6 @@ import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/services/database_helper.dart';
 import 'package:flutter_offline_music/services/db_table.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:sqflite/sqlite_api.dart';
 
 class MusicService {

@@ -6,6 +6,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
+import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -52,7 +53,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   bool get canNext =>
       _playlist.isNotEmpty && currentIndex + 1 < _playlist.length;
 
-  StreamSubscription<Duration>? positionSubscription;
+  StreamSubscription<Duration>? _positionSubscription;
 
   AppAudioHandler() {
     _createAudioPlayer();
@@ -78,7 +79,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   Future<void> playMediaItem(MediaItem mediaItem) async {
     if (_currentMediaItem?.id != mediaItem.id || _player.duration == null) {
       if (!File(mediaItem.id).existsSync()) {
-        print('Not found path ${mediaItem.id}');
+        logDebug('Not found path ${mediaItem.id}');
         return;
       }
 
@@ -111,7 +112,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   Future<void> play() async {
     if (SettingProvider.staticAppSetting.autoVolumnPausePlay) {
       innerPlay() async {
-        positionSubscription?.pause();
+        _positionSubscription?.pause();
         playing = true;
         notifyListeners();
 
@@ -119,7 +120,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
         _player.play();
 
         await fadeOutAudio(reverse: true);
-        positionSubscription?.resume();
+        _positionSubscription?.resume();
       }
 
       innerPlay();
@@ -131,14 +132,14 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   @override
   Future<void> pause() async {
-    positionSubscription?.pause();
+    _positionSubscription?.pause();
     if (SettingProvider.staticAppSetting.autoVolumnPausePlay) {
       playing = false;
       notifyListeners();
       await fadeOutAudio();
     }
     await _player.pause();
-    positionSubscription?.resume();
+    _positionSubscription?.resume();
   }
 
   Future<void> fadeOutAudio({bool reverse = false}) {
@@ -222,9 +223,13 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       if (!timer.isActive || _stopTime == null) return;
 
       if (_stopTime!.difference(DateTime.now()) <= Duration.zero) {
+        _positionSubscription?.pause();
         stop();
         _stopTime = null;
         _timerStop?.cancel();
+        Future.delayed(Duration(seconds: 1), () {
+          _positionSubscription?.resume();
+        });
       }
     });
   }
@@ -238,7 +243,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   @override
   Future customAction(String name, [Map<String, dynamic>? extras]) async {
-    print('action $name');
+    logDebug('action $name');
     stop();
     // return super.customAction(name, extras);
   }
@@ -287,7 +292,8 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       notifyListeners();
     });
 
-    positionSubscription = _player.positionStream.listen((p) {
+    _positionSubscription = _player.positionStream.listen((p) {
+      if (_positionSubscription?.isPaused == true) return;
       if (_position >= _duration && _duration > Duration.zero) {
         if (player.loopMode == LoopMode.one) {
           seek(Duration.zero);
@@ -357,7 +363,6 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   static Future<AppAudioHandler> createInstance() async {
     WidgetsFlutterBinding.ensureInitialized();
-    // Kiểm tra & yêu cầu quyền thông báo trên Android 13+
     if (await Permission.notification.isDenied) {
       await Permission.notification.request();
     }

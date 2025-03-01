@@ -94,6 +94,9 @@ class _DurationPickerState extends State<DurationPicker> {
                         int newMinute = quickOptions[opt]!.inMinutes % 60;
                         _hourWheelKey.currentState!.scrollToIndex(newHour);
                         _minuteWheelKey.currentState!.scrollToIndex(newMinute);
+                        if (widget.onChanged != null) {
+                          widget.onChanged!(quickOptions[opt]!);
+                        }
                       },
                       child: Text(
                         opt,

@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_offline_music/utilities/debug_helper.dart';
 
 class AppBackgroundHelper {
   static const MethodChannel _channel = MethodChannel(
@@ -9,7 +10,7 @@ class AppBackgroundHelper {
     try {
       await _channel.invokeMethod('moveToBackground');
     } on PlatformException catch (e) {
-      print("Lỗi khi đưa ứng dụng vào nền: ${e.message}");
+      logDebug("Lỗi khi đưa ứng dụng vào nền: ${e.message}");
     }
   }
 }
