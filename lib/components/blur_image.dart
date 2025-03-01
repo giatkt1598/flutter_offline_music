@@ -25,6 +25,7 @@ class BlurImageWidget extends StatelessWidget {
         }
 
         return CustomPaint(
+          key: ValueKey(snapshot.data!),
           size: size,
           painter: BlurImagePainter(
             snapshot.data!,

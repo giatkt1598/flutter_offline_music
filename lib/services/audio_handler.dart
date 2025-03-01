@@ -52,7 +52,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   bool get canPrevious => _playlist.isNotEmpty && currentIndex > 0;
   bool get canNext =>
       _playlist.isNotEmpty && currentIndex + 1 < _playlist.length;
-
+  String playingMediaItemId = '';
   StreamSubscription<Duration>? _positionSubscription;
 
   AppAudioHandler() {
@@ -77,12 +77,13 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   @override
   Future<void> playMediaItem(MediaItem mediaItem) async {
-    if (_currentMediaItem?.id != mediaItem.id || _player.duration == null) {
+    if (playingMediaItemId != mediaItem.id || _player.duration == null) {
       if (!File(mediaItem.id).existsSync()) {
         logDebug('Not found path ${mediaItem.id}');
         return;
       }
 
+      playingMediaItemId = mediaItem.id;
       await _player.setFilePath(mediaItem.id);
       if (SettingProvider.staticAppSetting.skipSilent) {
         // print('[wave]start');
@@ -93,10 +94,16 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
         //   await _player.seek(nonSilentPosition.start);
         // }
       }
+      await _setCurrentMediaItem(mediaItem);
     } else if (_position >= _duration) {
       seek(Duration.zero);
     }
 
+    await play();
+    notifyListeners();
+  }
+
+  Future<void> _setCurrentMediaItem(MediaItem mediaItem) async {
     var albumArtFile = await getPictureFile(mediaItem.id);
     _currentMediaItem =
         albumArtFile != null
@@ -104,8 +111,6 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
             : mediaItem;
 
     this.mediaItem.add(_currentMediaItem);
-    await play();
-    notifyListeners();
   }
 
   @override
@@ -177,15 +182,25 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   @override
   Future<void> skipToNext() async {
     if (!canNext) return;
-    await pause();
-    await playMediaItem(_playlist[currentIndex + 1]);
+    final nextMediaItem = _playlist[currentIndex + 1];
+    _setCurrentMediaItem(nextMediaItem);
+    notifyListeners();
+    if (SettingProvider.staticAppSetting.autoVolumnPausePlay) {
+      await fadeOutAudio();
+    }
+    await playMediaItem(nextMediaItem);
   }
 
   @override
   Future<void> skipToPrevious() async {
     if (!canPrevious) return;
-    await pause();
-    await playMediaItem(_playlist[currentIndex - 1]);
+    final preMediaItem = _playlist[currentIndex - 1];
+    _setCurrentMediaItem(preMediaItem);
+    notifyListeners();
+    if (SettingProvider.staticAppSetting.autoVolumnPausePlay) {
+      await fadeOutAudio();
+    }
+    await playMediaItem(preMediaItem);
   }
 
   bool get isShuffle => _player.shuffleModeEnabled;

@@ -69,6 +69,10 @@ class _PlayerPageState extends State<PlayerPage> {
         Theme.of(context).brightness == Brightness.light;
     final duration = audioHandler.currentMediaItem?.duration ?? Duration.zero;
 
+    final currentPosition =
+        audioHandler.playingMediaItemId == audioHandler.currentMediaItem?.id
+            ? position
+            : Duration.zero;
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
         playerProvider.isShowMiniPlayer = true;
@@ -242,7 +246,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                   ),
                                   Slider(
                                     value: min(
-                                      position.inSeconds.toDouble(),
+                                      currentPosition.inSeconds.toDouble(),
                                       duration.inSeconds.toDouble(),
                                     ),
                                     min: 0,
@@ -265,7 +269,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                       children: [
                                         Text(
                                           fDurationHHMMSS(
-                                            position,
+                                            currentPosition,
                                             short: true,
                                           ),
                                         ),
