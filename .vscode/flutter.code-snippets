@@ -1,20 +1,23 @@
 {
-    "PlayerProvider": {
-        "scope": "dart",
-        "prefix": "pp",
-        "body": "final playerProvider = Provider$0.of<PlayerProvider>(context, $1);"
-    },
-    "ThemeContext": {
-        "scope": "dart",
-        "prefix": "tc",
-        "body": "Theme.of(context).$0"
-    },
-    
-    "MediaQuery": {
-        "scope": "dart",
-        "prefix": "mq",
-        "body": "MediaQuery.of(context).size.$0"
-    }
+  "PlayerProvider": {
+    "scope": "dart",
+    "prefix": "pp",
+    "body": "final playerProvider = Provider$0.of<PlayerProvider>(context, $1);"
+  },
+  "ThemeContext": {
+    "scope": "dart",
+    "prefix": "tc",
+    "body": "Theme.of(context).$0"
+  },
 
-    
+  "MediaQuery": {
+    "scope": "dart",
+    "prefix": "mq",
+    "body": "MediaQuery.of(context).size.$0"
+  },
+  "Log": {
+    "scope": "dart",
+    "prefix": "lg",
+    "body": "logDebug('$0');"
+  }
 }

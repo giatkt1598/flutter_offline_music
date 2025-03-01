@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/components/audio_slider.dart';
 import 'package:flutter_offline_music/components/auto_scroll_text.dart';
 import 'package:flutter_offline_music/components/blur_image.dart';
 import 'package:flutter_offline_music/components/countdown.dart';
@@ -244,7 +243,7 @@ class _PlayerPageState extends State<PlayerPage> {
                                       SizedBox(height: 12),
                                     ],
                                   ),
-                                  Slider(
+                                  AudioSlider(
                                     value: min(
                                       currentPosition.inSeconds.toDouble(),
                                       duration.inSeconds.toDouble(),
@@ -255,9 +254,6 @@ class _PlayerPageState extends State<PlayerPage> {
                                         (value) => audioHandler.seek(
                                           Duration(seconds: value.toInt()),
                                         ),
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                    ),
                                   ),
                                   Padding(
                                     padding: EdgeInsets.symmetric(

@@ -108,6 +108,11 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Text(
+                'Hẹn giờ ngủ',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 16, width: 30, child: Divider()),
               DurationPicker(
                 value: newDuration,
                 onChanged: (du) {
