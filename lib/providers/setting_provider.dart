@@ -23,6 +23,7 @@ class SettingProvider extends ChangeNotifier {
     bool? pauseWhenOpenOtherApp,
     String? languageCode,
     String? playerBackgroundImage,
+    double? backgroundBlurValue,
   }) async {
     _appSetting.autoScanFiles = autoScanFiles ?? _appSetting.autoScanFiles;
     _appSetting.autoVolumnPausePlay =
@@ -36,6 +37,8 @@ class SettingProvider extends ChangeNotifier {
         useHeadsetControl ?? _appSetting.useHeadsetControl;
     _appSetting.playerBackgroundImage =
         playerBackgroundImage ?? _appSetting.playerBackgroundImage;
+    _appSetting.backgroundBlurValue =
+        backgroundBlurValue ?? _appSetting.backgroundBlurValue;
     final pref = await SharedPreferences.getInstance();
     pref.setString('appSetting', jsonEncode(_appSetting.toJson()));
 
@@ -47,8 +50,12 @@ class SettingProvider extends ChangeNotifier {
     final setting = pref.getString('appSetting');
     if (setting != null) {
       var jsonCode = jsonDecode(setting);
-      _appSetting = AppSetting.fromJson(jsonCode);
-      notifyListeners();
+      try {
+        _appSetting = AppSetting.fromJson(jsonCode);
+        notifyListeners();
+      } catch (e) {
+        pref.remove('appSetting');
+      }
     }
 
     return _appSetting;

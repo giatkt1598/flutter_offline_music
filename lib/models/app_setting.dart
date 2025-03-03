@@ -9,6 +9,7 @@ class AppSetting {
   bool pauseWhenOpenOtherApp = true;
   String languageCode = 'vi';
   String playerBackgroundImage = '';
+  double backgroundBlurValue; // Value from 0 -> 1.0
 
   AppSetting({
     this.themeMode = ThemeMode.system,
@@ -19,6 +20,7 @@ class AppSetting {
     this.pauseWhenOpenOtherApp = true,
     this.languageCode = 'vi',
     this.playerBackgroundImage = '',
+    this.backgroundBlurValue = 1.0,
   });
 
   Map<String, dynamic> toJson() {
@@ -31,6 +33,7 @@ class AppSetting {
       'pauseWhenOpenOtherApp': pauseWhenOpenOtherApp,
       'languageCode': languageCode,
       'playerBackgroundImage': playerBackgroundImage,
+      'backgroundBlurValue': backgroundBlurValue,
     };
   }
 
@@ -44,6 +47,7 @@ class AppSetting {
       pauseWhenOpenOtherApp: json['pauseWhenOpenOtherApp'],
       languageCode: json['languageCode'],
       playerBackgroundImage: json['playerBackgroundImage'],
+      backgroundBlurValue: json['backgroundBlurValue'],
     );
   }
 }

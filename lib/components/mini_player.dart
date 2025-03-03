@@ -98,7 +98,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
         isScrollControlled: true,
         builder: (context) {
           return SizedBox(
-            height: SharedData.fullHeight - SharedData.statusBarHeight,
+            height: SharedData.fullHeight,
             child: PlayerPage(music: music),
           );
         },

@@ -8,6 +8,7 @@ import 'package:flutter_offline_music/components/blur_image.dart';
 import 'package:flutter_offline_music/components/countdown.dart';
 import 'package:flutter_offline_music/components/music_disc_illustrator.dart';
 import 'package:flutter_offline_music/components/music_item_menu.dart';
+import 'package:flutter_offline_music/constants/constant.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
@@ -79,13 +80,15 @@ class _PlayerPageState extends State<PlayerPage> {
       child: Stack(
         children: [
           if (backgroundImage.isNotEmpty)
-            ClipRRect(
-              child: BlurImageWidget(
-                imagePath: backgroundImage,
-                size: Size(SharedData.fullWidth, SharedData.fullHeight),
-                sigmaX: 20,
-                sigmaY: 20,
-              ),
+            BlurImageWidget(
+              imagePath: backgroundImage,
+              size: Size(SharedData.fullWidth, SharedData.fullHeight),
+              sigmaX:
+                  settingProvider.appSetting.backgroundBlurValue *
+                  Constants.backgroundBlurSigmaMaxValue,
+              sigmaY:
+                  settingProvider.appSetting.backgroundBlurValue *
+                  Constants.backgroundBlurSigmaMaxValue,
             ),
           if (isDarkBottom)
             Container(

@@ -70,19 +70,18 @@ flutter:
     - assets/music.gif
     - assets/disc_hole.png
     - assets/splash.png
-    - assets/player_bg/player_bg (1).jpg
     - assets/player_bg/player_bg (1).webp
-    - assets/player_bg/player_bg (2).jpg
     - assets/player_bg/player_bg (2).webp
-    - assets/player_bg/player_bg (3).jpg
     - assets/player_bg/player_bg (3).webp
-    - assets/player_bg/player_bg (3).webp
-    - assets/player_bg/player_bg (4).jpg
     - assets/player_bg/player_bg (4).webp
     - assets/player_bg/player_bg (5).webp
     - assets/player_bg/player_bg (6).webp
     - assets/player_bg/player_bg (7).webp
     - assets/player_bg/player_bg (8).webp
+    - assets/player_bg/player_bg (9).webp
+    - assets/player_bg/player_bg (10).webp
+    - assets/player_bg/player_bg (11).webp
+    - assets/player_bg/player_bg (12).webp
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

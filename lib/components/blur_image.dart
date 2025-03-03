@@ -24,13 +24,15 @@ class BlurImageWidget extends StatelessWidget {
           return Container();
         }
 
-        return CustomPaint(
-          key: ValueKey(snapshot.data!),
-          size: size,
-          painter: BlurImagePainter(
-            snapshot.data!,
-            sigmaX: sigmaX,
-            sigmaY: sigmaY,
+        return ClipRRect(
+          child: CustomPaint(
+            key: ValueKey(snapshot.data!),
+            size: size,
+            painter: BlurImagePainter(
+              snapshot.data!,
+              sigmaX: sigmaX,
+              sigmaY: sigmaY,
+            ),
           ),
         );
       },

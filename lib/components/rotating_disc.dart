@@ -65,7 +65,7 @@ class _RotatingDiscState extends State<RotatingDisc>
           shape: BoxShape.circle,
           image: DecorationImage(
             image: AssetImage('assets/disc_2.png'), // Đĩa nhạc
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
           ),
           boxShadow: [
             BoxShadow(color: Colors.black26, blurRadius: 10, spreadRadius: 2),
