@@ -6,6 +6,8 @@ import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/services/database_helper.dart';
 import 'package:flutter_offline_music/services/db_table.dart';
+import 'package:flutter_offline_music/utilities/debug_helper.dart';
+import 'package:flutter_offline_music/utilities/find_nonsilent_position.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:sqflite/sqlite_api.dart';
 
@@ -276,6 +278,30 @@ WHERE (:isHidden IS NULL OR :isHidden = 1 OR ${DbTable.musicFolder}.isHidden = 0
       onCompleted(addedFileCount, removedFileCount);
     }
     return list;
+  }
+
+  static bool _isFetchedSkipSilent = false;
+  fetchSkipSilentDurations() async {
+    if (_isFetchedSkipSilent) return;
+    _isFetchedSkipSilent = true;
+    var musics = await getListMusicAsync(isHidden: null);
+    musics =
+        musics
+            .where((x) => x.skipSilentStart == null && x.skipSilentEnd == null)
+            .toList();
+    logDebug('Start fetchSkipSilentDurations');
+    for (var music in musics) {
+      var result = await findNonSilentPosition(music.path);
+      if (result != null) {
+        logDebug(
+          'Update skip silent: ${music.path} start: ${result.start} end: ${result.end}',
+        );
+        music.skipSilentStart = result.start.inMilliseconds;
+        music.skipSilentEnd = result.end.inMilliseconds;
+        await updateMusicAsync(music);
+      }
+    }
+    logDebug('End fetchSkipSilentDurations');
   }
 
   String calcTotalDuration(List<Music> list) {

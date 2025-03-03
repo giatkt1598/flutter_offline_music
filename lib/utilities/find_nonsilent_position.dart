@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:just_waveform/just_waveform.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -12,10 +11,12 @@ class NonSilentFoundedResult {
   NonSilentFoundedResult(this.start, this.end);
 }
 
-@Deprecated('Quá chậm')
+//TODO: Fix performance
 Future<NonSilentFoundedResult?> findNonSilentPosition(String filePath) async {
   final tempDir = await getTemporaryDirectory();
-  final waveformFile = File('${tempDir.path}/waveform.json');
+  final waveformFile = File(
+    '${tempDir.path}/${filePath.replaceAll('/', '_')}.json',
+  );
   // Phân tích sóng âm thanh
   final waveformStream = JustWaveform.extract(
     audioInFile: File(filePath),
@@ -25,14 +26,11 @@ Future<NonSilentFoundedResult?> findNonSilentPosition(String filePath) async {
   final completer = Completer<NonSilentFoundedResult>();
   late StreamSubscription<WaveformProgress> progressDone;
   progressDone = waveformStream.listen((progress) {
-    logDebug('[wave]${progress.progress}');
     if (progress.waveform != null) {
       Duration start = _findFirstNonSilent(progress.waveform!);
-      if (start != Duration.zero) {
-        logDebug('[wave]done');
-        completer.complete(NonSilentFoundedResult(start, Duration.zero));
-        progressDone.cancel();
-      }
+      Duration end = _findLastNonSilent(progress.waveform!);
+      completer.complete(NonSilentFoundedResult(start, end));
+      progressDone.cancel();
     }
   });
   return completer.future;
@@ -45,12 +43,16 @@ abs(int num) {
   return num;
 }
 
+final int _totalStartNonSilentWave = 10;
+final int _nonSilentThreshold = 1000;
+
 // Hàm tìm điểm bắt đầu không có khoảng lặng
 Duration _findFirstNonSilent(Waveform waveform) {
-  for (int i = 0; i < waveform.data.length - 3; i++) {
-    if (abs(waveform.data[i]) > 1000 &&
-        abs(waveform.data[i + 1]) > 1000 &&
-        abs(waveform.data[i + 2]) > 1000) {
+  for (int i = 0; i < waveform.data.length - _totalStartNonSilentWave; i++) {
+    final isTouchedNonSilent = waveform.data
+        .sublist(i, i + _totalStartNonSilentWave)
+        .every((w) => abs(w) > _nonSilentThreshold);
+    if (isTouchedNonSilent) {
       // Ngưỡng khoảng lặng
       Duration position = Duration(
         milliseconds:
@@ -65,9 +67,18 @@ Duration _findFirstNonSilent(Waveform waveform) {
 
 // Hàm tìm điểm kết thúc không có khoảng lặng
 Duration _findLastNonSilent(Waveform waveform) {
-  for (int i = waveform.data.length - 1; i >= 0; i--) {
-    if (waveform.data[i] > 0.02) {
-      return Duration(milliseconds: (i / waveform.sampleRate * 1000).toInt());
+  for (int i = waveform.data.length - 1; i > _totalStartNonSilentWave; i--) {
+    final isTouchedNonSilent = waveform.data
+        .sublist(i - _totalStartNonSilentWave, i)
+        .every((w) => abs(w) > _nonSilentThreshold);
+    if (isTouchedNonSilent) {
+      // Ngưỡng khoảng lặng
+      Duration position = Duration(
+        milliseconds:
+            (i / waveform.data.length * waveform.duration.inMilliseconds)
+                .toInt(),
+      );
+      return position;
     }
   }
   return Duration.zero;

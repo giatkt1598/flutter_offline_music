@@ -1,7 +1,9 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/models/music.dart';
+import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/services/audio_handler.dart';
+import 'package:flutter_offline_music/services/music_service.dart';
+import 'package:flutter_offline_music/services/toast_service.dart';
 
 class PlayerProvider extends ChangeNotifier {
   bool isShowMiniPlayer = true;
@@ -20,24 +22,39 @@ class PlayerProvider extends ChangeNotifier {
 
   setMusics(List<Music> musics) {
     this.musics = musics;
-    audioHandler.setPlaylist(
-      this.musics
-          .map(
-            (e) => MediaItem(
-              id: e.path,
-              title: e.title,
-              artist: e.artist ?? '<Không rõ tác giả>',
-              album: 'Tất cả',
-              duration: e.duration,
-            ),
-          )
-          .toList(),
-    );
+    audioHandler.setPlaylist(this.musics.map((e) => e.toMediaItem()).toList());
 
     notifyListeners();
   }
 
   PlayerProvider() {
     audioHandler.addListener(notifyListeners);
+
+    _init();
+  }
+
+  Future<void> _init() async {
+    final musicService = MusicService();
+    final bool isExecSyncData = SettingProvider.staticAppSetting.autoScanFiles;
+    if (isExecSyncData) {
+      await musicService.scanMusicAsync(
+        onCompleted: (totalNewFile, totalDeletedFile) {
+          if (totalNewFile > 0) {
+            ToastService.showSuccess('Đã thêm $totalNewFile bài hát từ bộ nhớ');
+          }
+
+          if (totalDeletedFile > 0) {
+            ToastService.showSuccess(
+              'Đã xóa $totalDeletedFile bài hát vì không tìm thấy tệp trong bộ nhớ',
+            );
+          }
+        },
+      );
+    }
+
+    final bool isSkipSilent = SettingProvider.staticAppSetting.skipSilent;
+    if (isSkipSilent) {
+      await musicService.fetchSkipSilentDurations();
+    }
   }
 }

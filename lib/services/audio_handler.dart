@@ -66,13 +66,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   }
 
   Future<void> playMusic(Music music) async {
-    MediaItem item = MediaItem(
-      id: music.path,
-      title: music.title,
-      artist: music.artist ?? '<Không rõ tác giả>',
-      album: 'Tất cả',
-      duration: music.duration,
-    );
+    MediaItem item = music.toMediaItem();
     await playMediaItem(item);
   }
 
@@ -96,13 +90,10 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
         await _player.setFilePath(mediaItem.id);
       }
       if (SettingProvider.staticAppSetting.skipSilent) {
-        // print('[wave]start');
-        // var nonSilentPosition = await findNonSilentPosition(mediaItem.id);
-        // print('[wave]end');
-        // if (nonSilentPosition != null) {
-        //   print('[wave]${nonSilentPosition.start}');
-        //   await _player.seek(nonSilentPosition.start);
-        // }
+        final Music music = mediaItem.extras!['music'] as Music;
+        if (music.skipSilentStartDuration != null) {
+          await _player.seek(music.skipSilentStartDuration);
+        }
       }
       await _setCurrentMediaItem(mediaItem);
     } else if (_position >= _duration) {
@@ -319,7 +310,17 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
     _positionSubscription = _player.positionStream.listen((p) {
       if (_positionSubscription?.isPaused == true) return;
-      if (_position >= _duration && _duration > Duration.zero) {
+
+      final Music? music = currentMediaItem?.extras!['music'] as Music?;
+      bool isEndBySkipSilent =
+          SettingProvider.staticAppSetting.skipSilent &&
+          music?.skipSilentEndDuration != null &&
+          music!.skipSilentEndDuration! <= _position;
+      bool isEndByLastPosition =
+          _position >= _duration && _duration > Duration.zero;
+      bool isEndAudio = isEndBySkipSilent || isEndByLastPosition;
+
+      if (isEndAudio) {
         if (player.loopMode == LoopMode.one) {
           seek(Duration.zero);
         } else if (canNext) {

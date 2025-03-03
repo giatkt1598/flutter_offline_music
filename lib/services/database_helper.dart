@@ -20,7 +20,7 @@ class DatabaseHelper {
   static Future<void> resetDatabase() async {
     String path = join(await getDatabasesPath(), _databaseName);
     await deleteDatabase(path);
-    _database = await _initDatabase();
+    // _database = await _initDatabase();
   }
 
   static Future<Database> _initDatabase() async {
@@ -52,6 +52,8 @@ id INTEGER PRIMARY KEY AUTOINCREMENT
 , genre TEXT
 , creationTime TEXT
 , isHidden INTEGER NOT NULL DEFAULT 0
+, skipSilentStart INTEGER
+, skipSilentEnd INTEGER
 , FOREIGN KEY (musicFolderId) REFERENCES ${DbTable.musicFolder}(id) ON DELETE CASCADE
 )
           ''');
