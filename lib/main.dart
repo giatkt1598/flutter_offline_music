@@ -7,6 +7,7 @@ import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/services/audio_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:toastification/toastification.dart';
 
 Future<void> main() async {
   await AppAudioHandler.createInstance();
@@ -42,7 +43,9 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData.dark(),
       themeMode: appSetting.themeMode,
       home: const SplashPage(home: HomePage()),
-      builder: EasyLoading.init(),
+      builder: (context, child) {
+        return ToastificationWrapper(child: FlutterEasyLoading(child: child));
+      },
     );
   }
 }

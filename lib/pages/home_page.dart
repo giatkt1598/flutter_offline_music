@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     SharedData.fullHeight = MediaQuery.of(context).size.height;
     SharedData.fullWidth = MediaQuery.of(context).size.width;
     SharedData.statusBarHeight = MediaQuery.of(context).padding.top;
+    SharedData.rootContext = context;
     if (!initMiniPlayer) {
       setState(() {
         initMiniPlayer = true;

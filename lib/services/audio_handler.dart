@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
@@ -84,7 +85,16 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       }
 
       playingMediaItemId = mediaItem.id;
-      await _player.setFilePath(mediaItem.id);
+      if (kDebugMode) {
+        try {
+          await _player.setFilePath(mediaItem.id);
+        } catch (e) {
+          await Future.delayed(Duration(seconds: 1));
+          await _player.setFilePath(mediaItem.id);
+        }
+      } else {
+        await _player.setFilePath(mediaItem.id);
+      }
       if (SettingProvider.staticAppSetting.skipSilent) {
         // print('[wave]start');
         // var nonSilentPosition = await findNonSilentPosition(mediaItem.id);

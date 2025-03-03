@@ -7,6 +7,7 @@ import 'package:flutter_offline_music/pages/music_in_folder_page.dart';
 import 'package:flutter_offline_music/providers/music_folder_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/permission_service.dart';
+import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -64,7 +65,22 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
         dismissOnTap: false,
       );
       if (await _permissionService.requestStoragePermissionAsync()) {
-        var list = await _musicService.scanMusicAsync();
+        var list = await _musicService.scanMusicAsync(
+          onCompleted: (totalNewFile, totalDeletedFile) {
+            ToastService.showSuccess(
+              [
+                'Quét thành công',
+                totalNewFile == 0
+                    ? 'không có tệp mới'
+                    : 'đã thêm $totalNewFile bài hát',
+                totalDeletedFile > 0
+                    ? 'gỡ bỏ $totalDeletedFile bài hát vì không tìm thấy tệp trên thiết bị'
+                    : null,
+              ].where((x) => x != null).join(', '),
+              duration: Duration(seconds: 5),
+            );
+          },
+        );
         setState(() {
           _musicFolders = list;
         });

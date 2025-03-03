@@ -16,10 +16,10 @@ class _DurationPickerState extends State<DurationPicker> {
   final GlobalKey<NumberWheelState> _minuteWheelKey = GlobalKey();
 
   Map<String, Duration> quickOptions = {
-    "15 phút": Duration(minutes: 15),
-    "30 phút": Duration(minutes: 30),
-    "1 giờ": Duration(hours: 1),
-    "2 giờ": Duration(hours: 2),
+    "15m": Duration(minutes: 15),
+    "30m": Duration(minutes: 30),
+    "45m": Duration(minutes: 45),
+    "60m": Duration(hours: 1),
     "Tắt": Duration.zero,
   };
 

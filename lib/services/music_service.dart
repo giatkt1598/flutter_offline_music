@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:audio_metadata_reader/audio_metadata_reader.dart';
@@ -197,7 +198,18 @@ WHERE (:isHidden IS NULL OR :isHidden = 1 OR ${DbTable.musicFolder}.isHidden = 0
     }
   }
 
-  Future<List<MusicFolder>> scanMusicAsync() async {
+  Future<List<MusicFolder>> scanMusicAsync({
+    Function(String path)? onProgress,
+    Function(int totalNewFile, int totalDeletedFile)? onCompleted,
+  }) async {
+    int addedFileCount = 0;
+    int removedFileCount = 0;
+    final progressStream = StreamController<String>();
+    if (onProgress != null) {
+      progressStream.stream.listen((path) {
+        onProgress(path);
+      });
+    }
     List<String> musicFolderPaths = await getMusicFoldersInStorageAsync();
     final oldFolders = await getMusicFolderListAsync(isHidden: null);
     final oldMusics = await getListMusicAsync(isHidden: null);
@@ -229,6 +241,8 @@ WHERE (:isHidden IS NULL OR :isHidden = 1 OR ${DbTable.musicFolder}.isHidden = 0
             !musicPaths.contains(old.path),
       );
 
+      removedFileCount += notFoundMusics.length;
+
       for (var item in notFoundMusics) {
         await deleteMusicAsync(item.id);
       }
@@ -239,6 +253,8 @@ WHERE (:isHidden IS NULL OR :isHidden = 1 OR ${DbTable.musicFolder}.isHidden = 0
           musicPath.lastIndexOf('.'),
         );
 
+        bool isNew = !oldMusics.any((x) => x.path == musicPath);
+        if (isNew) addedFileCount++;
         final metadata = readMetadata(File(musicPath));
         await insertMusicAsync(
           Music(
@@ -252,9 +268,13 @@ WHERE (:isHidden IS NULL OR :isHidden = 1 OR ${DbTable.musicFolder}.isHidden = 0
             creationTime: (await File(musicPath).stat()).changed,
           ),
         );
+        progressStream.add(musicPath);
       }
     }
     var list = await getMusicFolderListAsync();
+    if (onCompleted != null) {
+      onCompleted(addedFileCount, removedFileCount);
+    }
     return list;
   }
 

@@ -6,7 +6,6 @@ import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/pages/player_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
-import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:provider/provider.dart';
 
 class MusicListItem extends StatelessWidget {

@@ -3,6 +3,7 @@ import 'package:flutter_offline_music/components/library_thumbnail.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/services/library_service.dart';
+import 'package:flutter_offline_music/services/toast_service.dart';
 
 class AddMusicItemToLibrary extends StatefulWidget {
   const AddMusicItemToLibrary({
@@ -41,7 +42,7 @@ class _AddMusicItemToLibraryState extends State<AddMusicItemToLibrary> {
       libraryId: library.id,
     );
 
-    //TODO: add message show info
+    ToastService.showSuccess('Đã thêm bài hát vào thư viện');
     Navigator.of(context).pop();
   }
 

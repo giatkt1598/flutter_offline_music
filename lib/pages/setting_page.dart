@@ -7,6 +7,7 @@ import 'package:flutter_offline_music/pages/language_list_page.dart';
 import 'package:flutter_offline_music/pages/setting_player_background_page.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/services/database_helper.dart';
+import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -48,13 +49,7 @@ class _SettingPageState extends State<SettingPage> {
 
       await DatabaseHelper.resetDatabase();
       await clearTemporaryDirectory();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Đã xóa dữ liệu, vui lòng khởi động lại app..."),
-          duration: Duration(seconds: 2),
-        ),
-      );
-
+      ToastService.showSuccess('Đã xóa dữ liệu, vui lòng khởi động lại app...');
       Timer(Duration(seconds: 1), () {
         exit(0);
       });

@@ -179,7 +179,7 @@ class _PlayerPageState extends State<PlayerPage> {
                         ),
                         if (audioHandler.stopTime != null)
                           DefaultTextStyle(
-                            style: TextStyle(fontSize: 10),
+                            style: TextStyle(fontSize: 12),
                             child: Opacity(
                               opacity: 0.5,
                               child: Row(

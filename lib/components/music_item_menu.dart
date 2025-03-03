@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/add_music_item_to_library.dart';
+import 'package:flutter_offline_music/components/app_button.dart';
 import 'package:flutter_offline_music/components/duration_picker.dart';
 import 'package:flutter_offline_music/components/music_info.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
+import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -119,38 +121,51 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                   newDuration = du == Duration.zero ? null : du;
                 },
               ),
-              SizedBox(
-                width: 120,
-                child: OutlinedButton(
-                  onPressed: () {
-                    audioHandler.setStopTime(duration: newDuration);
-                    String message = '';
-                    if (newDuration != null && newDuration! > Duration.zero) {
-                      message = 'Tắt nhạc sau ${fDurationLong(newDuration!)}';
-                    } else {
-                      message = "Đã tắt hẹn giờ";
-                    }
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(message),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-                    Navigator.pop(context);
-                  },
-                  child: Text('OK'),
-                ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8, right: 64, left: 64),
+                child: Divider(),
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Hủy',
-                  style: TextStyle(
-                    color: Theme.of(context).textTheme.titleMedium?.color,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 8,
+                children: [
+                  SizedBox(
+                    width: 120,
+                    child: AppButton(
+                      type: AppButtonType.secondary,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Hủy',
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.titleMedium?.color,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  SizedBox(
+                    width: 120,
+                    child: AppButton(
+                      type: AppButtonType.primary,
+                      onPressed: () {
+                        audioHandler.setStopTime(duration: newDuration);
+                        String message = '';
+                        if (newDuration != null &&
+                            newDuration! > Duration.zero) {
+                          message =
+                              'Tắt nhạc sau ${fDurationLong(newDuration!)}';
+                        } else {
+                          message = "Đã tắt hẹn giờ";
+                        }
+                        ToastService.showSuccess(message);
+                        Navigator.pop(context);
+                      },
+                      child: Text('OK'),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

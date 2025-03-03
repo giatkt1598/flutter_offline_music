@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/blur_image.dart';
-import 'package:flutter_offline_music/constants/constant.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:provider/provider.dart';
