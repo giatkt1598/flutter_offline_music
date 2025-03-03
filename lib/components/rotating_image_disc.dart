@@ -121,18 +121,11 @@ class CircleTransparentPainter extends CustomPainter {
     // Draw image on a new layer
     Rect rect = Rect.fromLTWH(0, 0, size.width, size.height);
     canvas.saveLayer(rect, Paint()); // ✅ Save layer before clearing pixels
+
+    Rect srcRect = calculateSrcRectToCover(image, size);
+    Rect dstRect = Rect.fromLTWH(0, 0, size.width, size.height);
     // Vẽ ảnh
-    canvas.drawImageRect(
-      image,
-      Rect.fromLTWH(
-        0,
-        0,
-        image.width.toDouble(),
-        image.height.toDouble(),
-      ), // Ảnh gốc
-      Rect.fromLTWH(0, 0, size.width, size.height), // Ảnh được vẽ trên canvas
-      paint,
-    );
+    canvas.drawImageRect(image, srcRect, dstRect, paint);
 
     // Tạo vùng trong suốt hình tròn
     Paint transparentPaint =

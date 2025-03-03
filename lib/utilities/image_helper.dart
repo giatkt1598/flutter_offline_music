@@ -24,3 +24,25 @@ Future<ui.Image> loadUIImage(String path) async {
   ui.decodeImageFromList(imageBytes, (ui.Image img) => completer.complete(img));
   return completer.future;
 }
+
+/// Hàm tính toán vùng cắt ảnh để đảm bảo `BoxFit.cover`
+Rect calculateSrcRectToCover(ui.Image image, Size targetSize) {
+  double imageAspect = image.width / image.height;
+  double targetAspect = targetSize.width / targetSize.height;
+
+  double srcWidth, srcHeight;
+  if (imageAspect > targetAspect) {
+    // Ảnh rộng hơn => Cắt chiều ngang
+    srcHeight = image.height.toDouble();
+    srcWidth = srcHeight * targetAspect;
+  } else {
+    // Ảnh cao hơn => Cắt chiều dọc
+    srcWidth = image.width.toDouble();
+    srcHeight = srcWidth / targetAspect;
+  }
+
+  double srcX = (image.width - srcWidth) / 2;
+  double srcY = (image.height - srcHeight) / 2;
+
+  return Rect.fromLTWH(srcX, srcY, srcWidth, srcHeight);
+}

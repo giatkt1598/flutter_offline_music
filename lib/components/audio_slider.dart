@@ -35,41 +35,39 @@ class _AudioSliderState extends State<AudioSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return Listener(
-      onPointerDown: (e) {
-        setState(() {
-          _isDragging = true;
-        });
-      },
-      onPointerUp: (e) {
-        setState(() {
-          _isDragging = false;
-        });
-        if (widget.onChanged != null) {
-          widget.onChanged!(value);
-        }
-      },
-      child: SliderTheme(
-        data: SliderThemeData(
-          inactiveTrackColor: Theme.of(
-            context,
-          ).colorScheme.secondaryContainer.withValues(alpha: 0.3),
-          thumbShape:
-              _isDragging ? null : RoundSliderThumbShape(enabledThumbRadius: 6),
-        ),
-        child: SizedBox(
-          height: 30,
-          child: Slider(
-            value: value,
-            min: widget.min,
-            max: widget.max,
-            onChanged: (val) {
-              setState(() {
-                value = val;
-              });
-            },
-            padding: EdgeInsets.symmetric(horizontal: 16),
-          ),
+    return SliderTheme(
+      data: SliderThemeData(
+        inactiveTrackColor: Theme.of(
+          context,
+        ).colorScheme.secondaryContainer.withValues(alpha: 0.3),
+        thumbShape:
+            _isDragging ? null : RoundSliderThumbShape(enabledThumbRadius: 6),
+      ),
+      child: SizedBox(
+        height: 30,
+        child: Slider(
+          value: value,
+          min: widget.min,
+          max: widget.max,
+          onChanged: (val) {
+            setState(() {
+              value = val;
+            });
+          },
+          onChangeStart: (value) {
+            setState(() {
+              _isDragging = true;
+            });
+          },
+          onChangeEnd: (value) {
+            setState(() {
+              _isDragging = false;
+            });
+            if (widget.onChanged != null) {
+              widget.onChanged!(value);
+            }
+          },
+          padding: EdgeInsets.symmetric(horizontal: 16),
         ),
       ),
     );

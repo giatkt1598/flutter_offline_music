@@ -121,11 +121,25 @@ class _PlayerPageState extends State<PlayerPage> {
                           style: TextStyle(
                             color:
                                 Theme.of(context).textTheme.bodyMedium!.color,
+                            shadows: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.9),
+                                blurRadius: 1,
+                                spreadRadius: 5,
+                              ),
+                            ],
                           ),
                           child: IconTheme(
                             data: IconThemeData(
                               color:
                                   Theme.of(context).textTheme.bodyMedium!.color,
+                              shadows: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.9),
+                                  blurRadius: 1,
+                                  spreadRadius: 5,
+                                ),
+                              ],
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

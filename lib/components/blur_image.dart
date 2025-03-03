@@ -55,33 +55,11 @@ class BlurImagePainter extends CustomPainter {
             tileMode: TileMode.mirror,
           );
     // Tính toán kích thước cắt ảnh theo BoxFit.cover
-    Rect srcRect = _calculateSrcRect(image, size);
+    Rect srcRect = calculateSrcRectToCover(image, size);
     Rect dstRect = Rect.fromLTWH(0, 0, size.width, size.height);
 
     // Vẽ ảnh bị blur
     canvas.drawImageRect(image, srcRect, dstRect, paint);
-  }
-
-  /// Hàm tính toán vùng cắt ảnh để đảm bảo `BoxFit.cover`
-  Rect _calculateSrcRect(ui.Image image, Size targetSize) {
-    double imageAspect = image.width / image.height;
-    double targetAspect = targetSize.width / targetSize.height;
-
-    double srcWidth, srcHeight;
-    if (imageAspect > targetAspect) {
-      // Ảnh rộng hơn => Cắt chiều ngang
-      srcHeight = image.height.toDouble();
-      srcWidth = srcHeight * targetAspect;
-    } else {
-      // Ảnh cao hơn => Cắt chiều dọc
-      srcWidth = image.width.toDouble();
-      srcHeight = srcWidth / targetAspect;
-    }
-
-    double srcX = (image.width - srcWidth) / 2;
-    double srcY = (image.height - srcHeight) / 2;
-
-    return Rect.fromLTWH(srcX, srcY, srcWidth, srcHeight);
   }
 
   @override
