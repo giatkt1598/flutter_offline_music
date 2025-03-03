@@ -18,7 +18,6 @@ class SettingProvider extends ChangeNotifier {
     ThemeMode? themeMode,
     bool? skipSilent,
     bool? autoVolumnPausePlay,
-    bool? useHeadsetControl,
     bool? autoScanFiles,
     bool? pauseWhenOpenOtherApp,
     String? languageCode,
@@ -29,12 +28,8 @@ class SettingProvider extends ChangeNotifier {
     _appSetting.autoVolumnPausePlay =
         autoVolumnPausePlay ?? _appSetting.autoVolumnPausePlay;
     _appSetting.languageCode = languageCode ?? _appSetting.languageCode;
-    _appSetting.pauseWhenOpenOtherApp =
-        pauseWhenOpenOtherApp ?? _appSetting.pauseWhenOpenOtherApp;
     _appSetting.skipSilent = skipSilent ?? _appSetting.skipSilent;
     _appSetting.themeMode = themeMode ?? _appSetting.themeMode;
-    _appSetting.useHeadsetControl =
-        useHeadsetControl ?? _appSetting.useHeadsetControl;
     _appSetting.playerBackgroundImage =
         playerBackgroundImage ?? _appSetting.playerBackgroundImage;
     _appSetting.backgroundBlurValue =

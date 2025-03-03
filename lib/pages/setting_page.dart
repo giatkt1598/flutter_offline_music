@@ -157,20 +157,6 @@ class _SettingPageState extends State<SettingPage> {
                 title: "To/nhỏ dần khi phát/tạm dừng, chuyển bài",
               ),
               SettingItemSwitch(
-                value: appSetting.pauseWhenOpenOtherApp,
-                onChanged: (val) {
-                  settingProvider.setting(pauseWhenOpenOtherApp: val);
-                },
-                title: "Tạm dừng khi app khác phát",
-              ),
-              SettingItemSwitch(
-                value: appSetting.useHeadsetControl,
-                onChanged: (val) {
-                  settingProvider.setting(useHeadsetControl: val);
-                },
-                title: "Phát/tạm dừng, chuyển bài bằng tai nghe",
-              ),
-              SettingItemSwitch(
                 value: appSetting.autoScanFiles,
                 onChanged: (val) {
                   settingProvider.setting(autoScanFiles: val);
