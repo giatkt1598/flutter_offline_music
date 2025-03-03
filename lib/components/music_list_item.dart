@@ -18,28 +18,13 @@ class MusicListItem extends StatelessWidget {
     final audioHandler = Provider.of<PlayerProvider>(context).audioHandler;
 
     void playMusic() {
-      // Navigator.of(context).push(
-      //   PageRouteBuilder(
-      //     pageBuilder:
-      //         (context, animation, secondaryAnimation) =>
-      //             PlayerPage(music: music),
-      //     transitionsBuilder:
-      //         (context, animation, secondaryAnimation, child) =>
-      //             SlideTransition(
-      //               position: Tween(
-      //                 begin: Offset(0, 1),
-      //                 end: Offset(0, 0),
-      //               ).animate(animation),
-      //               child: child,
-      //             ),
-      //   ),
-      // );
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
+        shape: RoundedRectangleBorder(),
         builder: (context) {
           return SizedBox(
-            height: SharedData.fullHeight - SharedData.statusBarHeight,
+            height: SharedData.fullHeight,
             child: PlayerPage(music: music),
           );
         },
