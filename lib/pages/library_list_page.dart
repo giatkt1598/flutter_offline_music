@@ -73,7 +73,7 @@ class _LibraryListPageState extends State<LibraryListPage> {
                   onPressed: addNewLibrary,
                   icon: Icon(Icons.library_add),
                 ),
-                IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
+                IconButton(onPressed: null, icon: Icon(Icons.more_vert)),
               ],
             ),
           ),

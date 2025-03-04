@@ -1,0 +1,106 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/components/library_thumbnail.dart';
+import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
+import 'package:flutter_offline_music/models/library.dart';
+import 'package:flutter_offline_music/pages/music_select_to_library_page.dart';
+import 'package:flutter_offline_music/services/library_service.dart';
+import 'package:flutter_offline_music/services/music_service.dart';
+import 'package:flutter_offline_music/services/toast_service.dart';
+
+class LibraryListItemMenu extends StatelessWidget {
+  LibraryListItemMenu({
+    super.key,
+    required this.library,
+    required this.onRefresh,
+  });
+  final musicService = MusicService();
+  final libraryService = LibraryService();
+  final Library library;
+  final Function onRefresh;
+
+  @override
+  Widget build(BuildContext context) {
+    addMusicToLibrary() {
+      Navigator.of(context)
+          .push(
+            MaterialPageRoute(
+              builder:
+                  (context) => MusicSelectToLibraryPage(libraryId: library.id),
+            ),
+          )
+          .then((_) => onRefresh());
+    }
+
+    deleteLibrary(BuildContext context) async {
+      var isConfirm = await showConfirmDialog(
+        context: context,
+        title: 'Xóa thư viện',
+        message: 'Bạn chắc chắn muốn xóa thư viện ${library.title}?',
+      );
+      if (isConfirm != true) return;
+
+      await libraryService.deleteAsync(library.id);
+      ToastService.showSuccess('Đã xóa thư viện "${library.title}"');
+      Navigator.of(context).pop();
+      onRefresh();
+    }
+
+    return SizedBox(
+      height: 500,
+      child: Column(
+        children: [
+          SizedBox(height: 16),
+          SizedBox(
+            height: 120,
+            width: 120,
+            child: Center(
+              child: Transform.scale(
+                scale: 2,
+                child: LibraryThumbnail(library: library),
+              ),
+            ),
+          ),
+          Text(library.title, style: TextStyle(fontWeight: FontWeight.bold)),
+          Opacity(
+            opacity: 0.4,
+            child: Text(
+              '${library.musics.length} bài hát ・ ${musicService.calcTotalDuration(library.musics)}',
+              style: TextStyle(fontSize: 12),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Divider(),
+          ),
+          ListTile(
+            onTap: () {
+              Navigator.pop(context);
+              addMusicToLibrary();
+            },
+            leading: Icon(Icons.playlist_add),
+            title: Text('Thêm bài hát vào thư viện'),
+          ),
+          ListTile(
+            enabled: false,
+            onTap: null,
+            leading: Icon(Icons.edit),
+            title: Text('Sửa thông tin'),
+          ),
+          ListTile(
+            enabled: false,
+            onTap: null,
+            leading: Icon(Icons.sort_rounded),
+            title: Text('Sắp xếp bài hát'),
+          ),
+          ListTile(
+            onTap: () => deleteLibrary(context),
+            leading: Icon(Icons.delete, color: Colors.red),
+            title: Text('Xóa thư viện', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+  }
+}

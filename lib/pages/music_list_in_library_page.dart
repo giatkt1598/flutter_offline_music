@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/components/library_list_item_menu_button.dart';
 import 'package:flutter_offline_music/components/music_list.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/models/library.dart';
@@ -75,7 +76,9 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(library.title),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))],
+        actions: [
+          LibraryListItemMenuButton(library: library, onRefresh: loadLibrary),
+        ],
         backgroundColor: Theme.of(context).cardColor,
         surfaceTintColor: Colors.transparent,
       ),
