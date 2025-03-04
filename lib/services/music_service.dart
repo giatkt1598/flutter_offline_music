@@ -9,6 +9,7 @@ import 'package:flutter_offline_music/services/db_table.dart';
 import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:flutter_offline_music/utilities/find_nonsilent_position.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
+import 'package:remove_diacritic/remove_diacritic.dart';
 import 'package:sqflite/sqlite_api.dart';
 
 class MusicService {
@@ -311,5 +312,44 @@ WHERE (:isHidden IS NULL OR :isHidden = 1 OR ${DbTable.musicFolder}.isHidden = 0
             ? 0
             : list.map((m) => m.lengthInSecond).reduce((a, b) => a + b);
     return fDurationLong(Duration(seconds: totalDurationInSeconds));
+  }
+
+  Future<List<Music>> searchMusics(String keyword) async {
+    if (keyword.isEmpty) return [];
+
+    var allMusics = await getListMusicAsync(
+      orderBy: 'title asc',
+      isHidden: null,
+    );
+    keyword = keyword.toLowerCase();
+    var filteredItems =
+        allMusics.where((item) {
+          String title = removeDiacritics(item.title).toLowerCase();
+          String artist =
+              item.artist != null
+                  ? removeDiacritics(item.artist!).toLowerCase()
+                  : '';
+          return title.contains(keyword) || artist.contains(keyword);
+        }).toList();
+
+    return filteredItems;
+  }
+
+  Future<List<MusicFolder>> searchFolders(String keyword) async {
+    if (keyword.isEmpty) return [];
+
+    keyword = keyword.toLowerCase();
+    var allFolders = await getMusicFolderListAsync(
+      orderBy: 'name asc',
+      isHidden: null,
+    );
+
+    var filteredItems =
+        allFolders.where((item) {
+          String name = removeDiacritics(item.name).toLowerCase();
+          return name.contains(keyword);
+        }).toList();
+
+    return filteredItems;
   }
 }

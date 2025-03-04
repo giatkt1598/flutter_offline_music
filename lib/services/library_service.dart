@@ -3,6 +3,7 @@ import 'package:flutter_offline_music/models/music_library.dart';
 import 'package:flutter_offline_music/services/database_helper.dart';
 import 'package:flutter_offline_music/services/db_table.dart';
 import 'package:flutter_offline_music/utilities/debug_helper.dart';
+import 'package:remove_diacritic/remove_diacritic.dart';
 import 'package:sqflite/sqflite.dart';
 
 class LibraryService {
@@ -103,5 +104,19 @@ class LibraryService {
               .toList();
     }
     return libraries;
+  }
+
+  Future<List<Library>> searchLibraries(String keyword) async {
+    if (keyword.isEmpty) return [];
+
+    keyword = keyword.toLowerCase();
+    var allLibs = await getListAsync();
+    var filteredItems =
+        allLibs.where((item) {
+          String title = removeDiacritics(item.title).toLowerCase();
+          return title.contains(keyword);
+        }).toList();
+
+    return filteredItems;
   }
 }

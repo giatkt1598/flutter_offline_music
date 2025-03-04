@@ -23,7 +23,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   Timer? _timerStop;
   final List<MediaItem> _playlist = [];
 
-  late List<MediaItem> _originPlaylist;
+  List<MediaItem> _originPlaylist = [];
   MediaItem? _currentMediaItem;
   String? playingMediaItemId;
 
@@ -153,6 +153,12 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   @override
   Future<void> playMediaItem(MediaItem mediaItem) async {
+    if (_playlist.every((x) => x.id != mediaItem.id)) {
+      await addItemToPlaylist(
+        mediaItem,
+      ); //TODO: use insertToPlaylist, insert to current index
+    }
+
     if (playingMediaItemId != mediaItem.id || _player.duration == null) {
       if (!File(mediaItem.id).existsSync()) {
         ToastService.showError('Không tìm thấy tệp "${mediaItem.id}"');
@@ -215,6 +221,10 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setPlaylistFromMusics(List<Music> musics) async {
+    await setPlaylist(musics.map((x) => x.toMediaItem()).toList());
+  }
+
   Future<void> setPlaylist(List<MediaItem> playlist) async {
     _playlist.clear();
     _playlist.addAll(playlist);
@@ -235,6 +245,24 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     }
 
     addArtPictureToPlaylist();
+  }
+
+  Future<void> addItemToPlaylist(MediaItem item) async {
+    if (_playlist.any((x) => x.id == item.id)) return;
+
+    if (_player.audioSource == null) {
+      await setPlaylist([item]);
+    } else {
+      var art = await getPictureFile(item.id);
+      if (art != null) {
+        item = item.copyWith(artUri: art.uri);
+      }
+      _playlist.add(item);
+      _originPlaylist.add(item);
+      (_player.audioSource as ConcatenatingAudioSource).add(
+        AudioSource.file(item.id),
+      );
+    }
   }
 
   Future<void> setShuffle(bool isShuffle) async {
@@ -353,10 +381,10 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   MediaItem? _findMediaItem(int audioSourceIndex) {
     final audioSource =
-        _player.sequence![audioSourceIndex] as ProgressiveAudioSource;
+        _player.sequence?[audioSourceIndex] as ProgressiveAudioSource?;
     final item =
         _originPlaylist
-            .where((x) => x.id == audioSource.uri.toFilePath())
+            .where((x) => x.id == audioSource?.uri.toFilePath())
             .firstOrNull;
     return item;
   }

@@ -17,7 +17,7 @@
   },
   "Log": {
     "scope": "dart",
-    "prefix": "lg",
+    "prefix": "printDebug",
     "body": "logDebug('$0');"
   }
 }

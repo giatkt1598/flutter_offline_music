@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/components/highlighted_text.dart';
 import 'package:flutter_offline_music/components/library_thumbnail.dart';
 import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
 import 'package:flutter_offline_music/models/library.dart';
@@ -10,12 +11,17 @@ import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:provider/provider.dart';
 
 class LibraryListItem extends StatelessWidget {
-  LibraryListItem({super.key, required this.library, required this.onRefresh});
+  LibraryListItem({
+    super.key,
+    required this.library,
+    required this.onRefresh,
+    this.keywordSearch,
+  });
   final musicService = MusicService();
   final libraryService = LibraryService();
   final Library library;
   final Function onRefresh;
-
+  final String? keywordSearch;
   @override
   Widget build(BuildContext context) {
     addMusicToLibrary() {
@@ -129,12 +135,18 @@ class LibraryListItem extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            library.title,
-            style: TextStyle(fontWeight: FontWeight.normal),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
+          keywordSearch != null
+              ? HighlightedText(
+                fullText: library.title,
+                highlightedText: keywordSearch!,
+                style: TextStyle(fontWeight: FontWeight.normal),
+              )
+              : Text(
+                library.title,
+                style: TextStyle(fontWeight: FontWeight.normal),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
 
           Opacity(
             opacity: 0.4,

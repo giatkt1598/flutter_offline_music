@@ -47,9 +47,10 @@ class _FullMusicListPageState extends State<FullMusicListPage> {
       orderBy: '${this.sortField} ${this.sortDirection}',
     );
 
-    setState(() {
-      playerProvider.setMusics(musics);
-    });
+    playerProvider.setMusics(musics);
+    if (playerProvider.audioHandler.playlist.isEmpty) {
+      playerProvider.audioHandler.setPlaylistFromMusics(musics);
+    }
   }
 
   @override

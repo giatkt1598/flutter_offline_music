@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/auto_scroll_text.dart';
+import 'package:flutter_offline_music/components/highlighted_text.dart';
 import 'package:flutter_offline_music/components/music_item_menu.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/models/music.dart';
@@ -9,14 +10,21 @@ import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:provider/provider.dart';
 
 class MusicListItem extends StatelessWidget {
-  const MusicListItem({super.key, required this.music, this.afterHideItem});
+  const MusicListItem({
+    super.key,
+    required this.music,
+    this.afterHideItem,
+    this.keywordSearch,
+  });
+
   final Music music;
   final Function? afterHideItem;
+  final String? keywordSearch;
   @override
   Widget build(BuildContext context) {
     final audioHandler = Provider.of<PlayerProvider>(context).audioHandler;
 
-    void playMusic() {
+    void playMusic() async {
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -31,7 +39,11 @@ class MusicListItem extends StatelessWidget {
     }
 
     final isCurrent = audioHandler.currentMediaItem?.id == music.path;
-
+    final artist = music.artist ?? '<Không rõ tác giả>';
+    final TextStyle artistTextStyle = TextStyle(
+      fontSize: 12,
+      color: isCurrent ? Theme.of(context).colorScheme.primary : null,
+    );
     final double borderWidth = 5.0;
     return Container(
       decoration:
@@ -90,6 +102,11 @@ class MusicListItem extends StatelessWidget {
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                             )
+                            : keywordSearch != null
+                            ? HighlightedText(
+                              fullText: music.title,
+                              highlightedText: keywordSearch!,
+                            )
                             : Text(
                               music.title,
                               maxLines: 1,
@@ -108,18 +125,19 @@ class MusicListItem extends StatelessWidget {
                   Expanded(
                     child: Opacity(
                       opacity: 0.4,
-                      child: Text(
-                        music.artist ?? '<Không rõ tác giả>',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color:
-                              isCurrent
-                                  ? Theme.of(context).colorScheme.primary
-                                  : null,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      child:
+                          keywordSearch != null
+                              ? HighlightedText(
+                                fullText: artist,
+                                highlightedText: keywordSearch!,
+                                style: artistTextStyle,
+                              )
+                              : Text(
+                                artist,
+                                style: artistTextStyle,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                     ),
                   ),
                 ],

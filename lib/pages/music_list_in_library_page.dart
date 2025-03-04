@@ -36,9 +36,7 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
     setState(() {
       library = libs.first;
     });
-
     playerProvider.setMusics(library.musics);
-
     setState(() {
       loaded = true;
     });
@@ -56,12 +54,23 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
         .then((_) => loadLibrary());
   }
 
+  bool isSetCurrentPlaylist = false;
+  Future<void> setCurrentPlaylist() async {
+    if (isSetCurrentPlaylist) return;
+    isSetCurrentPlaylist = true;
+    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
+    await playerProvider.audioHandler.setPlaylistFromMusics(
+      playerProvider.musics,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!loaded) return Container();
 
-    final audioHandler = Provider.of<PlayerProvider>(context).audioHandler;
-    final musics = library.musics;
+    final playerProvider = Provider.of<PlayerProvider>(context);
+    final audioHandler = playerProvider.audioHandler;
+    final musics = playerProvider.musics;
 
     return Scaffold(
       appBar: AppBar(
@@ -82,7 +91,7 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
                     Padding(
                       padding: const EdgeInsets.only(left: 12.0),
                       child: Text(
-                        '${library.musics.length} bài hát ・ ${musicService.calcTotalDuration(library.musics)}',
+                        '${musics.length} bài hát ・ ${musicService.calcTotalDuration(musics)}',
                       ),
                     ),
                     IconButton(
@@ -112,14 +121,16 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
                         onPressed:
                             musics.isNotEmpty
                                 ? () {
-                                  if (musics.first.path !=
-                                      audioHandler.currentMediaItem?.id) {
-                                    audioHandler.stop().then((_) {
-                                      audioHandler.playMusic(musics.first);
-                                    });
-                                  } else {
-                                    audioHandler.seek(Duration.zero);
-                                  }
+                                  setCurrentPlaylist().then((_) {
+                                    if (musics.first.path !=
+                                        audioHandler.currentMediaItem?.id) {
+                                      audioHandler.stop().then((_) {
+                                        audioHandler.playMusic(musics.first);
+                                      });
+                                    } else {
+                                      audioHandler.seek(Duration.zero);
+                                    }
+                                  });
                                 }
                                 : null,
                         child: Row(
@@ -144,15 +155,17 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
                           ),
                         ),
                         onPressed:
-                            library.musics.isNotEmpty
+                            musics.isNotEmpty
                                 ? () {
-                                  audioHandler.setShuffle(true);
-                                  audioHandler.stop().then((_) {
-                                    audioHandler.playMediaItem(
-                                      audioHandler.playlist[Random().nextInt(
-                                        audioHandler.playlist.length - 1,
-                                      )],
-                                    );
+                                  setCurrentPlaylist().then((_) {
+                                    audioHandler.setShuffle(true);
+                                    audioHandler.stop().then((_) {
+                                      audioHandler.playMediaItem(
+                                        audioHandler.playlist[Random().nextInt(
+                                          audioHandler.playlist.length - 1,
+                                        )],
+                                      );
+                                    });
                                   });
                                 }
                                 : null,
@@ -185,7 +198,7 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
             Expanded(
               child: MusicList(
                 musics: musics,
-                onChanged: (value) => setState(() {}),
+                onChanged: (value) => loadLibrary(),
               ),
             ),
           SizedBox(height: 90),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/mini_player.dart';
 import 'package:flutter_offline_music/pages/library_list_page.dart';
 import 'package:flutter_offline_music/pages/load_music_page.dart';
+import 'package:flutter_offline_music/pages/search_page.dart';
 import 'package:flutter_offline_music/pages/setting_page.dart';
 import 'package:flutter_offline_music/pages/full_music_list_page.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
@@ -43,7 +44,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           appBar: AppBar(
             title: Text('G-Player'),
             actions: [
-              IconButton(onPressed: null, icon: Icon(Icons.search)),
+              IconButton(
+                onPressed: () {
+                  Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (context) => SearchPage()));
+                },
+                icon: Icon(Icons.search),
+              ),
               IconButton(
                 onPressed: () {
                   Navigator.of(context).push(

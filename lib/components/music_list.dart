@@ -11,6 +11,7 @@ class MusicList extends StatefulWidget {
     this.leadingItem,
     this.trailingItem,
     this.removeInvisibleItem = true,
+    this.searchKeyword,
   });
 
   final List<Music> musics;
@@ -18,6 +19,7 @@ class MusicList extends StatefulWidget {
   final Widget? leadingItem;
   final Widget? trailingItem;
   final bool removeInvisibleItem;
+  final String? searchKeyword;
 
   @override
   State<MusicList> createState() => _MusicListState();
@@ -56,6 +58,7 @@ class _MusicListState extends State<MusicList> {
         final item = musics[index - 1];
         return MusicListItem(
           music: item,
+          keywordSearch: widget.searchKeyword,
           afterHideItem: () {
             if (widget.removeInvisibleItem && item.isHidden) {
               musics.remove(item);

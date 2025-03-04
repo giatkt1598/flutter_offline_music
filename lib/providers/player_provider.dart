@@ -20,10 +20,8 @@ class PlayerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  setMusics(List<Music> musics) {
+  Future<void> setMusics(List<Music> musics) async {
     this.musics = musics;
-    audioHandler.setPlaylist(this.musics.map((e) => e.toMediaItem()).toList());
-
     notifyListeners();
   }
 
