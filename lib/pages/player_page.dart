@@ -318,19 +318,13 @@ class _PlayerPageState extends State<PlayerPage> {
                                   onPressed: () {
                                     switch (audioHandler.player.loopMode) {
                                       case LoopMode.off:
-                                        audioHandler.player.setLoopMode(
-                                          LoopMode.all,
-                                        );
+                                        audioHandler.setLoopMode(LoopMode.all);
                                         break;
                                       case LoopMode.all:
-                                        audioHandler.player.setLoopMode(
-                                          LoopMode.one,
-                                        );
+                                        audioHandler.setLoopMode(LoopMode.one);
                                         break;
                                       default:
-                                        audioHandler.player.setLoopMode(
-                                          LoopMode.off,
-                                        );
+                                        audioHandler.setLoopMode(LoopMode.off);
                                         break;
                                     }
                                   },

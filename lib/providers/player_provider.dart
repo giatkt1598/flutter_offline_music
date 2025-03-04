@@ -52,9 +52,9 @@ class PlayerProvider extends ChangeNotifier {
       );
     }
 
-    final bool isSkipSilent = SettingProvider.staticAppSetting.skipSilent;
-    if (isSkipSilent) {
-      await musicService.fetchSkipSilentDurations();
-    }
+    // final bool isSkipSilent = SettingProvider.staticAppSetting.skipSilent;
+    // if (isSkipSilent) {
+    //   await musicService.fetchSkipSilentDurations();
+    // }
   }
 }

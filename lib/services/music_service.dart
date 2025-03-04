@@ -281,6 +281,7 @@ WHERE (:isHidden IS NULL OR :isHidden = 1 OR ${DbTable.musicFolder}.isHidden = 0
   }
 
   static bool _isFetchedSkipSilent = false;
+  @Deprecated('Crash app')
   fetchSkipSilentDurations() async {
     if (_isFetchedSkipSilent) return;
     _isFetchedSkipSilent = true;

@@ -81,7 +81,7 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
             );
           },
         );
-        _musicService.fetchSkipSilentDurations();
+        // _musicService.fetchSkipSilentDurations();
         setState(() {
           _musicFolders = list;
         });
