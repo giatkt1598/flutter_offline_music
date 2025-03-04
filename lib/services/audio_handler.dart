@@ -155,7 +155,18 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   Future<void> playMediaItem(MediaItem mediaItem) async {
     if (playingMediaItemId != mediaItem.id || _player.duration == null) {
       if (!File(mediaItem.id).existsSync()) {
-        logDebug('Not found path ${mediaItem.id}');
+        ToastService.showError('Không tìm thấy tệp "${mediaItem.id}"');
+        final mediaIndex = _playlist.indexWhere((x) => x.id == mediaItem.id);
+        await setPlaylist(
+          _playlist.where((x) => x.id != mediaItem.id).toList(),
+        );
+        if (mediaIndex < _playlist.length) {
+          playingMediaItemId = null;
+          await stop();
+          await playMediaItem(_playlist[mediaIndex]);
+        } else {
+          await stop();
+        }
         return;
       }
 
@@ -163,16 +174,9 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       final audioSourceIndex = _player.sequence?.indexWhere(
         (x) => (x as ProgressiveAudioSource).uri.toFilePath() == mediaItem.id,
       );
-      logDebug(audioSourceIndex);
-      // await _player.setFilePath(mediaItem.id);
-      final Music music = mediaItem.extras!['music'] as Music;
-      final startPosition =
-          SettingProvider.staticAppSetting.skipSilent
-              ? music.skipSilentStartDuration ?? Duration.zero
-              : Duration.zero;
 
       if (audioSourceIndex != null) {
-        await _player.seek(startPosition, index: audioSourceIndex);
+        await _player.seek(Duration.zero, index: audioSourceIndex);
       } else {
         ToastService.show(
           message: "Lỗi không tìm thấy audioSource",
@@ -211,11 +215,11 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     notifyListeners();
   }
 
-  setPlaylist(List<MediaItem> playlist) {
+  Future<void> setPlaylist(List<MediaItem> playlist) async {
     _playlist.clear();
     _playlist.addAll(playlist);
     _originPlaylist = [...playlist];
-    _player.setAudioSource(
+    await _player.setAudioSource(
       ConcatenatingAudioSource(
         children: playlist.map((m) => AudioSource.file(m.id)).toList(),
       ),

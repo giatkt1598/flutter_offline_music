@@ -13,6 +13,10 @@ class ToastService {
     );
   }
 
+  static showError(String message, {Duration? duration}) {
+    show(message: message, type: ToastificationType.error, duration: duration);
+  }
+
   static show({
     required String message,
     Duration? duration,

@@ -258,7 +258,11 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                             : Icons.visibility_off_rounded,
                     title: widget.music.isHidden ? 'Hiển thị' : 'Ẩn',
                     onTap: () async {
+                      bool isHidden = widget.music.isHidden;
                       await toggleHide();
+                      ToastService.showSuccess(
+                        'Đã ${isHidden ? 'hiển thị' : 'ẩn'} "${widget.music.title}"',
+                      );
                       Navigator.pop(context, true);
                     },
                   ),

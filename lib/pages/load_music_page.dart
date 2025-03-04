@@ -129,6 +129,9 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
                             ? folder.musics.length
                             : folder.musics.where((x) => !x.isHidden).length;
 
+                    final totalHiddenFileInfolder =
+                        folder.musics.where((x) => x.isHidden).length;
+
                     return Visibility(
                       visible:
                           musicFolderProvider.isShowAllMusicFolder ||
@@ -180,6 +183,13 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
                                       if (folder.isHidden)
                                         Text(
                                           ' (Thư mục ẩn)',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      if (musicFolderProvider
+                                              .isShowAllMusicFolder &&
+                                          totalHiddenFileInfolder > 0)
+                                        Text(
+                                          ' ($totalHiddenFileInfolder tệp ẩn)',
                                           style: TextStyle(color: Colors.red),
                                         ),
                                     ],

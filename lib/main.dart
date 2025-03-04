@@ -10,8 +10,9 @@ import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
 Future<void> main() async {
-  await AppAudioHandler.createInstance();
+  WidgetsFlutterBinding.ensureInitialized();
   var initialThemeMode = (await SettingProvider().loadSetting()).themeMode;
+  await AppAudioHandler.createInstance();
   runApp(
     MultiProvider(
       providers: [
