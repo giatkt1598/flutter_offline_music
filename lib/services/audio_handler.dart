@@ -313,7 +313,9 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   }
 
   void _createAudioPlayer() {
-    player.currentIndexStream.listen((index) {
+    _player.setSkipSilenceEnabled(SettingProvider.staticAppSetting.skipSilent);
+
+    _player.currentIndexStream.listen((index) {
       if (index == null) {
         return;
       }
@@ -327,7 +329,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       _setCurrentMediaItem(currentMediaItem);
     });
 
-    player.processingStateStream.listen((state) {
+    _player.processingStateStream.listen((state) {
       if (state == ProcessingState.completed) {
         stop();
       }

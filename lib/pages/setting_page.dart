@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
 import 'package:flutter_offline_music/pages/language_list_page.dart';
 import 'package:flutter_offline_music/pages/setting_player_background_page.dart';
+import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/services/database_helper.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
@@ -59,6 +60,7 @@ class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     final settingProvider = Provider.of<SettingProvider>(context);
+    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     final appSetting = settingProvider.appSetting;
     String? backgroundName = '';
     if (appSetting.playerBackgroundImage.isEmpty) {
@@ -144,8 +146,11 @@ class _SettingPageState extends State<SettingPage> {
               SettingGroup(title: 'Trình phát nhạc'),
               SettingItemSwitch(
                 value: appSetting.skipSilent,
-                onChanged: (val) {
-                  settingProvider.setting(skipSilent: val);
+                onChanged: (enable) {
+                  settingProvider.setting(skipSilent: enable);
+                  playerProvider.audioHandler.player.setSkipSilenceEnabled(
+                    enable,
+                  );
                 },
                 title: "Bỏ qua khoảng lặng",
               ),
