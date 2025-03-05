@@ -6,6 +6,7 @@ import 'package:flutter_offline_music/providers/music_folder_provider.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/services/audio_handler.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:toastification/toastification.dart';
 
@@ -40,8 +41,12 @@ class MyApp extends StatelessWidget {
       title: 'Trình phát nhạc',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        textTheme: GoogleFonts.quicksandTextTheme(),
+        fontFamily: GoogleFonts.quicksandTextTheme().bodyMedium!.fontFamily,
       ),
-      darkTheme: ThemeData.dark(),
+      darkTheme: ThemeData.dark().copyWith(
+        colorScheme: ThemeData.dark().colorScheme.copyWith(),
+      ),
       themeMode: appSetting.themeMode,
       home: const SplashPage(home: HomePage()),
       builder: (context, child) {

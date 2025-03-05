@@ -12,6 +12,7 @@ class SearchField extends StatefulWidget {
 }
 
 class _SearchFieldState extends State<SearchField> {
+  final _focusNode = FocusNode();
   final TextEditingController _searchInputController = TextEditingController();
   final Duration _debounceDuration = Duration(milliseconds: 500);
   Timer? _timer;
@@ -46,9 +47,17 @@ class _SearchFieldState extends State<SearchField> {
   }
 
   @override
+  void initState() {
+    Future.delayed(Duration(milliseconds: 200), () {
+      _focusNode.requestFocus();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      autofocus: true,
+      focusNode: _focusNode,
       textInputAction: TextInputAction.search,
       controller: _searchInputController,
       decoration: InputDecoration(

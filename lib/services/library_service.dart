@@ -114,7 +114,8 @@ class LibraryService {
     var filteredItems =
         allLibs.where((item) {
           String title = removeDiacritics(item.title).toLowerCase();
-          return title.contains(keyword);
+          return title.contains(keyword) ||
+              item.title.toLowerCase().contains(keyword);
         }).toList();
 
     return filteredItems;

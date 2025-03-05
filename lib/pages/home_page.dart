@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/mini_player.dart';
+import 'package:flutter_offline_music/pages/dashboard_page.dart';
 import 'package:flutter_offline_music/pages/library_list_page.dart';
 import 'package:flutter_offline_music/pages/load_music_page.dart';
 import 'package:flutter_offline_music/pages/search_page.dart';
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         AppBackgroundHelper.moveAppToBackground();
       },
       child: DefaultTabController(
-        length: 3,
+        length: 4,
         child: Scaffold(
           appBar: AppBar(
             title: Text('G-Player'),
@@ -66,6 +67,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             bottom: TabBar(
               isScrollable: true,
               tabs: [
+                Tab(child: Text('Gợi ý')),
                 Tab(child: Text('Bài hát')),
                 Tab(child: Text('Thư viện')),
                 Tab(child: Text('Thư mục')),
@@ -73,7 +75,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
           ),
           body: TabBarView(
-            children: [FullMusicListPage(), LibraryListPage(), LoadMusicPage()],
+            children: [
+              DashboardPage(),
+              FullMusicListPage(),
+              LibraryListPage(),
+              LoadMusicPage(),
+            ],
           ),
         ),
       ),

@@ -329,7 +329,10 @@ WHERE (:isHidden IS NULL OR :isHidden = 1 OR ${DbTable.musicFolder}.isHidden = 0
               item.artist != null
                   ? removeDiacritics(item.artist!).toLowerCase()
                   : '';
-          return title.contains(keyword) || artist.contains(keyword);
+          return title.contains(keyword) ||
+              artist.contains(keyword) ||
+              item.title.toLowerCase().contains(keyword) ||
+              item.artist?.toLowerCase().contains(keyword) == true;
         }).toList();
 
     return filteredItems;
@@ -347,7 +350,8 @@ WHERE (:isHidden IS NULL OR :isHidden = 1 OR ${DbTable.musicFolder}.isHidden = 0
     var filteredItems =
         allFolders.where((item) {
           String name = removeDiacritics(item.name).toLowerCase();
-          return name.contains(keyword);
+          return name.contains(keyword) ||
+              item.name.toLowerCase().contains(keyword);
         }).toList();
 
     return filteredItems;

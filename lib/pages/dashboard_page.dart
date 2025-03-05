@@ -1,0 +1,128 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/components/button_card.dart';
+import 'package:flutter_offline_music/components/music_list_item.dart';
+import 'package:flutter_offline_music/components/music_list_item_card.dart';
+import 'package:flutter_offline_music/components/music_list_item_rrect.dart';
+import 'package:flutter_offline_music/models/music.dart';
+import 'package:flutter_offline_music/services/music_service.dart';
+import 'package:flutter_offline_music/shared/shared_data.dart';
+import 'package:flutter_offline_music/utilities/debug_helper.dart';
+
+class DashboardPage extends StatefulWidget {
+  const DashboardPage({super.key});
+
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  List<Music> _recentMusics = [];
+  List<Music> _newestMusics = [];
+  final _scrollController = ScrollController();
+  final _musicService = MusicService();
+  @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
+
+  fetchData() async {
+    var allMusics = await _musicService.getListMusicAsync();
+    setState(() {
+      _recentMusics = allMusics.take(3).toList();
+      _newestMusics = allMusics.take(10).toList();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: SingleChildScrollView(
+        controller: _scrollController,
+        child: Column(
+          spacing: 8,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 8),
+            Row(
+              spacing: 8,
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: ButtonCard(
+                    icon: Icon(Icons.favorite),
+                    backgroundImage: AssetImage("assets/bg_music_pink.png"),
+                    onPressed: () {
+                      logDebug('Favorite');
+                    },
+                    child: Text('Yêu thích'),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  child: ButtonCard(
+                    icon: Icon(Icons.play_arrow_rounded, size: 32),
+                    backgroundImage: AssetImage("assets/bg_music_blue.png"),
+                    onPressed: () {},
+                    child: Text('Phát nhạc'),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 4),
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _GroupTitle(title: 'Đã phát gần đây'),
+                for (var music in _recentMusics)
+                  MusicListItem(music: music, afterHideItem: () => fetchData()),
+              ],
+            ),
+            _GroupTitle(title: 'Đã thêm gần đây'),
+            SizedBox(
+              height: 160,
+              width: SharedData.fullWidth,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _newestMusics.length,
+                itemBuilder:
+                    (context, idx) =>
+                        MusicListItemRrect(music: _newestMusics[idx]),
+              ),
+            ),
+            _GroupTitle(title: 'Lượt nghe nhiều nhất'),
+            SizedBox(
+              height: 200,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _newestMusics.length,
+                itemBuilder:
+                    (context, idx) =>
+                        MusicListItemCard(music: _newestMusics[idx]),
+              ),
+            ),
+            SizedBox(height: 90),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _GroupTitle extends StatelessWidget {
+  const _GroupTitle({required this.title});
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title, style: Theme.of(context).textTheme.titleSmall),
+        TextButton(onPressed: () {}, child: Text('Xem tất cả >')),
+      ],
+    );
+  }
+}

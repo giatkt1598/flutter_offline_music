@@ -5,6 +5,5 @@ void logDebug(dynamic object) {
     return;
   }
   String message = object != null ? object.toString() : 'null';
-  // ignore: avoid_print
-  print('[Debug]${DateTime.now()}: $message');
+  debugPrint('[Debug]${DateTime.now()}: $message');
 }

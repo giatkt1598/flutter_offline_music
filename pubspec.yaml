@@ -37,6 +37,7 @@ dependencies:
   flutter_foreground_task: ^8.17.0
   flutter_launcher_icons: ^0.14.3
   flutter_native_splash: ^2.4.5
+  google_fonts: ^6.2.1
   just_audio: ^0.9.46
   just_audio_background: ^0.0.1-beta.15
   just_waveform: ^0.0.6
@@ -66,6 +67,9 @@ flutter:
   uses-material-design: true
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/bg_music_blue.png
+    - assets/bg_music_pink.png
+    - assets/music_note_2.png
     - assets/playing.gif
     - assets/no_data.png
     - assets/disc_2.png

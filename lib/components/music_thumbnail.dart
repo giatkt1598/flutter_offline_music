@@ -9,13 +9,14 @@ class MusicThumbnail extends StatelessWidget {
     this.size,
     this.boxShape,
     this.borderRadius,
+    this.fallbackWidget,
   });
 
   final String musicPath;
   final double? size;
   final BoxShape? boxShape;
   final BorderRadiusGeometry? borderRadius;
-
+  final Widget? fallbackWidget;
   @override
   Widget build(BuildContext context) {
     final audioHandler = Provider.of<PlayerProvider>(context).audioHandler;
@@ -34,16 +35,19 @@ class MusicThumbnail extends StatelessWidget {
         future: getThumbnail(),
         builder: (_, snapshot) {
           if (snapshot.data == null) {
-            return Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                shape: boxShape ?? BoxShape.circle,
-                borderRadius:
-                    boxShape == BoxShape.rectangle ? currentBorderRadius : null,
-              ),
-              child: Icon(Icons.music_note_rounded),
-            );
+            return fallbackWidget ??
+                Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                    shape: boxShape ?? BoxShape.circle,
+                    borderRadius:
+                        boxShape == BoxShape.rectangle
+                            ? currentBorderRadius
+                            : null,
+                  ),
+                  child: Icon(Icons.music_note_rounded),
+                );
           }
           return boxShape == BoxShape.rectangle
               ? ClipRRect(
