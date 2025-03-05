@@ -228,17 +228,20 @@ class _PlayerPageState extends State<PlayerPage> {
                                     SizedBox(height: 12),
                                   ],
                                 ),
-                                AudioSlider(
-                                  value: min(
-                                    currentPosition.inSeconds.toDouble(),
-                                    duration.inSeconds.toDouble(),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 16),
+                                  child: AudioSlider(
+                                    value: min(
+                                      currentPosition.inSeconds.toDouble(),
+                                      duration.inSeconds.toDouble(),
+                                    ),
+                                    min: 0,
+                                    max: duration.inSeconds.toDouble(),
+                                    onChanged:
+                                        (value) => audioHandler.seek(
+                                          Duration(seconds: value.toInt()),
+                                        ),
                                   ),
-                                  min: 0,
-                                  max: duration.inSeconds.toDouble(),
-                                  onChanged:
-                                      (value) => audioHandler.seek(
-                                        Duration(seconds: value.toInt()),
-                                      ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 16),
