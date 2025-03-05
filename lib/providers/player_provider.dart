@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/models/music.dart';
+import 'package:flutter_offline_music/pages/player_page.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/services/audio_handler.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
+import 'package:flutter_offline_music/shared/shared_data.dart';
 
 class PlayerProvider extends ChangeNotifier {
   bool isShowMiniPlayer = true;
@@ -23,6 +25,20 @@ class PlayerProvider extends ChangeNotifier {
   Future<void> setMusics(List<Music> musics) async {
     this.musics = musics;
     notifyListeners();
+  }
+
+  Future openAudioPlayerPage(BuildContext context, {required Music music}) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(),
+      builder: (context) {
+        return SizedBox(
+          height: SharedData.fullHeight,
+          child: PlayerPage(music: music),
+        );
+      },
+    );
   }
 
   PlayerProvider() {

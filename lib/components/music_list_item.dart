@@ -4,9 +4,7 @@ import 'package:flutter_offline_music/components/highlighted_text.dart';
 import 'package:flutter_offline_music/components/music_item_menu.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/models/music.dart';
-import 'package:flutter_offline_music/pages/player_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
-import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:provider/provider.dart';
 
 class MusicListItem extends StatelessWidget {
@@ -22,21 +20,8 @@ class MusicListItem extends StatelessWidget {
   final String? keywordSearch;
   @override
   Widget build(BuildContext context) {
-    final audioHandler = Provider.of<PlayerProvider>(context).audioHandler;
-
-    void playMusic() async {
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(),
-        builder: (context) {
-          return SizedBox(
-            height: SharedData.fullHeight,
-            child: PlayerPage(music: music),
-          );
-        },
-      );
-    }
+    final playerProvider = Provider.of<PlayerProvider>(context);
+    final audioHandler = playerProvider.audioHandler;
 
     final isCurrent = audioHandler.currentMediaItem?.id == music.path;
     final artist = music.artist ?? '<Không rõ tác giả>';
@@ -69,7 +54,7 @@ class MusicListItem extends StatelessWidget {
                   context,
                 ).colorScheme.inversePrimary.withValues(alpha: 0.3)
                 : null,
-        onTap: playMusic,
+        onTap: () => playerProvider.openAudioPlayerPage(context, music: music),
         leading: Opacity(
           opacity: music.isHidden ? 0.3 : 1,
           child: MusicThumbnail(musicPath: music.path),
