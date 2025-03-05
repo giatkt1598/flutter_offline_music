@@ -123,6 +123,14 @@ class MusicService {
     );
   }
 
+  Future<int> increaseMusicPlayedCount(String musicPath) async {
+    final playedCount = (await getMusicAsync(path: musicPath)).playedCount;
+    return await (await _db).rawUpdate(
+      'UPDATE ${DbTable.music} SET playedCount = ? WHERE path = ?',
+      [playedCount + 1, musicPath],
+    );
+  }
+
   Future<int> deleteMusicAsync(int id) async {
     return await (await _db).delete(
       DbTable.music,

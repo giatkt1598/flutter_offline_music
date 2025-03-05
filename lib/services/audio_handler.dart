@@ -45,8 +45,12 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   List<MediaItem> get playlist => _playlist;
   DateTime? get stopTime => _stopTime;
   Duration get _duration => _player.duration ?? Duration.zero;
-
   Duration get _position => _player.position;
+
+  Duration _audioListeningDuration = Duration.zero;
+  Timer? _audioListeningTimer;
+  bool _isPlayedCounted = false;
+  final double playedCountThreshold = 0.6; // >= 60% of duration of audio
 
   @override
   Future customAction(String name, [Map<String, dynamic>? extras]) async {
@@ -346,8 +350,36 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     });
   }
 
+  void _evaluateIncreasingPlayedCount() {
+    bool isIncreasePlayedCount =
+        _currentMediaItem != null &&
+        _isPlayedCounted == false &&
+        _currentMediaItem?.duration != null &&
+        _currentMediaItem!.duration! > Duration.zero &&
+        _audioListeningDuration >=
+            _currentMediaItem!.duration! * playedCountThreshold;
+    if (!isIncreasePlayedCount) {
+      return;
+    }
+    // logDebug('increase count for ${_currentMediaItem!.id}');
+    _musicService.increaseMusicPlayedCount(_currentMediaItem!.id);
+    _audioListeningDuration = Duration.zero;
+    _isPlayedCounted = true;
+  }
+
   void _createAudioPlayer() {
     _player.setSkipSilenceEnabled(SettingProvider.staticAppSetting.skipSilent);
+
+    _player.playingStream.listen((isPlaying) {
+      if (isPlaying) {
+        _audioListeningTimer ??= Timer.periodic(Duration(seconds: 1), (timer) {
+          _audioListeningDuration += Duration(seconds: 1);
+        });
+      } else {
+        _audioListeningTimer?.cancel();
+        _audioListeningTimer = null;
+      }
+    });
 
     _player.currentIndexStream.listen((index) {
       if (index == null) {
@@ -358,6 +390,10 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
           fadeOutAudio(reverse: true);
         });
       }
+
+      _isPlayedCounted = false;
+      _audioListeningDuration = Duration.zero;
+
       final currentMediaItem = _findMediaItem(index);
       playingMediaItemId = currentMediaItem?.id;
       _setCurrentMediaItem(currentMediaItem);
@@ -379,7 +415,14 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
         playing = _player.playing;
         notifyListeners();
       }
+
+      if (latestPosition < Duration(seconds: 1) && _isPlayedCounted) {
+        _audioListeningDuration = Duration.zero;
+        _isPlayedCounted = false;
+      }
+      _evaluateIncreasingPlayedCount();
     });
+
     _notifyAudioHandlerAboutPlaybackEvents();
     _countDownStopTime();
   }

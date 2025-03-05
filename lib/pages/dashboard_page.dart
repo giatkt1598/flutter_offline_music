@@ -19,6 +19,7 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   List<Music> _recentMusics = [];
   List<Music> _newestMusics = [];
+  List<Music> _topPlayedCountMusics = [];
   final _scrollController = ScrollController();
   final _musicService = MusicService();
   @override
@@ -36,6 +37,7 @@ class _DashboardPageState extends State<DashboardPage> {
               .orderByDescending((x) => x.playedLastTime!)
               .take(3)
               .toList();
+
       _newestMusics =
           allMusics
               .where(
@@ -44,6 +46,13 @@ class _DashboardPageState extends State<DashboardPage> {
                     Duration(days: 1),
               )
               .orderByDescending((x) => x.creationTime)
+              .take(10)
+              .toList();
+
+      _topPlayedCountMusics =
+          allMusics
+              .where((x) => x.playedCount > 0)
+              .orderByDescending((x) => x.playedCount)
               .take(10)
               .toList();
     });
@@ -118,10 +127,10 @@ class _DashboardPageState extends State<DashboardPage> {
               height: 200,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: _newestMusics.length,
+                itemCount: _topPlayedCountMusics.length,
                 itemBuilder:
                     (context, idx) =>
-                        MusicListItemCard(music: _newestMusics[idx]),
+                        MusicListItemCard(music: _topPlayedCountMusics[idx]),
               ),
             ),
             SizedBox(height: 90),
