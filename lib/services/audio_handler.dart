@@ -137,6 +137,16 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   @override
   Future<void> play() async {
+    bool isEnd =
+        !_player.playing &&
+        _player.position > Duration.zero &&
+        _player.duration != null &&
+        _player.position >= _player.duration!;
+
+    if (isEnd) {
+      await seek(Duration.zero);
+    }
+
     if (SettingProvider.staticAppSetting.autoVolumnPausePlay) {
       innerPlay() async {
         _positionSubscription?.pause();
