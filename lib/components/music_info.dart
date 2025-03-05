@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/models/music.dart';
+import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
+import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class MusicInfo extends StatelessWidget {
   const MusicInfo({super.key, required this.music});
@@ -11,6 +14,7 @@ class MusicInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double size = File(music.path).lengthSync() / 1024 / 1024;
+    final setting = Provider.of<SettingProvider>(context).appSetting;
     return Table(
       columnWidths: {0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
       children: [
@@ -27,6 +31,27 @@ class MusicInfo extends StatelessWidget {
           value: '${double.parse(size.toStringAsFixed(2))} MB',
         ),
         createRow(label: 'Vị trí', value: music.path),
+        createRow(
+          label: 'Ngày tạo',
+          widgetValue: Opacity(
+            opacity: 0.6,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  music.creationTime.toString().substring(
+                    0,
+                    music.creationTime.toString().lastIndexOf('.'),
+                  ),
+                ),
+                Text(
+                  '(${timeago.format(music.creationTime, locale: setting.languageCode)})',
+                ),
+              ],
+            ),
+          ),
+          value: null,
+        ),
       ],
     );
   }

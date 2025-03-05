@@ -61,7 +61,10 @@ class MusicListItemCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 2,
               children: [
-                Text('12', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                  music.playedCount.toString(),
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 Icon(Icons.headphones, size: 16),
               ],
             ),

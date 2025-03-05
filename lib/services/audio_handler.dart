@@ -6,6 +6,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
+import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:just_audio/just_audio.dart';
@@ -28,6 +29,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   String? playingMediaItemId;
 
   StreamSubscription<Duration>? _positionSubscription;
+  final _musicService = MusicService();
   AppAudioHandler() {
     _createAudioPlayer();
   }
@@ -359,6 +361,9 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       final currentMediaItem = _findMediaItem(index);
       playingMediaItemId = currentMediaItem?.id;
       _setCurrentMediaItem(currentMediaItem);
+      if (currentMediaItem?.id.isNotEmpty == true) {
+        _musicService.updateMusicPlayedLastTime(currentMediaItem!.id);
+      }
     });
 
     _player.processingStateStream.listen((state) {

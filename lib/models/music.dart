@@ -12,10 +12,12 @@ class Music {
   Duration get duration => Duration(seconds: lengthInSecond);
   String? thumbnail;
   String? genre;
-  DateTime? creationTime;
+  final DateTime creationTime;
   bool isHidden;
   int? skipSilentStart;
   int? skipSilentEnd;
+  DateTime? playedLastTime;
+  int playedCount;
   Duration? get skipSilentStartDuration =>
       skipSilentStart != null ? Duration(milliseconds: skipSilentStart!) : null;
   Duration? get skipSilentEndDuration =>
@@ -26,14 +28,16 @@ class Music {
     required this.musicFolderId,
     required this.title,
     required this.path,
+    required this.creationTime,
     this.artist,
     this.lengthInSecond = 0,
     this.thumbnail,
     this.genre,
-    this.creationTime,
     this.isHidden = false,
     this.skipSilentStart,
     this.skipSilentEnd,
+    this.playedLastTime,
+    this.playedCount = 0,
   });
 
   Map<String, dynamic> toJson() {
@@ -46,10 +50,12 @@ class Music {
       'lengthInSecond': lengthInSecond,
       'thumbnail': thumbnail,
       'genre': genre,
-      'creationTime': creationTime?.toIso8601String(),
+      'creationTime': creationTime.toIso8601String(),
       'isHidden': isHidden ? 1 : 0,
       'skipSilentStart': skipSilentStart,
       'skipSilentEnd': skipSilentEnd,
+      'playedLastTime': playedLastTime?.toIso8601String(),
+      'playedCount': playedCount,
     };
   }
 
@@ -63,10 +69,12 @@ class Music {
       thumbnail: json['thumbnail'],
       artist: json['artist'],
       lengthInSecond: json['lengthInSecond'],
-      creationTime: DateTime.tryParse(json['creationTime'] ?? ''),
+      creationTime: DateTime.parse(json['creationTime']),
       isHidden: json['isHidden'] == 1,
       skipSilentStart: json['skipSilentStart'],
       skipSilentEnd: json['skipSilentEnd'],
+      playedLastTime: DateTime.tryParse(json['playedLastTime'] ?? ''),
+      playedCount: json['playedCount'],
     );
   }
 

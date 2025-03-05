@@ -1,3 +1,4 @@
+import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/button_card.dart';
 import 'package:flutter_offline_music/components/music_list_item.dart';
@@ -29,8 +30,22 @@ class _DashboardPageState extends State<DashboardPage> {
   fetchData() async {
     var allMusics = await _musicService.getListMusicAsync();
     setState(() {
-      _recentMusics = allMusics.take(3).toList();
-      _newestMusics = allMusics.take(10).toList();
+      _recentMusics =
+          allMusics
+              .where((x) => x.playedLastTime != null)
+              .orderByDescending((x) => x.playedLastTime!)
+              .take(3)
+              .toList();
+      _newestMusics =
+          allMusics
+              .where(
+                (x) =>
+                    DateTime.now().difference(x.creationTime) <
+                    Duration(days: 1),
+              )
+              .orderByDescending((x) => x.creationTime)
+              .take(10)
+              .toList();
     });
   }
 
@@ -56,7 +71,10 @@ class _DashboardPageState extends State<DashboardPage> {
                     onPressed: () {
                       logDebug('Favorite');
                     },
-                    child: Text('Yêu thích'),
+                    child: Text(
+                      'Yêu thích',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 Flexible(
@@ -65,7 +83,10 @@ class _DashboardPageState extends State<DashboardPage> {
                     icon: Icon(Icons.play_arrow_rounded, size: 32),
                     backgroundImage: AssetImage("assets/bg_music_blue.png"),
                     onPressed: () {},
-                    child: Text('Phát nhạc'),
+                    child: Text(
+                      'Phát nhạc',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               ],
@@ -121,7 +142,7 @@ class _GroupTitle extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(title, style: Theme.of(context).textTheme.titleSmall),
-        TextButton(onPressed: () {}, child: Text('Xem tất cả >')),
+        TextButton(onPressed: () {}, child: Text('Xem thêm >')),
       ],
     );
   }

@@ -116,6 +116,13 @@ class MusicService {
     );
   }
 
+  Future<int> updateMusicPlayedLastTime(String musicPath) async {
+    return await (await _db).rawUpdate(
+      'UPDATE ${DbTable.music} SET playedLastTime = ? WHERE path = ?',
+      [DateTime.now().toIso8601String(), musicPath],
+    );
+  }
+
   Future<int> deleteMusicAsync(int id) async {
     return await (await _db).delete(
       DbTable.music,

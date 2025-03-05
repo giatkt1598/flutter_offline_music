@@ -54,6 +54,8 @@ id INTEGER PRIMARY KEY AUTOINCREMENT
 , isHidden INTEGER NOT NULL DEFAULT 0
 , skipSilentStart INTEGER
 , skipSilentEnd INTEGER
+, playedLastTime TEXT
+, playedCount INTEGER NOT NULL DEFAULT 0
 , FOREIGN KEY (musicFolderId) REFERENCES ${DbTable.musicFolder}(id) ON DELETE CASCADE
 )
           ''');

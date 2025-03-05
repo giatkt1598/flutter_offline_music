@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/models/music.dart';
+import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:flutter_offline_music/utilities/theme_helper.dart';
+import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class MusicListItemRrect extends StatelessWidget {
   const MusicListItemRrect({super.key, required this.music});
@@ -11,6 +14,7 @@ class MusicListItemRrect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final setting = Provider.of<SettingProvider>(context).appSetting;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
@@ -67,7 +71,10 @@ class MusicListItemRrect extends StatelessWidget {
                             .withValues(alpha: 0.3),
                       ),
                       child: Text(
-                        '3 ngày trước',
+                        timeago.format(
+                          music.creationTime,
+                          locale: setting.languageCode,
+                        ),
                         style: TextStyle(fontSize: 10),
                       ),
                     ),
