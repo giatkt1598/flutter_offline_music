@@ -162,6 +162,7 @@ FROM ${DbTable.music} JOIN ${DbTable.musicFolder} ON ${DbTable.music}.musicFolde
 WHERE (:isHidden IS NULL OR :isHidden = 1 OR ${DbTable.musicFolder}.isHidden = 0)
   AND (:isHidden IS NULL OR ${DbTable.music}.isHidden = :isHidden)
   AND (:musicFolderId IS NULL OR ${DbTable.music}.musicFolderId = :musicFolderId)
+${orderBy != null ? 'ORDER BY $orderBy' : ''}
 '''
           .replaceAll(
             ':isHidden',
