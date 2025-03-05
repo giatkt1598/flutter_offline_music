@@ -20,7 +20,6 @@ class _DashboardPageState extends State<DashboardPage> {
   List<Music> _recentMusics = [];
   List<Music> _newestMusics = [];
   List<Music> _topPlayedCountMusics = [];
-  final _scrollController = ScrollController();
   final _musicService = MusicService();
   @override
   void initState() {
@@ -63,7 +62,7 @@ class _DashboardPageState extends State<DashboardPage> {
     return Container(
       padding: EdgeInsets.all(16),
       child: SingleChildScrollView(
-        controller: _scrollController,
+        physics: AlwaysScrollableScrollPhysics(),
         child: Column(
           spacing: 8,
           crossAxisAlignment: CrossAxisAlignment.start,

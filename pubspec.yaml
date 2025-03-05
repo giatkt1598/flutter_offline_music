@@ -71,6 +71,7 @@ flutter:
   assets:
     - assets/bg_music_blue.png
     - assets/bg_music_pink.png
+    - assets/bg_music_1.png
     - assets/music_note_2.png
     - assets/playing.gif
     - assets/no_data.png
