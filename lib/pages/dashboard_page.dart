@@ -6,6 +6,7 @@ import 'package:flutter_offline_music/components/music_list_item_card.dart';
 import 'package:flutter_offline_music/components/music_list_item_rrect.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
+import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:flutter_offline_music/utilities/debug_helper.dart';
 
@@ -27,7 +28,7 @@ class _DashboardPageState extends State<DashboardPage> {
     super.initState();
   }
 
-  fetchData() async {
+  Future<void> fetchData() async {
     var allMusics = await _musicService.getListMusicAsync();
     setState(() {
       _recentMusics =
@@ -59,81 +60,93 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      child: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-        child: Column(
-          spacing: 8,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 8),
-            Row(
-              spacing: 8,
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: ButtonCard(
-                    icon: Icon(Icons.favorite),
-                    backgroundImage: AssetImage("assets/bg_music_pink.png"),
-                    onPressed: () {
-                      logDebug('Favorite');
-                    },
-                    child: Text(
-                      'Yêu thích',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+    return RefreshIndicator(
+      onRefresh: () async {
+        await fetchData();
+        ToastService.showSuccess(
+          'Đã tải lại trang',
+          duration: Duration(seconds: 1),
+        );
+      },
+      child: Container(
+        padding: EdgeInsets.all(16),
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Column(
+            spacing: 8,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 8),
+              Row(
+                spacing: 8,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: ButtonCard(
+                      icon: Icon(Icons.favorite),
+                      backgroundImage: AssetImage("assets/bg_music_pink.png"),
+                      onPressed: () {
+                        logDebug('Favorite');
+                      },
+                      child: Text(
+                        'Yêu thích',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
-                ),
-                Flexible(
-                  flex: 1,
-                  child: ButtonCard(
-                    icon: Icon(Icons.play_arrow_rounded, size: 32),
-                    backgroundImage: AssetImage("assets/bg_music_blue.png"),
-                    onPressed: () {},
-                    child: Text(
-                      'Phát nhạc',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                  Flexible(
+                    flex: 1,
+                    child: ButtonCard(
+                      icon: Icon(Icons.play_arrow_rounded, size: 32),
+                      backgroundImage: AssetImage("assets/bg_music_blue.png"),
+                      onPressed: () {},
+                      child: Text(
+                        'Phát nhạc',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
+                ],
+              ),
+              SizedBox(height: 4),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _GroupTitle(title: 'Đã phát gần đây'),
+                  for (var music in _recentMusics)
+                    MusicListItem(
+                      music: music,
+                      afterHideItem: () => fetchData(),
+                    ),
+                ],
+              ),
+              _GroupTitle(title: 'Đã thêm gần đây'),
+              SizedBox(
+                height: 160,
+                width: SharedData.fullWidth,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _newestMusics.length,
+                  itemBuilder:
+                      (context, idx) =>
+                          MusicListItemRrect(music: _newestMusics[idx]),
                 ),
-              ],
-            ),
-            SizedBox(height: 4),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _GroupTitle(title: 'Đã phát gần đây'),
-                for (var music in _recentMusics)
-                  MusicListItem(music: music, afterHideItem: () => fetchData()),
-              ],
-            ),
-            _GroupTitle(title: 'Đã thêm gần đây'),
-            SizedBox(
-              height: 160,
-              width: SharedData.fullWidth,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: _newestMusics.length,
-                itemBuilder:
-                    (context, idx) =>
-                        MusicListItemRrect(music: _newestMusics[idx]),
               ),
-            ),
-            _GroupTitle(title: 'Lượt nghe nhiều nhất'),
-            SizedBox(
-              height: 200,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: _topPlayedCountMusics.length,
-                itemBuilder:
-                    (context, idx) =>
-                        MusicListItemCard(music: _topPlayedCountMusics[idx]),
+              _GroupTitle(title: 'Lượt nghe nhiều nhất'),
+              SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _topPlayedCountMusics.length,
+                  itemBuilder:
+                      (context, idx) =>
+                          MusicListItemCard(music: _topPlayedCountMusics[idx]),
+                ),
               ),
-            ),
-            SizedBox(height: 90),
-          ],
+              SizedBox(height: 90),
+            ],
+          ),
         ),
       ),
     );

@@ -5,7 +5,7 @@ import 'package:toastification/toastification.dart';
 class ToastService {
   ToastService._();
 
-  static showSuccess(String message, {Duration? duration}) {
+  static void showSuccess(String message, {Duration? duration}) {
     show(
       message: message,
       type: ToastificationType.success,
@@ -13,11 +13,11 @@ class ToastService {
     );
   }
 
-  static showError(String message, {Duration? duration}) {
+  static void showError(String message, {Duration? duration}) {
     show(message: message, type: ToastificationType.error, duration: duration);
   }
 
-  static show({
+  static void show({
     required String message,
     Duration? duration,
     ToastificationType? type,
