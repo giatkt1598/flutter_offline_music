@@ -6,7 +6,6 @@ import 'package:flutter_offline_music/components/song_list_sort_button.dart';
 import 'package:flutter_offline_music/constants/constant.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
-import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -71,94 +70,87 @@ class _FullMusicListPageState extends State<FullMusicListPage> {
     final playerProvider = Provider.of<PlayerProvider>(context);
     final audioHandler = playerProvider.audioHandler;
     final musics = playerProvider.musics;
-    return RefreshIndicator(
-      onRefresh: () async {
-        await fetchData();
-        ToastService.showSuccess('Đã cập nhật danh sách');
-      },
-      child: Scaffold(
-        body: Column(
-          children: [
-            Expanded(
-              child: MusicList(
-                musics: musics,
-                onChanged: (value) => setState(() {}),
-                leadingItem: Column(
-                  children: [
-                    SizedBox(height: 12),
-                    Text(
-                      '${musics.length} bài hát ・ ${_musicService.calcTotalDuration(musics)}',
-                    ),
-                    SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: 8,
-                      children: [
-                        SizedBox(
-                          width: 140,
-                          child: OutlinedButton(
-                            onPressed:
-                                musics.isNotEmpty
-                                    ? () {
-                                      if (musics.first.path !=
-                                          audioHandler.currentMediaItem?.id) {
-                                        audioHandler.stop().then((_) {
-                                          audioHandler.playMusic(musics.first);
-                                        });
-                                      } else {
-                                        audioHandler.seek(Duration.zero);
-                                      }
-                                    }
-                                    : null,
-                            child: Text('Phát nhạc'),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 140,
-                          child: OutlinedButton(
-                            onPressed:
-                                musics.isNotEmpty
-                                    ? () {
-                                      audioHandler.setShuffle(true);
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            child: MusicList(
+              musics: musics,
+              onChanged: (value) => setState(() {}),
+              leadingItem: Column(
+                children: [
+                  SizedBox(height: 12),
+                  Text(
+                    '${musics.length} bài hát ・ ${_musicService.calcTotalDuration(musics)}',
+                  ),
+                  SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 8,
+                    children: [
+                      SizedBox(
+                        width: 140,
+                        child: OutlinedButton(
+                          onPressed:
+                              musics.isNotEmpty
+                                  ? () {
+                                    if (musics.first.path !=
+                                        audioHandler.currentMediaItem?.id) {
                                       audioHandler.stop().then((_) {
-                                        audioHandler.playMediaItem(
-                                          audioHandler
-                                              .playlist[Random().nextInt(
-                                            audioHandler.playlist.length - 1,
-                                          )],
-                                        );
+                                        audioHandler.playMusic(musics.first);
                                       });
+                                    } else {
+                                      audioHandler.seek(Duration.zero);
                                     }
-                                    : null,
-                            child: Text('Ngẫu nhiên'),
-                          ),
+                                  }
+                                  : null,
+                          child: Text('Phát nhạc'),
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(child: Container()),
-                        if (musics.isNotEmpty &&
-                            sortField != null &&
-                            sortDirection != null)
-                          SongListSortButton(
-                            initialSortDirection: sortDirection!,
-                            initialSortField: sortField!,
-                            onChanged:
-                                (sortField, sortDirection) => fetchData(
-                                  sortDirection: sortDirection,
-                                  sortField: sortField,
-                                ),
-                          ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                      SizedBox(
+                        width: 140,
+                        child: OutlinedButton(
+                          onPressed:
+                              musics.isNotEmpty
+                                  ? () {
+                                    audioHandler.setShuffle(true);
+                                    audioHandler.stop().then((_) {
+                                      audioHandler.playMediaItem(
+                                        audioHandler.playlist[Random().nextInt(
+                                          audioHandler.playlist.length - 1,
+                                        )],
+                                      );
+                                    });
+                                  }
+                                  : null,
+                          child: Text('Ngẫu nhiên'),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(child: Container()),
+                      if (musics.isNotEmpty &&
+                          sortField != null &&
+                          sortDirection != null)
+                        SongListSortButton(
+                          initialSortDirection: sortDirection!,
+                          initialSortField: sortField!,
+                          onChanged:
+                              (sortField, sortDirection) => fetchData(
+                                sortDirection: sortDirection,
+                                sortField: sortField,
+                              ),
+                        ),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

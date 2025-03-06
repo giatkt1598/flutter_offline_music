@@ -91,58 +91,55 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
       EasyLoading.dismiss();
     }
 
-    return RefreshIndicator(
-      onRefresh: scanMusic,
-      child: Scaffold(
-        body: Column(
-          spacing: 4,
-          children: [
-            SizedBox(height: 8),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: OutlinedButton(
-                onPressed: scanMusic,
-                child: Text('Quét nhạc'),
-              ),
+    return Scaffold(
+      body: Column(
+        spacing: 4,
+        children: [
+          SizedBox(height: 8),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: OutlinedButton(
+              onPressed: scanMusic,
+              child: Text('Quét nhạc'),
             ),
-            if (totalHiddenFolder == 0 && _musicFolders.isEmpty)
-              Padding(padding: const EdgeInsets.only(top: 24), child: NoData())
-            else
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView.builder(
-                    itemCount: _musicFolders.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index == _musicFolders.length) {
-                        if (totalHiddenFile == 0 && totalHiddenFolder == 0) {
-                          return Container();
-                        }
-                        return HiddenMusicFolderInfo(
-                          totalHiddenFile: totalHiddenFile,
-                          totalHiddenFolder: totalHiddenFolder,
-                        );
+          ),
+          if (totalHiddenFolder == 0 && _musicFolders.isEmpty)
+            Padding(padding: const EdgeInsets.only(top: 24), child: NoData())
+          else
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.builder(
+                  itemCount: _musicFolders.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == _musicFolders.length) {
+                      if (totalHiddenFile == 0 && totalHiddenFolder == 0) {
+                        return Container();
                       }
-
-                      final folder = _musicFolders[index];
-
-                      return Visibility(
-                        visible:
-                            musicFolderProvider.isShowAllMusicFolder ||
-                            !folder.isHidden,
-                        child: FolderListItem(
-                          folder: folder,
-                          onRefresh: loadData,
-                          showHiddenInfo:
-                              musicFolderProvider.isShowAllMusicFolder,
-                        ),
+                      return HiddenMusicFolderInfo(
+                        totalHiddenFile: totalHiddenFile,
+                        totalHiddenFolder: totalHiddenFolder,
                       );
-                    },
-                  ),
+                    }
+
+                    final folder = _musicFolders[index];
+
+                    return Visibility(
+                      visible:
+                          musicFolderProvider.isShowAllMusicFolder ||
+                          !folder.isHidden,
+                      child: FolderListItem(
+                        folder: folder,
+                        onRefresh: loadData,
+                        showHiddenInfo:
+                            musicFolderProvider.isShowAllMusicFolder,
+                      ),
+                    );
+                  },
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }

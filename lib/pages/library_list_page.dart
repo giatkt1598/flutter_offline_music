@@ -4,7 +4,6 @@ import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/pages/music_select_to_library_page.dart';
 import 'package:flutter_offline_music/services/library_service.dart';
-import 'package:flutter_offline_music/services/toast_service.dart';
 
 class LibraryListPage extends StatefulWidget {
   const LibraryListPage({super.key});
@@ -55,76 +54,70 @@ class _LibraryListPageState extends State<LibraryListPage> {
           });
     }
 
-    return RefreshIndicator(
-      onRefresh: () async {
-        await loadLibraries();
-        ToastService.showSuccess('Đã cập nhật danh sách');
-      },
-      child: Scaffold(
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: Text(
-                      '${libraries.length} thư viện',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+    return Scaffold(
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Text(
+                    '${libraries.length} thư viện',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Expanded(child: Container()),
+                IconButton(
+                  onPressed: addNewLibrary,
+                  icon: Icon(Icons.library_add),
+                ),
+                IconButton(onPressed: null, icon: Icon(Icons.more_vert)),
+              ],
+            ),
+          ),
+          if (libraries.isNotEmpty)
+            Expanded(
+              child: ListView.builder(
+                itemCount: libraries.length + 1,
+                itemBuilder: (context, index) {
+                  if (libraries.length == index) {
+                    return SizedBox(height: 90);
+                  }
+
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: LibraryListItem(
+                      library: libraries[index],
+                      onRefresh: loadLibraries,
+                    ),
+                  );
+                },
+              ),
+            )
+          else
+            Expanded(
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 200),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        NoData(title: 'Chưa có thư viện nào!'),
+                        SizedBox(height: 12),
+                        OutlinedButton(
+                          onPressed: addNewLibrary,
+                          child: Text('Tạo mới'),
+                        ),
+                      ],
                     ),
                   ),
-                  Expanded(child: Container()),
-                  IconButton(
-                    onPressed: addNewLibrary,
-                    icon: Icon(Icons.library_add),
-                  ),
-                  IconButton(onPressed: null, icon: Icon(Icons.more_vert)),
-                ],
+                ),
               ),
             ),
-            if (libraries.isNotEmpty)
-              Expanded(
-                child: ListView.builder(
-                  itemCount: libraries.length + 1,
-                  itemBuilder: (context, index) {
-                    if (libraries.length == index) {
-                      return SizedBox(height: 90);
-                    }
-
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: LibraryListItem(
-                        library: libraries[index],
-                        onRefresh: loadLibraries,
-                      ),
-                    );
-                  },
-                ),
-              )
-            else
-              Expanded(
-                child: Center(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 200),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          NoData(title: 'Chưa có thư viện nào!'),
-                          SizedBox(height: 12),
-                          OutlinedButton(
-                            onPressed: addNewLibrary,
-                            child: Text('Tạo mới'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }
