@@ -8,6 +8,7 @@ import 'package:flutter_offline_music/components/simple_tab.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
+import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:provider/provider.dart';
 
 class PlayerPlaylistTabContent extends StatefulWidget {
@@ -21,11 +22,18 @@ class PlayerPlaylistTabContent extends StatefulWidget {
 class _PlayerPlaylistTabContentState extends State<PlayerPlaylistTabContent>
     with AutomaticKeepAliveClientMixin {
   final _musicService = MusicService();
+  final _scrollController = ScrollController(keepScrollOffset: true);
   List<Music> musics = [];
   @override
   void initState() {
     fetchData();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   Future<void> fetchData() async {
@@ -57,8 +65,10 @@ class _PlayerPlaylistTabContentState extends State<PlayerPlaylistTabContent>
               ),
             ),
             IconButton(
-              onPressed: () {
-                audioHandler.setShuffle(true);
+              onPressed: () async {
+                await audioHandler.setShuffle(true);
+                setState(() {});
+                ToastService.showSuccess('Đảo thứ tự thành công');
               },
               icon: Icon(Icons.shuffle),
             ),
@@ -83,6 +93,7 @@ class _PlayerPlaylistTabContentState extends State<PlayerPlaylistTabContent>
         ),
         Expanded(
           child: ReorderableListView.builder(
+            scrollController: _scrollController,
             onReorder: audioHandler.reorderPlaylist,
             proxyDecorator: (child, index, animation) {
               return AnimatedBuilder(

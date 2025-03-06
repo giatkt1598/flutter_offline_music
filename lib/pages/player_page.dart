@@ -9,7 +9,6 @@ import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
-import 'package:flutter_offline_music/utilities/theme_helper.dart';
 import 'package:provider/provider.dart';
 
 class PlayerPage extends StatefulWidget {
@@ -23,17 +22,6 @@ class PlayerPage extends StatefulWidget {
 
 class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   int tabIndex = 1;
-
-  @override
-  void initState() {
-    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
-    playerProvider.isShowMiniPlayer = false;
-
-    if (playerProvider.audioHandler.playlist.isEmpty) {
-      playerProvider.audioHandler.setPlaylistFromMusics(playerProvider.musics);
-    }
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

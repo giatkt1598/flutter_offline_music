@@ -123,17 +123,14 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
                         ),
                         onPressed:
                             musics.isNotEmpty
-                                ? () {
-                                  setCurrentPlaylist().then((_) {
-                                    if (musics.first.path !=
-                                        audioHandler.currentMediaItem?.id) {
-                                      audioHandler.stop().then((_) {
-                                        audioHandler.playMusic(musics.first);
-                                      });
-                                    } else {
-                                      audioHandler.seek(Duration.zero);
-                                    }
-                                  });
+                                ? () async {
+                                  await setCurrentPlaylist();
+                                  if (musics.first.path !=
+                                      audioHandler.currentMediaItem?.id) {
+                                    await audioHandler.playMusic(musics.first);
+                                  } else {
+                                    audioHandler.seek(Duration.zero);
+                                  }
                                 }
                                 : null,
                         child: Row(
@@ -159,17 +156,15 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
                         ),
                         onPressed:
                             musics.isNotEmpty
-                                ? () {
-                                  setCurrentPlaylist().then((_) {
-                                    audioHandler.setShuffle(true);
-                                    audioHandler.stop().then((_) {
-                                      audioHandler.playMediaItem(
-                                        audioHandler.playlist[Random().nextInt(
-                                          audioHandler.playlist.length - 1,
-                                        )],
-                                      );
-                                    });
-                                  });
+                                ? () async {
+                                  //Fix random not same as current
+                                  await setCurrentPlaylist();
+                                  await audioHandler.setShuffle(true);
+                                  await audioHandler.playMediaItem(
+                                    audioHandler.playlist[Random().nextInt(
+                                      audioHandler.playlist.length - 1,
+                                    )],
+                                  );
                                 }
                                 : null,
                         child: Row(

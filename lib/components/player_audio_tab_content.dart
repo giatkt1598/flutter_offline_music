@@ -28,13 +28,21 @@ class _PlayerAudioTabContentState extends State<PlayerAudioTabContent>
   @override
   void initState() {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
-    playerProvider.isShowMiniPlayer = false;
     final audioHandler = playerProvider.audioHandler;
-    if (widget.music.path != audioHandler.currentMediaItem?.id) {
-      audioHandler.stop().then((_) {
-        audioHandler.playMusic(widget.music);
-      });
+    playerProvider.isShowMiniPlayer = false;
+
+    Future play() async {
+      if (audioHandler.playlist.isEmpty) {
+        await audioHandler.setPlaylistFromMusics(playerProvider.musics);
+      }
+
+      if (widget.music.path != audioHandler.currentMediaItem?.id) {
+        await audioHandler.stop();
+        await audioHandler.playMusic(widget.music);
+      }
     }
+
+    play();
 
     setState(() {
       positionSubscription = audioHandler.player.positionStream.listen((p) {
