@@ -5,6 +5,7 @@ import 'package:flutter_offline_music/components/music_list.dart';
 import 'package:flutter_offline_music/components/song_list_sort_button.dart';
 import 'package:flutter_offline_music/constants/constant.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
+import 'package:flutter_offline_music/providers/tab_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,7 +17,8 @@ class FullMusicListPage extends StatefulWidget {
   State<FullMusicListPage> createState() => _FullMusicListPageState();
 }
 
-class _FullMusicListPageState extends State<FullMusicListPage> {
+class _FullMusicListPageState extends State<FullMusicListPage>
+    with TabProviderListenerMixin {
   final _scrollController = ScrollController();
 
   final MusicService _musicService = MusicService();
@@ -153,5 +155,10 @@ class _FullMusicListPageState extends State<FullMusicListPage> {
         ],
       ),
     );
+  }
+
+  @override
+  void onTabActive() {
+    fetchData();
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter_offline_music/pages/splash_page.dart';
 import 'package:flutter_offline_music/providers/music_folder_provider.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
+import 'package:flutter_offline_music/providers/tab_provider.dart';
 import 'package:flutter_offline_music/services/audio_handler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => TabProvider()),
         ChangeNotifierProvider(create: (context) => MusicFolderProvider()),
         ChangeNotifierProvider(create: (context) => PlayerProvider()),
         ChangeNotifierProvider(

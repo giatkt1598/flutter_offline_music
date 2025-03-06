@@ -19,5 +19,10 @@
     "scope": "dart",
     "prefix": "printDebug",
     "body": "logDebug('$0');"
+  },
+  "Log 2": {
+    "scope": "dart",
+    "prefix": "lo",
+    "body": "logDebug($0);"
   }
 }

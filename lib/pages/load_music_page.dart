@@ -5,6 +5,7 @@ import 'package:flutter_offline_music/components/hidden_music_folder_info.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/providers/music_folder_provider.dart';
+import 'package:flutter_offline_music/providers/tab_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/permission_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
@@ -18,7 +19,8 @@ class LoadMusicPage extends StatefulWidget {
   State<LoadMusicPage> createState() => _LoadMusicPageState();
 }
 
-class _LoadMusicPageState extends State<LoadMusicPage> {
+class _LoadMusicPageState extends State<LoadMusicPage>
+    with TabProviderListenerMixin {
   final MusicService _musicService = MusicService();
   final PermissionService _permissionService = PermissionService();
   List<MusicFolder> _musicFolders = [];
@@ -27,11 +29,11 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
 
   @override
   void initState() {
-    loadData();
+    fetchData();
     super.initState();
   }
 
-  loadData() {
+  Future<void> fetchData() async {
     _musicService.getMusicFolderListAsync(isHidden: null).then((rs) {
       setState(() {
         _musicFolders = rs;
@@ -130,7 +132,7 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
                           !folder.isHidden,
                       child: FolderListItem(
                         folder: folder,
-                        onRefresh: loadData,
+                        onRefresh: fetchData,
                         showHiddenInfo:
                             musicFolderProvider.isShowAllMusicFolder,
                       ),
@@ -142,5 +144,10 @@ class _LoadMusicPageState extends State<LoadMusicPage> {
         ],
       ),
     );
+  }
+
+  @override
+  void onTabActive() {
+    fetchData();
   }
 }

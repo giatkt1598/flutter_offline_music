@@ -5,6 +5,7 @@ import 'package:flutter_offline_music/components/music_list_item.dart';
 import 'package:flutter_offline_music/components/music_list_item_card.dart';
 import 'package:flutter_offline_music/components/music_list_item_rrect.dart';
 import 'package:flutter_offline_music/models/music.dart';
+import 'package:flutter_offline_music/providers/tab_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:flutter_offline_music/utilities/debug_helper.dart';
@@ -16,7 +17,8 @@ class DashboardPage extends StatefulWidget {
   State<DashboardPage> createState() => _DashboardPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _DashboardPageState extends State<DashboardPage>
+    with TabProviderListenerMixin {
   List<Music> _recentMusics = [];
   List<Music> _newestMusics = [];
   List<Music> _topPlayedCountMusics = [];
@@ -42,7 +44,7 @@ class _DashboardPageState extends State<DashboardPage> {
               .where(
                 (x) =>
                     DateTime.now().difference(x.creationTime) <
-                    Duration(days: 1),
+                    Duration(days: 90),
               )
               .orderByDescending((x) => x.creationTime)
               .take(10)
@@ -137,6 +139,11 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void onTabActive() {
+    fetchData();
   }
 }
 

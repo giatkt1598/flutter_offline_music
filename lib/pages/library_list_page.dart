@@ -3,6 +3,7 @@ import 'package:flutter_offline_music/components/library_list_item.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/pages/music_select_to_library_page.dart';
+import 'package:flutter_offline_music/providers/tab_provider.dart';
 import 'package:flutter_offline_music/services/library_service.dart';
 
 class LibraryListPage extends StatefulWidget {
@@ -12,11 +13,12 @@ class LibraryListPage extends StatefulWidget {
   State<LibraryListPage> createState() => _LibraryListPageState();
 }
 
-class _LibraryListPageState extends State<LibraryListPage> {
+class _LibraryListPageState extends State<LibraryListPage>
+    with TabProviderListenerMixin {
   List<Library> libraries = [];
   final libraryService = LibraryService();
 
-  Future<void> loadLibraries() async {
+  Future<void> fetchData() async {
     var list = await libraryService.getListAsync(
       orderBy: 'lastModificationTime desc',
     );
@@ -28,7 +30,7 @@ class _LibraryListPageState extends State<LibraryListPage> {
 
   @override
   void initState() {
-    loadLibraries();
+    fetchData();
     super.initState();
   }
 
@@ -50,7 +52,7 @@ class _LibraryListPageState extends State<LibraryListPage> {
             ),
           )
           .then((_) {
-            loadLibraries();
+            fetchData();
           });
     }
 
@@ -90,7 +92,7 @@ class _LibraryListPageState extends State<LibraryListPage> {
                     padding: const EdgeInsets.only(bottom: 16),
                     child: LibraryListItem(
                       library: libraries[index],
-                      onRefresh: loadLibraries,
+                      onRefresh: fetchData,
                     ),
                   );
                 },
@@ -120,6 +122,11 @@ class _LibraryListPageState extends State<LibraryListPage> {
         ],
       ),
     );
+  }
+
+  @override
+  void onTabActive() {
+    fetchData();
   }
 }
 
