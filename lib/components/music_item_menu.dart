@@ -11,17 +11,21 @@ import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:provider/provider.dart';
 
+enum MusicMenuType { inMusicList, inPlayer, inPlaylist }
+
 class MusicItemMenu extends StatefulWidget {
   const MusicItemMenu({
     super.key,
     required this.music,
     this.afterToggleHide,
     this.showMiniPlayer = true,
+    this.type = MusicMenuType.inMusicList,
   });
 
   final Music music;
   final Function? afterToggleHide;
   final bool showMiniPlayer;
+  final MusicMenuType type;
   @override
   State<MusicItemMenu> createState() => _MusicItemMenuState();
 }
@@ -179,6 +183,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
 
   showMenu() async {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
+    final audioHandler = playerProvider.audioHandler;
     playerProvider.hideMiniPlayer();
     final bool hasStopTime = playerProvider.audioHandler.stopTime != null;
     final Duration? stopDuration = playerProvider.audioHandler.stopTime
@@ -228,11 +233,41 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
               Opacity(opacity: .3, child: Divider()),
               Column(
                 children: [
-                  ListMenuOption(
-                    icon: Icons.post_add_sharp,
-                    title: 'Thêm vào hàng đợi',
-                    onTap: () {},
-                  ),
+                  if (widget.type == MusicMenuType.inMusicList ||
+                      widget.type == MusicMenuType.inPlaylist)
+                    ListMenuOption(
+                      icon: Icons.post_add_sharp,
+                      title: 'Phát tiếp theo',
+                      onTap: () {
+                        audioHandler
+                            .insertItemToPlaylist(
+                              widget.music.toMediaItem(),
+                              index: audioHandler.currentIndex + 1,
+                            )
+                            .then((success) {
+                              if (success) {
+                                ToastService.showSuccess(
+                                  'Tiếp theo sẽ phát bài "${widget.music.title}"',
+                                );
+                              } else {
+                                ToastService.showError('Xảy ra lỗi');
+                              }
+                              Navigator.of(context).pop();
+                            });
+                      },
+                    ),
+                  if (widget.type == MusicMenuType.inPlaylist)
+                    ListMenuOption(
+                      title: 'Xóa khỏi danh sách phát',
+                      icon: Icons.delete_rounded,
+                      onTap: () {
+                        audioHandler.removeItemInPlaylist(widget.music.path);
+                        ToastService.showSuccess(
+                          'Đã xóa "${widget.music.title}" khỏi danh sách phát',
+                        );
+                        Navigator.of(context).pop();
+                      },
+                    ),
                   ListMenuOption(
                     icon: Icons.playlist_add,
                     title: 'Thêm vào thư viện',

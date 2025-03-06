@@ -5,10 +5,12 @@ import 'package:flutter_offline_music/components/music_list_item.dart';
 import 'package:flutter_offline_music/components/music_list_item_card.dart';
 import 'package:flutter_offline_music/components/music_list_item_rrect.dart';
 import 'package:flutter_offline_music/models/music.dart';
+import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/tab_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:flutter_offline_music/utilities/debug_helper.dart';
+import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -30,6 +32,7 @@ class _DashboardPageState extends State<DashboardPage>
   }
 
   Future<void> fetchData() async {
+    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     var allMusics = await _musicService.getListMusicAsync();
     setState(() {
       _recentMusics =
@@ -57,6 +60,8 @@ class _DashboardPageState extends State<DashboardPage>
               .take(10)
               .toList();
     });
+
+    playerProvider.setMusics(allMusics); //TODO: workaround
   }
 
   @override

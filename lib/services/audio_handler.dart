@@ -43,6 +43,9 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   bool get isShuffle => _player.shuffleModeEnabled;
   AudioPlayer get player => _player;
   List<MediaItem> get playlist => _playlist;
+  ConcatenatingAudioSource? get _audioSource =>
+      _player.audioSource as ConcatenatingAudioSource?;
+
   DateTime? get stopTime => _stopTime;
   Duration get _duration => _player.duration ?? Duration.zero;
   Duration get _position => _player.position;
@@ -64,6 +67,54 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     _player.dispose();
     _timerStop?.cancel();
     super.dispose();
+  }
+
+  Future<void> reorderPlaylist(int oldIndex, int newIndex) async {
+    if (newIndex > oldIndex) newIndex--;
+    final item = _playlist.removeAt(oldIndex);
+    _playlist.insert(newIndex, item);
+    await _audioSource?.move(oldIndex, newIndex);
+  }
+
+  Future<void> removeItemInPlaylist(String musicPath) async {
+    int index = _playlist.indexWhere((x) => x.id == musicPath);
+    _playlist.removeAt(index);
+    _originPlaylist.removeWhere((x) => x.id == musicPath);
+    await _audioSource?.removeAt(index);
+    notifyListeners();
+  }
+
+  Future<bool> insertItemToPlaylist(MediaItem item, {int? index}) async {
+    int oldIndex = _playlist.indexWhere((x) => x.id == item.id);
+    if (oldIndex > -1) {
+      if (index == null) return false;
+      await reorderPlaylist(oldIndex, index);
+      notifyListeners();
+      return true;
+    }
+
+    if (_player.audioSource == null) {
+      await setPlaylist([item]);
+      notifyListeners();
+      return true;
+    } else {
+      var art = await getPictureFile(item.id);
+      if (art != null) {
+        item = item.copyWith(artUri: art.uri);
+      }
+      _playlist.insert(index ?? _playlist.length, item);
+      if (!_originPlaylist.any((x) => x.id == item.id)) {
+        _originPlaylist.add(item);
+      }
+      await _audioSource!.insert(
+        index ?? _audioSource!.length,
+        AudioSource.file(item.id),
+      );
+      notifyListeners();
+      return _audioSource!.children.any(
+        (x) => (x as ProgressiveAudioSource).uri.toFilePath() == item.id,
+      );
+    }
   }
 
   Future<void> fadeOutAudio({bool reverse = false}) {
@@ -170,9 +221,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   @override
   Future<void> playMediaItem(MediaItem mediaItem) async {
     if (_playlist.every((x) => x.id != mediaItem.id)) {
-      await addItemToPlaylist(
-        mediaItem,
-      ); //TODO: use insertToPlaylist, insert to current index
+      await insertItemToPlaylist(mediaItem, index: currentIndex + 1);
     }
 
     if (playingMediaItemId != mediaItem.id || _player.duration == null) {
@@ -263,24 +312,6 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     addArtPictureToPlaylist();
   }
 
-  Future<void> addItemToPlaylist(MediaItem item) async {
-    if (_playlist.any((x) => x.id == item.id)) return;
-
-    if (_player.audioSource == null) {
-      await setPlaylist([item]);
-    } else {
-      var art = await getPictureFile(item.id);
-      if (art != null) {
-        item = item.copyWith(artUri: art.uri);
-      }
-      _playlist.add(item);
-      _originPlaylist.add(item);
-      (_player.audioSource as ConcatenatingAudioSource).add(
-        AudioSource.file(item.id),
-      );
-    }
-  }
-
   Future<void> setShuffle(bool isShuffle) async {
     if (_player.sequence == null || _player.sequence!.length < 2) return;
     if (isShuffle) {
@@ -338,6 +369,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   @override
   Future<void> stop() async {
     playing = false;
+    _setCurrentMediaItem(null);
     await _player.stop();
     notifyListeners();
   }

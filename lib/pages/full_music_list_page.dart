@@ -50,9 +50,6 @@ class _FullMusicListPageState extends State<FullMusicListPage>
     );
 
     playerProvider.setMusics(musics);
-    if (playerProvider.audioHandler.playlist.isEmpty) {
-      playerProvider.audioHandler.setPlaylistFromMusics(musics);
-    }
   }
 
   @override

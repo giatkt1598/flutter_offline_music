@@ -19,65 +19,40 @@ class _PlayerHeaderState extends State<PlayerHeader> {
   @override
   Widget build(BuildContext context) {
     final playerProvider = Provider.of<PlayerProvider>(context);
-    return DefaultTextStyle(
-      style: TextStyle(
-        color: Theme.of(context).textTheme.bodyMedium!.color,
-        shadows: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.9),
-            blurRadius: 1,
-            spreadRadius: 5,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.keyboard_arrow_down_rounded),
+        ),
+        AnimatedSwitcher(
+          duration: Duration(milliseconds: 300),
+          child: Text(
+            key: ValueKey(widget.playerTab),
+            {
+              PlayerTab.audio: 'Bài hát',
+              PlayerTab.playlist: 'Danh sách phát',
+            }[widget.playerTab]!,
           ),
-        ],
-      ),
-      child: IconTheme(
-        data: IconThemeData(
-          color: Theme.of(context).textTheme.bodyMedium!.color,
-          shadows: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.9),
-              blurRadius: 1,
-              spreadRadius: 5,
-            ),
-          ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: Icon(Icons.keyboard_arrow_down_rounded),
-            ),
-            AnimatedSwitcher(
-              duration: Duration(milliseconds: 300),
-              child: Text(
-                key: ValueKey(widget.playerTab),
-                {
-                  PlayerTab.audio: 'Bài hát',
-                  PlayerTab.playlist: 'Danh sách phát',
-                }[widget.playerTab]!,
-              ),
-            ),
-            if (widget.playerTab == PlayerTab.audio)
-              MusicItemMenu(
-                showMiniPlayer: false,
-                music: widget.music,
-                afterToggleHide: () {
-                  playerProvider.musics.removeWhere(
-                    (x) => x.id == widget.music.id,
-                  );
-                  playerProvider.setMusics(playerProvider.musics);
-                  Navigator.of(context).pop();
-                },
-              )
-            else
-              IconButton(onPressed: null, icon: Icon(Icons.more_vert)),
-          ],
-        ),
-      ),
+        if (widget.playerTab == PlayerTab.audio)
+          MusicItemMenu(
+            type: MusicMenuType.inPlayer,
+            showMiniPlayer: false,
+            music: widget.music,
+            afterToggleHide: () {
+              playerProvider.musics.removeWhere((x) => x.id == widget.music.id);
+              playerProvider.setMusics(playerProvider.musics);
+              Navigator.of(context).pop();
+            },
+          )
+        else
+          IconButton(onPressed: null, icon: Icon(Icons.more_vert)),
+      ],
     );
   }
 }

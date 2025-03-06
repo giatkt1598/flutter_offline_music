@@ -13,11 +13,31 @@ class MusicListItem extends StatelessWidget {
     required this.music,
     this.afterHideItem,
     this.keywordSearch,
+    this.onTap,
+    this.trailing,
+    this.leading,
+    this.musicTitleColor,
+    this.iconColor,
+    this.musicArtistColor,
+    this.activeMusicTitleColor,
+    this.tileColor,
+    this.menuType = MusicMenuType.inMusicList,
+    this.showMiniPlayer = true,
   });
 
   final Music music;
   final Function? afterHideItem;
   final String? keywordSearch;
+  final void Function()? onTap;
+  final Widget? trailing;
+  final Widget? leading;
+  final Color? musicTitleColor;
+  final Color? iconColor;
+  final Color? musicArtistColor;
+  final Color? activeMusicTitleColor;
+  final Color? tileColor;
+  final MusicMenuType menuType;
+  final bool showMiniPlayer;
   @override
   Widget build(BuildContext context) {
     final playerProvider = Provider.of<PlayerProvider>(context);
@@ -27,7 +47,7 @@ class MusicListItem extends StatelessWidget {
     final artist = music.artist ?? '<Không rõ tác giả>';
     final TextStyle artistTextStyle = TextStyle(
       fontSize: 12,
-      color: isCurrent ? Theme.of(context).colorScheme.primary : null,
+      color: musicArtistColor,
     );
     final double borderWidth = 5.0;
     return Container(
@@ -49,17 +69,29 @@ class MusicListItem extends StatelessWidget {
         ),
         horizontalTitleGap: 0,
         tileColor:
-            isCurrent
+            tileColor ??
+            (isCurrent
                 ? Theme.of(
                   context,
                 ).colorScheme.inversePrimary.withValues(alpha: 0.3)
-                : null,
-        onTap: () => playerProvider.openAudioPlayerPage(context, music: music),
-        leading: Opacity(
-          opacity: music.isHidden ? 0.3 : 1,
-          child: MusicThumbnail(musicPath: music.path),
-        ),
-        trailing: MusicItemMenu(music: music, afterToggleHide: afterHideItem),
+                : null),
+        onTap:
+            onTap ??
+            () => playerProvider.openAudioPlayerPage(context, music: music),
+        leading:
+            leading ??
+            Opacity(
+              opacity: music.isHidden ? 0.3 : 1,
+              child: MusicThumbnail(musicPath: music.path),
+            ),
+        trailing:
+            trailing ??
+            MusicItemMenu(
+              music: music,
+              afterToggleHide: afterHideItem,
+              type: menuType,
+              showMiniPlayer: showMiniPlayer,
+            ),
         title: Padding(
           padding: const EdgeInsets.only(left: 8),
           child: Column(
@@ -68,7 +100,7 @@ class MusicListItem extends StatelessWidget {
               Row(
                 spacing: 4,
                 children: [
-                  if (isCurrent)
+                  if (isCurrent && audioHandler.playing)
                     SizedBox(
                       width: 24,
                       height: 24,
@@ -84,7 +116,9 @@ class MusicListItem extends StatelessWidget {
                                   MediaQuery.of(context).size.width - 120,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.primary,
+                                color:
+                                    activeMusicTitleColor ??
+                                    Theme.of(context).colorScheme.primary,
                               ),
                             )
                             : keywordSearch != null
@@ -96,6 +130,7 @@ class MusicListItem extends StatelessWidget {
                               music.title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
+                              style: TextStyle(color: musicTitleColor),
                             ),
                   ),
                 ],

@@ -13,10 +13,10 @@ class SimpleTab extends StatefulWidget {
   final ValueChanged<int>? onTabChanged;
 
   @override
-  State<SimpleTab> createState() => _SimpleTabState();
+  State<SimpleTab> createState() => SimpleTabState();
 }
 
-class _SimpleTabState extends State<SimpleTab> with TickerProviderStateMixin {
+class SimpleTabState extends State<SimpleTab> with TickerProviderStateMixin {
   late TabController _tabController;
   int _tabIndex = 0;
   @override
@@ -36,6 +36,10 @@ class _SimpleTabState extends State<SimpleTab> with TickerProviderStateMixin {
       }
     });
     super.initState();
+  }
+
+  activeTab(int index) {
+    _tabController.animateTo(index);
   }
 
   @override
