@@ -1,7 +1,7 @@
 import 'package:flutter_offline_music/models/music.dart';
 
 class Library {
-  final int id;
+  int id;
   String title;
   DateTime creationTime;
   DateTime? lastModificationTime;

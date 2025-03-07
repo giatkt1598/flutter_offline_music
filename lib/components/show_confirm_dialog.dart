@@ -11,8 +11,14 @@ Future<bool?> showConfirmDialog({
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(title ?? "Xác nhận"),
-        content: Text(message ?? "Bạn chắc chắn?"),
+        title: Text(
+          title ?? "Xác nhận",
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        content: Text(
+          message ?? "Bạn chắc chắn?",
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
         actions: [
           TextButton(
             onPressed: () {

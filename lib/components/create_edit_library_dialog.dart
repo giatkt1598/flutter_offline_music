@@ -75,7 +75,7 @@ class _CreateEditLibraryDialogState extends State<CreateEditLibraryDialog> {
     library.title = _titleController.text;
     if (widget.libraryId == null) {
       library.creationTime = DateTime.now();
-      await _libraryService.insertAsync(library) > 0;
+      library.id = await _libraryService.insertAsync(library);
     } else {
       library.lastModificationTime = DateTime.now();
       await _libraryService.updateAsync(library) > 0;
