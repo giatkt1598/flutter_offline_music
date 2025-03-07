@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_offline_music/components/folder_list_item.dart';
+import 'package:flutter_offline_music/components/music_folder_item.dart';
 import 'package:flutter_offline_music/components/library_list_item.dart';
 import 'package:flutter_offline_music/components/music_list_item.dart';
 import 'package:flutter_offline_music/components/search_field.dart';
@@ -85,7 +85,7 @@ class _SearchPageState extends State<SearchPage> {
                 child: _SearchResultGroupTitle(title: 'Thư mục'),
               ),
             for (var folder in _folders)
-              FolderListItem(
+              MusicFolderItem(
                 showHiddenInfo: true,
                 keywordSearch: keyword,
                 folder: folder,

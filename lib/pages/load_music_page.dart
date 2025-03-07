@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_offline_music/components/folder_list_item.dart';
+import 'package:flutter_offline_music/components/music_folder_item.dart';
 import 'package:flutter_offline_music/components/hidden_music_folder_info.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
@@ -131,7 +131,7 @@ class _LoadMusicPageState extends State<LoadMusicPage>
                       visible:
                           musicFolderProvider.isShowAllMusicFolder ||
                           !folder.isHidden,
-                      child: FolderListItem(
+                      child: MusicFolderItem(
                         folder: folder,
                         onRefresh: fetchData,
                         showHiddenInfo:

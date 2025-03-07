@@ -15,8 +15,15 @@ import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:provider/provider.dart';
 
 class MusicFolderItemMenu extends StatefulWidget {
-  const MusicFolderItemMenu({super.key, required this.musicFolder});
+  const MusicFolderItemMenu({
+    super.key,
+    required this.musicFolder,
+    required this.onRefresh,
+    required this.afterHideFolder,
+  });
   final MusicFolder musicFolder;
+  final Function onRefresh;
+  final Function afterHideFolder;
 
   @override
   State<MusicFolderItemMenu> createState() => _MusicFolderItemMenuState();
@@ -35,7 +42,7 @@ class _MusicFolderItemMenuState extends State<MusicFolderItemMenu> {
     hideFolder() async {
       widget.musicFolder.isHidden = !widget.musicFolder.isHidden;
       await _musicService.updateMusicFolderAsync(widget.musicFolder);
-      Navigator.of(context).pop();
+      widget.afterHideFolder();
     }
 
     toggleHiddenAllFile() async {
@@ -43,7 +50,7 @@ class _MusicFolderItemMenuState extends State<MusicFolderItemMenu> {
         music.isHidden = !hasHiddenFile;
         await _musicService.updateMusicAsync(music);
       }
-      setState(() {});
+      widget.onRefresh();
     }
 
     Future<void> createLibraryFromFolder() async {
@@ -109,6 +116,7 @@ class _MusicFolderItemMenuState extends State<MusicFolderItemMenu> {
         builder: (context) {
           return SizedBox(
             width: MediaQuery.of(context).size.width,
+            height: 300,
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(

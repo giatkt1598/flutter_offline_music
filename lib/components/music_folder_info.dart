@@ -18,6 +18,7 @@ class MusicFolderInfo extends StatelessWidget {
       columnWidths: {0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
       children: [
         createRow(label: 'Tên thư mục', value: folder.name),
+        createRow(label: 'Vị trí', value: folder.path),
         createRow(
           label: 'Sửa lần cuối',
           widgetValue: Opacity(
@@ -54,7 +55,7 @@ class MusicFolderInfo extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 12),
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
+            padding: const EdgeInsets.only(bottom: 16.0),
             child:
                 widgetValue ??
                 Opacity(

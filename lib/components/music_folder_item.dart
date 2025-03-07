@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/highlighted_text.dart';
+import 'package:flutter_offline_music/components/music_folder_item_menu.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/pages/music_in_folder_page.dart';
 
-class FolderListItem extends StatelessWidget {
+class MusicFolderItem extends StatelessWidget {
   final MusicFolder folder;
   final Function onRefresh;
   final String? keywordSearch;
   final bool showHiddenInfo;
-  const FolderListItem({
+  const MusicFolderItem({
     super.key,
     required this.folder,
     required this.onRefresh,
@@ -27,6 +28,9 @@ class FolderListItem extends StatelessWidget {
         folder.musics.where((x) => x.isHidden).length;
 
     return TextButton(
+      style: TextButton.styleFrom(
+        padding: EdgeInsets.only(left: 8, top: 8, bottom: 8),
+      ),
       onPressed: () {
         Navigator.push(
           context,
@@ -93,6 +97,11 @@ class FolderListItem extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+          MusicFolderItemMenu(
+            musicFolder: folder,
+            onRefresh: onRefresh,
+            afterHideFolder: onRefresh,
           ),
         ],
       ),
