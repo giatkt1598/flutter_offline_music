@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/components/create_edit_library_dialog.dart';
 import 'package:flutter_offline_music/components/library_thumbnail.dart';
 import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
 import 'package:flutter_offline_music/models/library.dart';
@@ -83,8 +84,15 @@ class LibraryListItemMenu extends StatelessWidget {
             title: Text('Thêm bài hát vào thư viện'),
           ),
           ListTile(
-            enabled: false,
-            onTap: null,
+            enabled: true,
+            onTap: () {
+              Navigator.pop(context);
+              showDialogCreateUpdateLibrary(
+                context,
+                libraryIdForUpdate: library.id,
+                whenDone: (_) => onRefresh(),
+              );
+            },
             leading: Icon(Icons.edit),
             title: Text('Sửa thông tin'),
           ),

@@ -2,8 +2,8 @@ import 'package:flutter_offline_music/models/music.dart';
 
 class Library {
   final int id;
-  final String title;
-  final DateTime creationTime;
+  String title;
+  DateTime creationTime;
   DateTime? lastModificationTime;
   List<Music> musics = [];
 
