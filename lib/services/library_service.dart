@@ -90,7 +90,8 @@ class LibraryService {
   SELECT ${DbTable.music}.*, ${DbTable.musicLibrary}.*
   FROM ${DbTable.music}
   JOIN ${DbTable.musicLibrary} ON ${DbTable.music}.id = ${DbTable.musicLibrary}.musicId
-  WHERE ${DbTable.music}.isHidden = 0 ${id != null ? 'AND ${DbTable.musicLibrary}.libraryId = ? ' : ''}
+  JOIN ${DbTable.musicFolder} ON ${DbTable.music}.musicFolderId = ${DbTable.musicFolder}.id
+  WHERE ${DbTable.music}.isHidden = 0 AND ${DbTable.musicFolder}.isHidden = 0 ${id != null ? 'AND ${DbTable.musicLibrary}.libraryId = ? ' : ''}
 ''', id != null ? [id] : null);
 
     var musicLibraries =

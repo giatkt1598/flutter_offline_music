@@ -16,7 +16,7 @@ class MusicFolder {
   });
 
   Map<String, dynamic> toJson() {
-    return {'id': id, 'name': name, 'path': path, 'isHidden': isHidden};
+    return {'id': id, 'name': name, 'path': path, 'isHidden': isHidden ? 1 : 0};
   }
 
   factory MusicFolder.fromJson(Map<String, dynamic> json) {

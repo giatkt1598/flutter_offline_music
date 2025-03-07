@@ -170,8 +170,8 @@ class _MusicFolderItemMenuState extends State<MusicFolderItemMenu> {
           child: ListTile(
             leading:
                 widget.musicFolder.isHidden
-                    ? Icon(Icons.visibility_rounded)
-                    : Icon(Icons.visibility_off_rounded),
+                    ? Icon(Icons.folder)
+                    : Icon(Icons.folder_off_outlined),
             title: Text(
               widget.musicFolder.isHidden ? 'Hiển thị thư mục' : 'Ẩn thư mục',
             ),
