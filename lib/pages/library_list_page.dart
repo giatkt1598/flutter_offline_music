@@ -14,7 +14,7 @@ class LibraryListPage extends StatefulWidget {
 }
 
 class _LibraryListPageState extends State<LibraryListPage>
-    with TabProviderListenerMixin {
+    with TabProviderListenerMixin, AutomaticKeepAliveClientMixin {
   List<Library> libraries = [];
   final libraryService = LibraryService();
 
@@ -36,6 +36,7 @@ class _LibraryListPageState extends State<LibraryListPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     addNewLibrary() async {
       var newLib = await showDialog<Library>(
         context: context,
@@ -128,6 +129,9 @@ class _LibraryListPageState extends State<LibraryListPage>
   void onTabActive() {
     fetchData();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class FormCreateLibrary extends StatefulWidget {

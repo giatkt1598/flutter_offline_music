@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/library_list_item_menu_button.dart';
 import 'package:flutter_offline_music/components/music_list.dart';
@@ -12,9 +10,9 @@ import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:provider/provider.dart';
 
 class MusicListInLibraryPage extends StatefulWidget {
-  const MusicListInLibraryPage({super.key, required this.libraryId});
-
   final int libraryId;
+
+  const MusicListInLibraryPage({super.key, required this.libraryId});
   @override
   State<MusicListInLibraryPage> createState() => _MusicListInLibraryPageState();
 }
@@ -25,24 +23,7 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
   late Library library;
   bool loaded = false;
 
-  @override
-  void initState() {
-    loadLibrary();
-    super.initState();
-  }
-
-  loadLibrary() async {
-    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
-    var libs = await libraryService.getListAsync(id: widget.libraryId);
-    setState(() {
-      library = libs.first;
-    });
-    playerProvider.setMusics(library.musics);
-    setState(() {
-      loaded = true;
-    });
-    return library;
-  }
+  bool isSetCurrentPlaylist = false;
 
   addMusicToLibrary() {
     Navigator.of(context)
@@ -53,16 +34,6 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
           ),
         )
         .then((_) => loadLibrary());
-  }
-
-  bool isSetCurrentPlaylist = false;
-  Future<void> setCurrentPlaylist() async {
-    if (isSetCurrentPlaylist) return;
-    isSetCurrentPlaylist = true;
-    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
-    await playerProvider.audioHandler.setPlaylistFromMusics(
-      playerProvider.musics,
-    );
   }
 
   @override
@@ -131,6 +102,7 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
                                   } else {
                                     audioHandler.seek(Duration.zero);
                                   }
+                                  setState(() {});
                                 }
                                 : null,
                         child: Row(
@@ -155,16 +127,15 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
                           ),
                         ),
                         onPressed:
-                            musics.isNotEmpty
+                            musics.length > 1
                                 ? () async {
                                   //Fix random not same as current
                                   await setCurrentPlaylist();
                                   await audioHandler.setShuffle(true);
                                   await audioHandler.playMediaItem(
-                                    audioHandler.playlist[Random().nextInt(
-                                      audioHandler.playlist.length - 1,
-                                    )],
+                                    audioHandler.playlist[1],
                                   );
+                                  setState(() {});
                                 }
                                 : null,
                         child: Row(
@@ -202,6 +173,35 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
           SizedBox(height: 90),
         ],
       ),
+    );
+  }
+
+  @override
+  void initState() {
+    loadLibrary();
+    super.initState();
+  }
+
+  loadLibrary() async {
+    isSetCurrentPlaylist = false;
+    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
+    var libs = await libraryService.getListAsync(id: widget.libraryId);
+    setState(() {
+      library = libs.first;
+    });
+    playerProvider.setMusics(library.musics);
+    setState(() {
+      loaded = true;
+    });
+    return library;
+  }
+
+  Future<void> setCurrentPlaylist() async {
+    if (isSetCurrentPlaylist) return;
+    isSetCurrentPlaylist = true;
+    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
+    await playerProvider.audioHandler.setPlaylistFromMusics(
+      playerProvider.musics,
     );
   }
 }

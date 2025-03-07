@@ -51,7 +51,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: NestedScrollView(
-          controller: tabProvider.scrollController,
           floatHeaderSlivers: true,
           headerSliverBuilder:
               (context, innerBoxIsScrolled) => [
@@ -126,7 +125,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       fontWeight: FontWeight.bold,
                     ),
                     onTap: (value) {
-                      tabProvider.setTabIndex(value);
+                      tabProvider.animateToPage(value);
                     },
                     tabs: [
                       for (var tabData in tabProvider.tabDataList)
@@ -135,8 +134,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ),
               ],
-          body: IndexedStack(
-            index: tabProvider.tabIndex,
+          body: PageView(
+            controller: tabProvider.pageController,
+            onPageChanged: (value) {
+              tabProvider.animateToTab(value);
+            },
             children: [
               for (var tabData in tabProvider.tabDataList) tabData.widget,
             ],

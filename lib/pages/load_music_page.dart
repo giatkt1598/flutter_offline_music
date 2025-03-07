@@ -20,7 +20,7 @@ class LoadMusicPage extends StatefulWidget {
 }
 
 class _LoadMusicPageState extends State<LoadMusicPage>
-    with TabProviderListenerMixin {
+    with TabProviderListenerMixin, AutomaticKeepAliveClientMixin {
   final MusicService _musicService = MusicService();
   final PermissionService _permissionService = PermissionService();
   List<MusicFolder> _musicFolders = [];
@@ -59,6 +59,7 @@ class _LoadMusicPageState extends State<LoadMusicPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final musicFolderProvider = Provider.of<MusicFolderProvider>(context);
     Future<void> scanMusic() async {
       EasyLoading.show(
@@ -150,4 +151,7 @@ class _LoadMusicPageState extends State<LoadMusicPage>
   void onTabActive() {
     fetchData();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

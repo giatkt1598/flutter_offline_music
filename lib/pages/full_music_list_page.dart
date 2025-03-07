@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/music_list.dart';
 import 'package:flutter_offline_music/components/song_list_sort_button.dart';
 import 'package:flutter_offline_music/constants/constant.dart';
+import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/tab_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
@@ -18,13 +19,19 @@ class FullMusicListPage extends StatefulWidget {
 }
 
 class _FullMusicListPageState extends State<FullMusicListPage>
-    with TabProviderListenerMixin {
+    with TabProviderListenerMixin, AutomaticKeepAliveClientMixin {
   final _scrollController = ScrollController();
-
   final MusicService _musicService = MusicService();
 
   String? sortField;
   String? sortDirection;
+  List<Music> musics = [];
+
+  @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
 
   Future<void> fetchData({String? sortField, String? sortDirection}) async {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
@@ -50,12 +57,9 @@ class _FullMusicListPageState extends State<FullMusicListPage>
     );
 
     playerProvider.setMusics(musics);
-  }
-
-  @override
-  void initState() {
-    fetchData();
-    super.initState();
+    setState(() {
+      this.musics = musics;
+    });
   }
 
   @override
@@ -66,9 +70,9 @@ class _FullMusicListPageState extends State<FullMusicListPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final playerProvider = Provider.of<PlayerProvider>(context);
     final audioHandler = playerProvider.audioHandler;
-    final musics = playerProvider.musics;
     return Scaffold(
       body: Column(
         children: [
@@ -92,15 +96,17 @@ class _FullMusicListPageState extends State<FullMusicListPage>
                         child: OutlinedButton(
                           onPressed:
                               musics.isNotEmpty
-                                  ? () {
+                                  ? () async {
                                     if (musics.first.path !=
                                         audioHandler.currentMediaItem?.id) {
-                                      audioHandler.stop().then((_) {
-                                        audioHandler.playMusic(musics.first);
-                                      });
+                                      await audioHandler.stop();
+                                      await audioHandler.playMusic(
+                                        musics.first,
+                                      );
                                     } else {
-                                      audioHandler.seek(Duration.zero);
+                                      await audioHandler.seek(Duration.zero);
                                     }
+                                    setState(() {});
                                   }
                                   : null,
                           child: Text('Phát nhạc'),
@@ -111,15 +117,15 @@ class _FullMusicListPageState extends State<FullMusicListPage>
                         child: OutlinedButton(
                           onPressed:
                               musics.isNotEmpty
-                                  ? () {
-                                    audioHandler.setShuffle(true);
-                                    audioHandler.stop().then((_) {
-                                      audioHandler.playMediaItem(
-                                        audioHandler.playlist[Random().nextInt(
-                                          audioHandler.playlist.length - 1,
-                                        )],
-                                      );
-                                    });
+                                  ? () async {
+                                    await audioHandler.setShuffle(true);
+                                    await audioHandler.stop();
+                                    await audioHandler.playMediaItem(
+                                      audioHandler.playlist[Random().nextInt(
+                                        audioHandler.playlist.length - 1,
+                                      )],
+                                    );
+                                    setState(() {});
                                   }
                                   : null,
                           child: Text('Ngẫu nhiên'),
@@ -158,4 +164,7 @@ class _FullMusicListPageState extends State<FullMusicListPage>
   void onTabActive() {
     fetchData();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

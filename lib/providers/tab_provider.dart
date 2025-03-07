@@ -5,47 +5,6 @@ import 'package:flutter_offline_music/pages/library_list_page.dart';
 import 'package:flutter_offline_music/pages/load_music_page.dart';
 import 'package:provider/provider.dart';
 
-class TabProvider extends ChangeNotifier {
-  int _tabIndex = 0;
-  int get tabIndex => _tabIndex;
-  TabController? _tabController;
-  TabController get tabController => _tabController!;
-  final ScrollController _scrollController = ScrollController();
-  ScrollController get scrollController => _scrollController;
-
-  final List<TabData> tabDataList = [
-    TabData(title: 'Đề xuất', widget: DashboardPage()),
-    TabData(
-      title: 'Bài hát',
-      widget: FullMusicListPage(key: PageStorageKey(1)),
-    ),
-    TabData(title: 'Thư viện', widget: LibraryListPage()),
-    TabData(title: 'Thư mục', widget: LoadMusicPage()),
-  ];
-
-  TabProvider();
-
-  initTabController({required TickerProvider vsync}) {
-    _tabController ??= TabController(length: tabDataList.length, vsync: vsync);
-  }
-
-  setTabIndex(int value) {
-    tabDataList[_tabController!.previousIndex].scrollOffset =
-        _scrollController.offset;
-    _tabIndex = value;
-    _tabController?.animateTo(value);
-    // _scrollController.jumpTo(0);
-    notifyListeners();
-  }
-
-  int indexOf<T>() {
-    int index = tabDataList.indexWhere(
-      (x) => x.widget.runtimeType.toString() == T.toString(),
-    );
-    return index;
-  }
-}
-
 class TabData {
   final String title;
   final Widget widget;
@@ -54,28 +13,95 @@ class TabData {
   TabData({required this.title, required this.widget});
 }
 
-mixin TabProviderListenerMixin<T extends StatefulWidget> on State<T> {
-  @override
-  void initState() {
-    final tabProvider = Provider.of<TabProvider>(context, listen: false);
-    tabProvider.addListener(_onListen);
-    super.initState();
+class TabProvider extends ChangeNotifier {
+  int _tabIndex = 0;
+  TabController? _tabController;
+  PageController? _pageController;
+  final List<TabData> tabDataList = [
+    TabData(title: 'Đề xuất', widget: DashboardPage()),
+    TabData(title: 'Bài hát', widget: FullMusicListPage()),
+    TabData(title: 'Thư viện', widget: LibraryListPage()),
+    TabData(title: 'Thư mục', widget: LoadMusicPage()),
+  ];
+  TabProvider();
+  PageController get pageController => _pageController!;
+
+  TabController get tabController => _tabController!;
+
+  int get tabIndex => _tabIndex;
+
+  animateToPage(int value) {
+    bool isSide = value + 1 == _tabIndex || value - 1 == _tabIndex;
+    if (isSide) {
+      _pageController?.animateToPage(
+        value,
+        duration: isSide ? Duration(milliseconds: 300) : Duration.zero,
+        curve: Curves.ease,
+      );
+    } else {
+      _pageController?.jumpToPage(value);
+    }
+    _setTabIndex(value);
+  }
+
+  animateToTab(int value) {
+    _tabController?.animateTo(value);
+    _setTabIndex(value);
   }
 
   @override
   void dispose() {
-    final tabProvider = Provider.of<TabProvider>(context, listen: false);
-    tabProvider.removeListener(_onListen);
+    _pageController?.dispose();
+    _tabController?.dispose();
     super.dispose();
   }
 
-  void _onListen() {
-    final tabProvider = Provider.of<TabProvider>(context, listen: false);
-    if (tabProvider.tabIndex == tabProvider.indexOf<T>()) {
-      onTabActive();
-    }
+  int indexOf<T>() {
+    int index = tabDataList.indexWhere(
+      (x) => x.widget.runtimeType.toString() == T.toString(),
+    );
+    return index;
+  }
+
+  initTabController({required TickerProvider vsync}) {
+    _tabController ??= TabController(length: tabDataList.length, vsync: vsync);
+    _pageController ??= PageController();
+  }
+
+  _setTabIndex(int value) {
+    bool isNotify = value != _tabIndex;
+    _tabIndex = value;
+    if (isNotify) notifyListeners();
+  }
+}
+
+mixin TabProviderListenerMixin<T extends StatefulWidget> on State<T> {
+  late TabProvider _tabProvider;
+  @override
+  void dispose() {
+    _tabProvider.removeListener(_onListen);
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _tabProvider = Provider.of<TabProvider>(context, listen: false);
+    _tabProvider.addListener(_onListen);
   }
 
   @protected
   void onTabActive();
+
+  @protected
+  void onTabDeactivate() {}
+
+  void _onListen() {
+    int currentTabIndex = _tabProvider.indexOf<T>();
+    if (_tabProvider.tabIndex == currentTabIndex) {
+      onTabActive();
+    } else if (_tabProvider._tabController?.previousIndex == currentTabIndex) {
+      onTabDeactivate();
+    }
+  }
 }

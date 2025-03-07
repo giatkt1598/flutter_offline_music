@@ -20,7 +20,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage>
-    with TabProviderListenerMixin {
+    with TabProviderListenerMixin, AutomaticKeepAliveClientMixin {
   List<Music> _recentMusics = [];
   List<Music> _newestMusics = [];
   List<Music> _topPlayedCountMusics = [];
@@ -66,6 +66,7 @@ class _DashboardPageState extends State<DashboardPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Container(
       padding: EdgeInsets.all(16),
       child: SingleChildScrollView(
@@ -150,6 +151,9 @@ class _DashboardPageState extends State<DashboardPage>
   void onTabActive() {
     fetchData();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class _GroupTitle extends StatelessWidget {
