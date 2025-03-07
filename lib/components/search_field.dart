@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class SearchField extends StatefulWidget {
-  const SearchField({super.key, this.onSubmitted});
+  const SearchField({super.key, this.onSubmitted, this.autoFocus = false});
 
   final ValueChanged<String>? onSubmitted;
-
+  final bool autoFocus;
   @override
   State<SearchField> createState() => _SearchFieldState();
 }
@@ -53,7 +53,7 @@ class _SearchFieldState extends State<SearchField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      autofocus: true,
+      autofocus: widget.autoFocus,
       textInputAction: TextInputAction.search,
       controller: _searchInputController,
       decoration: InputDecoration(

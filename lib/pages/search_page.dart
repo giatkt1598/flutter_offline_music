@@ -44,6 +44,7 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: AppBar(
         title: SearchField(
+          autoFocus: true,
           onSubmitted: (value) {
             handleSearch(value);
           },
