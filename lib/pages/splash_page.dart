@@ -47,31 +47,31 @@ class _SplashPageState extends State<SplashPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFFFF405C), // Màu nền
-      body: Stack(
-        children: [
-          widget.home,
-          if (_isShowSplash)
-            FadeTransition(
-              opacity: _fadeAnimation,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    color: Color(0xFFFF405C),
-                  ),
-                  Image.asset(
-                    "assets/splash.png",
-                    width: 200, // Kích thước logo
-                  ),
-                ],
-              ),
+    return IndexedStack(
+      index: _isShowSplash ? 0 : 1,
+      children: [
+        Scaffold(
+          backgroundColor: Color(0xFFFF405C), // Màu nền
+          body: FadeTransition(
+            opacity: _fadeAnimation,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  color: Color(0xFFFF405C),
+                ),
+                Image.asset(
+                  "assets/splash.png",
+                  width: 200, // Kích thước logo
+                ),
+              ],
             ),
-        ],
-      ),
+          ),
+        ),
+        widget.home,
+      ],
     );
   }
 }

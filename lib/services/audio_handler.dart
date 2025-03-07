@@ -369,7 +369,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   @override
   Future<void> stop() async {
     playing = false;
-    _setCurrentMediaItem(null);
+    // _setCurrentMediaItem(null);
     await _player.stop();
     notifyListeners();
   }

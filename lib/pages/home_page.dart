@@ -49,6 +49,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         AppBackgroundHelper.moveAppToBackground();
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: NestedScrollView(
           controller: tabProvider.scrollController,
           floatHeaderSlivers: true,
