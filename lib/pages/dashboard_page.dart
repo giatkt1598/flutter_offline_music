@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/button_card.dart';
+import 'package:flutter_offline_music/components/music_list_empty.dart';
 import 'package:flutter_offline_music/components/music_list_item.dart';
 import 'package:flutter_offline_music/components/music_list_item_card.dart';
 import 'package:flutter_offline_music/components/music_list_item_rrect.dart';
@@ -8,8 +11,8 @@ import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/tab_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
+import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
-import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -67,6 +70,23 @@ class _DashboardPageState extends State<DashboardPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final playerProvider = Provider.of<PlayerProvider>(context);
+    playNow() async {
+      if (playerProvider.musics.isEmpty) {
+        ToastService.showError('Không có bài hát nào để phát');
+        return;
+      }
+      await playerProvider.audioHandler.setPlaylistFromMusics(
+        playerProvider.musics,
+      );
+      await playerProvider.audioHandler.playMusic(
+        playerProvider.musics[Random().nextInt(
+          playerProvider.musics.length - 1,
+        )],
+      );
+      playerProvider.showMiniPlayer();
+    }
+
     return Container(
       padding: EdgeInsets.all(16),
       child: SingleChildScrollView(
@@ -85,7 +105,9 @@ class _DashboardPageState extends State<DashboardPage>
                     icon: Icon(Icons.favorite),
                     backgroundImage: AssetImage("assets/bg_music_pink.png"),
                     onPressed: () {
-                      logDebug('Favorite');
+                      ToastService.show(
+                        message: 'Lười làm tính năng này quá :D',
+                      );
                     },
                     child: Text(
                       'Yêu thích',
@@ -98,7 +120,7 @@ class _DashboardPageState extends State<DashboardPage>
                   child: ButtonCard(
                     icon: Icon(Icons.play_arrow_rounded, size: 32),
                     backgroundImage: AssetImage("assets/bg_music_blue.png"),
-                    onPressed: () {},
+                    onPressed: playNow,
                     child: Text(
                       'Phát nhạc',
                       style: TextStyle(fontWeight: FontWeight.bold),
@@ -115,30 +137,38 @@ class _DashboardPageState extends State<DashboardPage>
                 _GroupTitle(title: 'Đã phát gần đây'),
                 for (var music in _recentMusics)
                   MusicListItem(music: music, afterHideItem: () => fetchData()),
+                if (_recentMusics.isEmpty) MusicListEmpty(),
               ],
             ),
             _GroupTitle(title: 'Đã thêm gần đây'),
             SizedBox(
               height: 160,
               width: SharedData.fullWidth,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: _newestMusics.length,
-                itemBuilder:
-                    (context, idx) =>
-                        MusicListItemRrect(music: _newestMusics[idx]),
-              ),
+              child:
+                  _newestMusics.isEmpty
+                      ? MusicListEmpty()
+                      : ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _newestMusics.length,
+                        itemBuilder:
+                            (context, idx) =>
+                                MusicListItemRrect(music: _newestMusics[idx]),
+                      ),
             ),
             _GroupTitle(title: 'Lượt nghe nhiều nhất'),
             SizedBox(
               height: 200,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: _topPlayedCountMusics.length,
-                itemBuilder:
-                    (context, idx) =>
-                        MusicListItemCard(music: _topPlayedCountMusics[idx]),
-              ),
+              child:
+                  _topPlayedCountMusics.isEmpty
+                      ? MusicListEmpty()
+                      : ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _topPlayedCountMusics.length,
+                        itemBuilder:
+                            (context, idx) => MusicListItemCard(
+                              music: _topPlayedCountMusics[idx],
+                            ),
+                      ),
             ),
             SizedBox(height: 90),
           ],

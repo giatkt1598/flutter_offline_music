@@ -18,6 +18,7 @@ class Music {
   int? skipSilentEnd;
   DateTime? playedLastTime;
   int playedCount;
+  bool isFavorite;
   Duration? get skipSilentStartDuration =>
       skipSilentStart != null ? Duration(milliseconds: skipSilentStart!) : null;
   Duration? get skipSilentEndDuration =>
@@ -38,6 +39,7 @@ class Music {
     this.skipSilentEnd,
     this.playedLastTime,
     this.playedCount = 0,
+    this.isFavorite = false,
   });
 
   Map<String, dynamic> toJson() {
@@ -56,6 +58,7 @@ class Music {
       'skipSilentEnd': skipSilentEnd,
       'playedLastTime': playedLastTime?.toIso8601String(),
       'playedCount': playedCount,
+      'isFavorite': isFavorite ? 1 : 0,
     };
   }
 
@@ -75,6 +78,7 @@ class Music {
       skipSilentEnd: json['skipSilentEnd'],
       playedLastTime: DateTime.tryParse(json['playedLastTime'] ?? ''),
       playedCount: json['playedCount'],
+      isFavorite: json['isFavorite'] == 1,
     );
   }
 
@@ -86,6 +90,7 @@ class Music {
       album: 'Tất cả',
       duration: duration,
       extras: {'music': this},
+      genre: genre,
     );
   }
 
