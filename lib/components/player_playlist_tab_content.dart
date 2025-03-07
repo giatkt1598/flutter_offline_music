@@ -54,16 +54,32 @@ class _PlayerPlaylistTabContentState extends State<PlayerPlaylistTabContent>
       return NoData();
     }
 
+    String totalDuration = _musicService.calcTotalDuration(
+      musics
+          .where((m) => audioHandler.playlist.any((item) => m.path == item.id))
+          .toList(),
+    );
+
     return Column(
       children: [
         Row(
           children: [
             Padding(
               padding: EdgeInsets.only(left: 8),
-              child: Text(
-                '${audioHandler.currentIndex + 1}/${audioHandler.playlist.length}',
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text:
+                          '${audioHandler.currentIndex + 1}/${audioHandler.playlist.length}',
+                    ),
+                    TextSpan(text: ' ・ '),
+                    TextSpan(text: totalDuration),
+                  ],
+                ),
               ),
             ),
+            Spacer(),
             IconButton(
               onPressed: () async {
                 await audioHandler.setShuffle(true);
@@ -72,7 +88,6 @@ class _PlayerPlaylistTabContentState extends State<PlayerPlaylistTabContent>
               },
               icon: Icon(Icons.shuffle),
             ),
-            Spacer(),
             IconButton(
               onPressed: () {
                 showConfirmDialog(
