@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_offline_music/components/music_item_select.dart';
+import 'package:flutter_offline_music/components/search_field.dart';
 import 'package:flutter_offline_music/components/song_list_sort_button.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/models/music.dart';
@@ -30,6 +31,7 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
   List<Music> selectedMusics = [];
   String sortField = 'creationTime';
   String sortDirection = 'desc';
+  String? keywordSearch = '';
   late Library library;
   @override
   void initState() {
@@ -46,17 +48,25 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
     });
   }
 
-  loadMusicList() async {
+  Future<void> loadMusicList() async {
     int? musicFolderId;
     if (sourceSelect.startsWith('Folder')) {
       musicFolderId = int.parse(
         sourceSelect.substring(sourceSelect.indexOf('/') + 1),
       );
     }
-    var list = await musicService.getListMusicAsync(
-      musicFolderId: musicFolderId,
-      orderBy: '$sortField $sortDirection',
-    );
+    var list =
+        keywordSearch?.isEmpty == true
+            ? await musicService.getListMusicAsync(
+              musicFolderId: musicFolderId,
+              orderBy: '$sortField $sortDirection',
+            )
+            : await musicService.searchMusics(
+              keywordSearch!,
+              musicFolderId: musicFolderId,
+              orderBy: '$sortField $sortDirection',
+              isHidden: false,
+            );
 
     setState(() {
       musics = list;
@@ -178,6 +188,17 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
       ),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 12, right: 12, top: 4),
+            child: SearchField(
+              onSubmitted: (value) {
+                setState(() {
+                  keywordSearch = value;
+                });
+                loadMusicList();
+              },
+            ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

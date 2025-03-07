@@ -330,12 +330,18 @@ ${orderBy != null ? 'ORDER BY $orderBy' : ''}
     return fDurationLong(Duration(seconds: totalDurationInSeconds));
   }
 
-  Future<List<Music>> searchMusics(String keyword) async {
+  Future<List<Music>> searchMusics(
+    String keyword, {
+    int? musicFolderId,
+    String? orderBy,
+    bool? isHidden,
+  }) async {
     if (keyword.isEmpty) return [];
 
     var allMusics = await getListMusicAsync(
-      orderBy: 'title asc',
-      isHidden: null,
+      orderBy: orderBy ?? 'title asc',
+      isHidden: isHidden,
+      musicFolderId: musicFolderId,
     );
     keyword = keyword.toLowerCase();
     var filteredItems =
