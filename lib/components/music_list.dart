@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/components/music_item_menu.dart';
 import 'package:flutter_offline_music/components/music_list_item.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/models/music.dart';
@@ -12,6 +13,7 @@ class MusicList extends StatefulWidget {
     this.trailingItem,
     this.removeInvisibleItem = true,
     this.searchKeyword,
+    this.menuType = MusicMenuType.inMusicList,
   });
 
   final List<Music> musics;
@@ -20,6 +22,7 @@ class MusicList extends StatefulWidget {
   final Widget? trailingItem;
   final bool removeInvisibleItem;
   final String? searchKeyword;
+  final MusicMenuType menuType;
 
   @override
   State<MusicList> createState() => _MusicListState();
@@ -58,6 +61,7 @@ class _MusicListState extends State<MusicList> {
         final item = musics[index - 1];
         return MusicListItem(
           music: item,
+          menuType: widget.menuType,
           keywordSearch: widget.searchKeyword,
           afterHideItem: () {
             if (widget.removeInvisibleItem && item.isHidden) {

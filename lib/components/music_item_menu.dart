@@ -6,12 +6,13 @@ import 'package:flutter_offline_music/components/music_info.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
+import 'package:flutter_offline_music/services/library_service.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:provider/provider.dart';
 
-enum MusicMenuType { inMusicList, inPlayer, inPlaylist }
+enum MusicMenuType { inMusicList, inPlayer, inPlaylist, inLibrary }
 
 class MusicItemMenu extends StatefulWidget {
   const MusicItemMenu({
@@ -32,7 +33,7 @@ class MusicItemMenu extends StatefulWidget {
 
 class _MusicItemMenuState extends State<MusicItemMenu> {
   final musicService = MusicService();
-
+  final libraryService = LibraryService();
   showMusicInfo() async {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     playerProvider.hideMiniPlayer();
@@ -276,6 +277,38 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                       showAddToLibraryModal();
                     },
                   ),
+                  if (widget.type == MusicMenuType.inLibrary)
+                    ListMenuOption(
+                      title: 'Xóa khỏi thư viện',
+                      icon: Icons.playlist_remove_rounded,
+                      onTap: () async {
+                        if (playerProvider.currentLibraryId == null) {
+                          ToastService.showError('Không tìm thấy thư viện');
+                          Navigator.of(context).pop();
+                          return;
+                        }
+
+                        bool isSuccess =
+                            await libraryService.removeMusicInLibraryAsync(
+                              musicId: widget.music.id,
+                              libraryId: playerProvider.currentLibraryId,
+                            ) >
+                            0;
+
+                        if (isSuccess) {
+                          playerProvider.musics.removeWhere(
+                            (x) => x.id == widget.music.id,
+                          );
+                          playerProvider.setMusics(playerProvider.musics);
+                          ToastService.showSuccess(
+                            'Đã xóa bài hát "${widget.music.title}" khỏi thư viện',
+                          );
+                        } else {
+                          ToastService.showError('Xảy ra lỗi');
+                        }
+                        Navigator.of(context).pop();
+                      },
+                    ),
                   ListMenuOption(
                     iconColor: hasStopTime ? Colors.green : null,
                     icon: Icons.alarm_rounded,

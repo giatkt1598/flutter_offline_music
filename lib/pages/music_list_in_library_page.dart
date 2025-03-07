@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/library_list_item_menu_button.dart';
+import 'package:flutter_offline_music/components/music_item_menu.dart';
 import 'package:flutter_offline_music/components/music_list.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/models/library.dart';
@@ -166,6 +167,7 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
           else
             Expanded(
               child: MusicList(
+                menuType: MusicMenuType.inLibrary,
                 musics: musics,
                 onChanged: (value) => loadLibrary(),
               ),
@@ -185,6 +187,7 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
   loadLibrary() async {
     isSetCurrentPlaylist = false;
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
+    playerProvider.currentLibraryId = widget.libraryId;
     var libs = await libraryService.getListAsync(id: widget.libraryId);
     setState(() {
       library = libs.first;
@@ -197,9 +200,13 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
   }
 
   Future<void> setCurrentPlaylist() async {
+    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
+    if (playerProvider.audioHandler.playlist.length !=
+        playerProvider.musics.length) {
+      isSetCurrentPlaylist = false;
+    }
     if (isSetCurrentPlaylist) return;
     isSetCurrentPlaylist = true;
-    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     await playerProvider.audioHandler.setPlaylistFromMusics(
       playerProvider.musics,
     );
