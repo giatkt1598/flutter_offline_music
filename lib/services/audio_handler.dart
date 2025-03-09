@@ -294,11 +294,15 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     _playlist.clear();
     _playlist.addAll(playlist);
     _originPlaylist = [...playlist];
-    await _player.setAudioSource(
-      ConcatenatingAudioSource(
-        children: playlist.map((m) => AudioSource.file(m.id)).toList(),
-      ),
-    );
+    try {
+      await _player.setAudioSource(
+        ConcatenatingAudioSource(
+          children: playlist.map((m) => AudioSource.file(m.id)).toList(),
+        ),
+      );
+    } catch (e) {
+      logDebug('[Exception] $e');
+    }
 
     addArtPictureToPlaylist() async {
       for (var item in _playlist) {

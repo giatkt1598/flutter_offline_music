@@ -239,22 +239,26 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                     ListMenuOption(
                       icon: Icons.post_add_sharp,
                       title: 'Phát tiếp theo',
-                      onTap: () {
-                        audioHandler
-                            .insertItemToPlaylist(
-                              widget.music.toMediaItem(),
-                              index: audioHandler.currentIndex + 1,
-                            )
-                            .then((success) {
-                              if (success) {
-                                ToastService.showSuccess(
-                                  'Tiếp theo sẽ phát bài "${widget.music.title}"',
-                                );
-                              } else {
-                                ToastService.showError('Xảy ra lỗi');
-                              }
-                              Navigator.of(context).pop();
-                            });
+                      onTap: () async {
+                        final nextIndex =
+                            audioHandler.playlist.isEmpty
+                                ? 0
+                                : audioHandler.currentIndex + 1;
+                        final success = await audioHandler.insertItemToPlaylist(
+                          widget.music.toMediaItem(),
+                          index: nextIndex,
+                        );
+                        if (success) {
+                          ToastService.showSuccess(
+                            'Tiếp theo sẽ phát bài "${widget.music.title}"',
+                          );
+                          if (nextIndex == 0) {
+                            await audioHandler.playMusic(widget.music);
+                          }
+                        } else {
+                          ToastService.showError('Xảy ra lỗi');
+                        }
+                        Navigator.of(context).pop();
                       },
                     ),
                   if (widget.type == MusicMenuType.inPlaylist)
