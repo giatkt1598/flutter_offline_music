@@ -72,7 +72,7 @@ class MusicService {
     bool? isHidden = false,
   }) async {
     var whereBuilt = DatabaseHelper.buildQueryFilter({
-      'isHidden = ?': isHidden,
+      'isHidden = ?': isHidden == true ? '1' : isHidden == false ? '0' : null,
     });
     var queryRs = await (await _db).query(
       tableMusicFolder,
