@@ -49,6 +49,7 @@ class AutoScrollText extends StatelessWidget {
           child:
               shouldScroll
                   ? Marquee(
+                    key: ValueKey(text),
                     text: text,
                     style: style,
                     scrollAxis: Axis.horizontal,
@@ -57,7 +58,7 @@ class AutoScrollText extends StatelessWidget {
                     pauseAfterRound: Duration(
                       seconds: 0,
                     ), // Pause before restarting
-                    startPadding: 10.0,
+                    startPadding: 0,
                     accelerationDuration: Duration(seconds: 1),
                     accelerationCurve: Curves.linear,
                     decelerationDuration: Duration(milliseconds: 500),
@@ -65,7 +66,11 @@ class AutoScrollText extends StatelessWidget {
                   )
                   : isCenter == true
                   ? Center(child: staticText)
-                  : staticText,
+                  : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [staticText],
+                  ),
         );
 
         if (useDebug == true) {
