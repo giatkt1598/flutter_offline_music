@@ -221,7 +221,7 @@ class _DashboardPageState extends State<DashboardPage>
 
   @override
   void onTabActive() {
-    fetchData();
+    Future.delayed(Duration(milliseconds: 500)).then((_) => fetchData());
   }
 
   @override

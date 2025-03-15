@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_offline_music/components/music_list.dart';
 import 'package:flutter_offline_music/components/music_list_simple_info.dart';
 import 'package:flutter_offline_music/components/song_list_sort_button.dart';
@@ -26,15 +27,17 @@ class _FullMusicListPageState extends State<FullMusicListPage>
 
   String? sortField;
   String? sortDirection;
-  List<Music> musics = [];
+  List<Music>? musics;
 
   @override
   void initState() {
-    fetchData();
     super.initState();
+    EasyLoading.show(status: 'Đang tải...');
+    fetchData();
   }
 
   Future<void> fetchData({String? sortField, String? sortDirection}) async {
+    await Future.delayed(Duration(milliseconds: 500));
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     final pref = await SharedPreferences.getInstance();
     setState(() {
@@ -61,6 +64,7 @@ class _FullMusicListPageState extends State<FullMusicListPage>
     setState(() {
       this.musics = musics;
     });
+    EasyLoading.dismiss();
   }
 
   @override
@@ -74,17 +78,22 @@ class _FullMusicListPageState extends State<FullMusicListPage>
     super.build(context);
     final playerProvider = Provider.of<PlayerProvider>(context);
     final audioHandler = playerProvider.audioHandler;
+
+    if (musics == null) {
+      return Container();
+    }
+
     return Scaffold(
       body: Column(
         children: [
           Expanded(
             child: MusicList(
-              musics: musics,
+              musics: musics!,
               onChanged: (value) => setState(() {}),
               leadingItem: Column(
                 children: [
                   SizedBox(height: 12),
-                  MusicListSimpleInfo(musics: musics),
+                  MusicListSimpleInfo(musics: musics!),
                   SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -94,13 +103,13 @@ class _FullMusicListPageState extends State<FullMusicListPage>
                         width: 140,
                         child: OutlinedButton(
                           onPressed:
-                              musics.isNotEmpty
+                              musics!.isNotEmpty
                                   ? () async {
-                                    if (musics.first.path !=
+                                    if (musics!.first.path !=
                                         audioHandler.currentMediaItem?.id) {
                                       await audioHandler.stop();
                                       await audioHandler.playMusic(
-                                        musics.first,
+                                        musics!.first,
                                       );
                                     } else {
                                       await audioHandler.seek(Duration.zero);
@@ -115,7 +124,7 @@ class _FullMusicListPageState extends State<FullMusicListPage>
                         width: 140,
                         child: OutlinedButton(
                           onPressed:
-                              musics.isNotEmpty
+                              musics!.isNotEmpty
                                   ? () async {
                                     await audioHandler.setShuffle(true);
                                     await audioHandler.stop();
@@ -136,7 +145,7 @@ class _FullMusicListPageState extends State<FullMusicListPage>
                   Row(
                     children: [
                       Expanded(child: Container()),
-                      if (musics.isNotEmpty &&
+                      if (musics!.isNotEmpty &&
                           sortField != null &&
                           sortDirection != null)
                         SongListSortButton(
