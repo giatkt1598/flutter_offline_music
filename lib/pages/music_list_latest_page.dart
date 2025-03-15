@@ -27,7 +27,18 @@ class _MusicListLatestPageState extends State<MusicListLatestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Đã thêm gần đây')),
+      appBar: AppBar(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Đã thêm gần đây'),
+            Opacity(
+              opacity: 0.4,
+              child: Text('(30 ngày gần đây)', style: TextStyle(fontSize: 12)),
+            ),
+          ],
+        ),
+      ),
       body: FutureBuilder(
         future: getMusics(),
         builder: (context, snapshot) {
