@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/button_card.dart';
@@ -74,32 +72,30 @@ class _DashboardPageState extends State<DashboardPage>
   Widget build(BuildContext context) {
     super.build(context);
     final playerProvider = Provider.of<PlayerProvider>(context);
+    final audioHandler = playerProvider.audioHandler;
     playNow() async {
       if (playerProvider.musics.isEmpty) {
         ToastService.showError('Không có bài hát nào để phát');
         return;
       }
-      await playerProvider.audioHandler.setPlaylistFromMusics(
-        playerProvider.musics,
-      );
-      await playerProvider.audioHandler.playMusic(
-        playerProvider.musics[Random().nextInt(
-          playerProvider.musics.length - 1,
-        )],
-      );
+      await audioHandler.stop();
+      await audioHandler.player.setShuffleModeEnabled(true);
+      await audioHandler.setPlaylist([]);
+      await audioHandler.setPlaylistFromMusics(playerProvider.musics);
+      await audioHandler.playMediaItem(audioHandler.playlist.first);
       playerProvider.showMiniPlayer();
     }
 
-    return Container(
-      padding: EdgeInsets.all(16),
-      child: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-        child: Column(
-          spacing: 8,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 8),
-            Row(
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Column(
+        spacing: 8,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
               spacing: 8,
               children: [
                 Flexible(
@@ -132,95 +128,93 @@ class _DashboardPageState extends State<DashboardPage>
                 ),
               ],
             ),
-            SizedBox(height: 4),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _GroupTitle(
-                  title: 'Đã phát gần đây',
-                  onViewMore:
-                      _recentMusics.isEmpty
-                          ? null
-                          : () {
-                            Navigator.of(context)
-                                .push(
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) =>
-                                            MusicListRecentPlayingPage(),
-                                  ),
-                                )
-                                .then((_) => fetchData());
-                          },
-                ),
-                for (var music in _recentMusics)
-                  MusicListItem(music: music, afterHideItem: () => fetchData()),
-                if (_recentMusics.isEmpty) MusicListEmpty(),
-              ],
-            ),
-            _GroupTitle(
-              title: 'Đã thêm gần đây',
-              onViewMore:
-                  _newestMusics.isEmpty
-                      ? null
-                      : () {
-                        Navigator.of(context)
-                            .push(
-                              MaterialPageRoute(
-                                builder: (context) => MusicListLatestPage(),
-                              ),
-                            )
-                            .then((_) => fetchData());
-                      },
-            ),
-            SizedBox(
-              height: 160,
-              width: SharedData.fullWidth,
-              child:
-                  _newestMusics.isEmpty
-                      ? MusicListEmpty()
-                      : ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _newestMusics.length,
-                        itemBuilder:
-                            (context, idx) =>
-                                MusicListItemRrect(music: _newestMusics[idx]),
-                      ),
-            ),
-            _GroupTitle(
-              title: 'Lượt nghe nhiều nhất',
-              onViewMore:
-                  _topPlayedCountMusics.isEmpty
-                      ? null
-                      : () {
-                        Navigator.of(context)
-                            .push(
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => MusicListMostListenedPage(),
-                              ),
-                            )
-                            .then((_) => fetchData());
-                      },
-            ),
-            SizedBox(
-              height: 200,
-              child:
-                  _topPlayedCountMusics.isEmpty
-                      ? MusicListEmpty()
-                      : ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _topPlayedCountMusics.length,
-                        itemBuilder:
-                            (context, idx) => MusicListItemCard(
-                              music: _topPlayedCountMusics[idx],
+          ),
+          SizedBox(height: 4),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _GroupTitle(
+                title: 'Đã phát gần đây',
+                onViewMore:
+                    _recentMusics.isEmpty
+                        ? null
+                        : () {
+                          Navigator.of(context)
+                              .push(
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => MusicListRecentPlayingPage(),
+                                ),
+                              )
+                              .then((_) => fetchData());
+                        },
+              ),
+              for (var music in _recentMusics)
+                MusicListItem(music: music, afterHideItem: () => fetchData()),
+              if (_recentMusics.isEmpty) MusicListEmpty(),
+            ],
+          ),
+          _GroupTitle(
+            title: 'Đã thêm gần đây',
+            onViewMore:
+                _newestMusics.isEmpty
+                    ? null
+                    : () {
+                      Navigator.of(context)
+                          .push(
+                            MaterialPageRoute(
+                              builder: (context) => MusicListLatestPage(),
                             ),
-                      ),
-            ),
-            SizedBox(height: 90),
-          ],
-        ),
+                          )
+                          .then((_) => fetchData());
+                    },
+          ),
+          SizedBox(
+            height: 160,
+            width: SharedData.fullWidth,
+            child:
+                _newestMusics.isEmpty
+                    ? MusicListEmpty()
+                    : ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _newestMusics.length,
+                      itemBuilder:
+                          (context, idx) =>
+                              MusicListItemRrect(music: _newestMusics[idx]),
+                    ),
+          ),
+          _GroupTitle(
+            title: 'Lượt nghe nhiều nhất',
+            onViewMore:
+                _topPlayedCountMusics.isEmpty
+                    ? null
+                    : () {
+                      Navigator.of(context)
+                          .push(
+                            MaterialPageRoute(
+                              builder: (context) => MusicListMostListenedPage(),
+                            ),
+                          )
+                          .then((_) => fetchData());
+                    },
+          ),
+          SizedBox(
+            height: 200,
+            child:
+                _topPlayedCountMusics.isEmpty
+                    ? MusicListEmpty()
+                    : ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _topPlayedCountMusics.length,
+                      itemBuilder:
+                          (context, idx) => MusicListItemCard(
+                            music: _topPlayedCountMusics[idx],
+                          ),
+                    ),
+          ),
+          SizedBox(height: 90),
+        ],
       ),
     );
   }
@@ -242,7 +236,7 @@ class _GroupTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16, bottom: 4),
+      padding: const EdgeInsets.only(top: 16, bottom: 4, right: 8, left: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

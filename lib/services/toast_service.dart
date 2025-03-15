@@ -37,73 +37,76 @@ class ToastService {
           onTap: () {
             toastification.dismiss(holder);
           },
-          child: Center(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Color.lerp(
-                        Theme.of(context).cardColor,
-                        isDarkMode ? Colors.white : Colors.black,
-                        isDarkMode ? 0.1 : 0,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color:
-                              Theme.of(context).brightness == Brightness.dark
-                                  ? Colors.white.withValues(alpha: 0.1)
-                                  : Colors.black.withValues(alpha: 0.1),
-                          blurRadius: 5,
-                          spreadRadius: 2,
-                          offset: Offset.zero,
+          child: Container(
+            color: Colors.transparent,
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Color.lerp(
+                          Theme.of(context).cardColor,
+                          isDarkMode ? Colors.white : Colors.black,
+                          isDarkMode ? 0.1 : 0,
                         ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 32,
-                    ),
-                    child: IconTheme(
-                      data: IconThemeData(size: 16),
-                      child: Row(
-                        spacing: 8,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (type == ToastificationType.success)
-                            Icon(
-                              Icons.check_circle_outline,
-                              color: Colors.green,
-                            ),
-                          if (type == ToastificationType.error)
-                            Icon(Icons.error_outline, color: Colors.red),
-                          if (type == ToastificationType.info)
-                            Icon(Icons.info_outline, color: Colors.blue),
-                          if (type == ToastificationType.warning)
-                            Icon(
-                              Icons.warning_amber_rounded,
-                              color: Colors.yellow,
-                            ),
-                          Flexible(
-                            child: Text(
-                              message,
-                              softWrap: true,
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
+                        boxShadow: [
+                          BoxShadow(
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? Colors.white.withValues(alpha: 0.1)
+                                    : Colors.black.withValues(alpha: 0.1),
+                            blurRadius: 5,
+                            spreadRadius: 2,
+                            offset: Offset.zero,
                           ),
                         ],
                       ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 32,
+                      ),
+                      child: IconTheme(
+                        data: IconThemeData(size: 16),
+                        child: Row(
+                          spacing: 8,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (type == ToastificationType.success)
+                              Icon(
+                                Icons.check_circle_outline,
+                                color: Colors.green,
+                              ),
+                            if (type == ToastificationType.error)
+                              Icon(Icons.error_outline, color: Colors.red),
+                            if (type == ToastificationType.info)
+                              Icon(Icons.info_outline, color: Colors.blue),
+                            if (type == ToastificationType.warning)
+                              Icon(
+                                Icons.warning_amber_rounded,
+                                color: Colors.yellow,
+                              ),
+                            Flexible(
+                              child: Text(
+                                message,
+                                softWrap: true,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

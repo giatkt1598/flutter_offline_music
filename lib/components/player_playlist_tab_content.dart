@@ -84,7 +84,7 @@ class _PlayerPlaylistTabContentState extends State<PlayerPlaylistTabContent>
               onPressed: () async {
                 await audioHandler.setShuffle(true);
                 setState(() {});
-                ToastService.showSuccess('Đảo thứ tự thành công');
+                ToastService.showSuccess('Đã trộn danh sách');
               },
               icon: Icon(Icons.shuffle),
             ),
