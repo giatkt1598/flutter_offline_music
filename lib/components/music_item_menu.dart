@@ -19,12 +19,14 @@ class MusicItemMenu extends StatefulWidget {
     super.key,
     required this.music,
     this.afterToggleHide,
+    this.afterToggleFavorite,
     this.showMiniPlayer = true,
     this.type = MusicMenuType.inMusicList,
   });
 
   final Music music;
   final Function? afterToggleHide;
+  final Function? afterToggleFavorite;
   final bool showMiniPlayer;
   final MusicMenuType type;
   @override
@@ -303,8 +305,20 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                             ? 'Đã thêm vào Yêu thích'
                             : 'Đã xóa khỏi Yêu thích',
                       );
+                      final musicInList =
+                          playerProvider.musics
+                              .where((x) => x.id == widget.music.id)
+                              .firstOrNull;
+
+                      if (musicInList != null) {
+                        musicInList.isFavorite = widget.music.isFavorite;
+                      }
                       if (isCurrent) {
                         playerProvider.setCurrentMusic(widget.music);
+                      }
+
+                      if (widget.afterToggleFavorite != null) {
+                        widget.afterToggleFavorite!();
                       }
                       Navigator.pop(context);
                     },

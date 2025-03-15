@@ -72,7 +72,12 @@ class MusicService {
     bool? isHidden = false,
   }) async {
     var whereBuilt = DatabaseHelper.buildQueryFilter({
-      'isHidden = ?': isHidden == true ? '1' : isHidden == false ? '0' : null,
+      'isHidden = ?':
+          isHidden == true
+              ? '1'
+              : isHidden == false
+              ? '0'
+              : null,
     });
     var queryRs = await (await _db).query(
       tableMusicFolder,
@@ -113,6 +118,12 @@ class MusicService {
       values,
       where: 'id = ?',
       whereArgs: [model.id],
+    );
+  }
+
+  Future<int> unfavoriteAllMusicAsync() async {
+    return await (await _db).rawUpdate(
+      'UPDATE ${DbTable.music} SET isFavorite = 0',
     );
   }
 

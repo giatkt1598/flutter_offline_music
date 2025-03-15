@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_offline_music/components/music_list.dart';
+import 'package:flutter_offline_music/components/music_list_controller_group.dart';
 import 'package:flutter_offline_music/components/music_list_simple_info.dart';
 import 'package:flutter_offline_music/components/song_list_sort_button.dart';
 import 'package:flutter_offline_music/constants/constant.dart';
@@ -76,8 +75,6 @@ class _FullMusicListPageState extends State<FullMusicListPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final playerProvider = Provider.of<PlayerProvider>(context);
-    final audioHandler = playerProvider.audioHandler;
 
     if (musics == null) {
       return Container();
@@ -95,52 +92,7 @@ class _FullMusicListPageState extends State<FullMusicListPage>
                   SizedBox(height: 12),
                   MusicListSimpleInfo(musics: musics!),
                   SizedBox(height: 12),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 8,
-                    children: [
-                      SizedBox(
-                        width: 140,
-                        child: OutlinedButton(
-                          onPressed:
-                              musics!.isNotEmpty
-                                  ? () async {
-                                    if (musics!.first.path !=
-                                        audioHandler.currentMediaItem?.id) {
-                                      await audioHandler.stop();
-                                      await audioHandler.playMusic(
-                                        musics!.first,
-                                      );
-                                    } else {
-                                      await audioHandler.seek(Duration.zero);
-                                    }
-                                    setState(() {});
-                                  }
-                                  : null,
-                          child: Text('Phát nhạc'),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 140,
-                        child: OutlinedButton(
-                          onPressed:
-                              musics!.isNotEmpty
-                                  ? () async {
-                                    await audioHandler.setShuffle(true);
-                                    await audioHandler.stop();
-                                    await audioHandler.playMediaItem(
-                                      audioHandler.playlist[Random().nextInt(
-                                        audioHandler.playlist.length - 1,
-                                      )],
-                                    );
-                                    setState(() {});
-                                  }
-                                  : null,
-                          child: Text('Ngẫu nhiên'),
-                        ),
-                      ),
-                    ],
-                  ),
+                  MusicListControllerGroup(musics: musics!),
                   SizedBox(height: 12),
                   Row(
                     children: [

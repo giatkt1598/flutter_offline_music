@@ -24,13 +24,6 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   int tabIndex = 1;
 
   @override
-  void initState() {
-    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
-    playerProvider.setCurrentMusic(widget.music);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final playerProvider = Provider.of<PlayerProvider>(context);
     final audioHandler = playerProvider.audioHandler;

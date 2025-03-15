@@ -6,6 +6,7 @@ import 'package:flutter_offline_music/components/music_list_item.dart';
 import 'package:flutter_offline_music/components/music_list_item_card.dart';
 import 'package:flutter_offline_music/components/music_list_item_rrect.dart';
 import 'package:flutter_offline_music/models/music.dart';
+import 'package:flutter_offline_music/pages/music_list_favorite_page.dart';
 import 'package:flutter_offline_music/pages/music_list_latest_page.dart';
 import 'package:flutter_offline_music/pages/music_list_most_listened_page.dart';
 import 'package:flutter_offline_music/pages/music_list_recent_playing_page.dart';
@@ -104,9 +105,13 @@ class _DashboardPageState extends State<DashboardPage>
                     icon: Icon(Icons.favorite),
                     backgroundImage: AssetImage("assets/bg_music_pink.png"),
                     onPressed: () {
-                      ToastService.show(
-                        message: 'Lười làm tính năng này quá :D',
-                      );
+                      Navigator.of(context)
+                          .push(
+                            MaterialPageRoute(
+                              builder: (context) => MusicListFavoritePage(),
+                            ),
+                          )
+                          .then((_) => fetchData());
                     },
                     child: Text(
                       'Yêu thích',

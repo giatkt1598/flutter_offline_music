@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/library_list_item_menu_button.dart';
 import 'package:flutter_offline_music/components/music_item_menu.dart';
 import 'package:flutter_offline_music/components/music_list.dart';
+import 'package:flutter_offline_music/components/music_list_controller_group.dart';
 import 'package:flutter_offline_music/components/music_list_simple_info.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/models/library.dart';
@@ -25,8 +26,6 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
   late Library library;
   bool loaded = false;
 
-  bool isSetCurrentPlaylist = false;
-
   addMusicToLibrary() {
     Navigator.of(context)
         .push(
@@ -43,7 +42,6 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
     if (!loaded) return Container();
 
     final playerProvider = Provider.of<PlayerProvider>(context);
-    final audioHandler = playerProvider.audioHandler;
     final musics = playerProvider.musics;
 
     return Scaffold(
@@ -74,79 +72,7 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 8,
-                  children: [
-                    SizedBox(
-                      width: 150,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                            color: const Color.fromARGB(
-                              255,
-                              167,
-                              167,
-                              167,
-                            ).withValues(alpha: 0.3),
-                            width: 2,
-                          ),
-                        ),
-                        onPressed:
-                            musics.isNotEmpty
-                                ? () async {
-                                  await setCurrentPlaylist();
-                                  if (musics.first.path !=
-                                      audioHandler.currentMediaItem?.id) {
-                                    await audioHandler.playMusic(musics.first);
-                                  } else {
-                                    audioHandler.seek(Duration.zero);
-                                  }
-                                  setState(() {});
-                                }
-                                : null,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 4,
-                          children: [Icon(Icons.play_arrow), Text('Phát nhạc')],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 150,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          side: BorderSide(
-                            color: const Color.fromARGB(
-                              255,
-                              167,
-                              167,
-                              167,
-                            ).withValues(alpha: 0.3),
-                            width: 2,
-                          ),
-                        ),
-                        onPressed:
-                            musics.length > 1
-                                ? () async {
-                                  //Fix random not same as current
-                                  await setCurrentPlaylist();
-                                  await audioHandler.setShuffle(true);
-                                  await audioHandler.playMediaItem(
-                                    audioHandler.playlist[1],
-                                  );
-                                  setState(() {});
-                                }
-                                : null,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 4,
-                          children: [Icon(Icons.shuffle), Text('Ngẫu nhiên')],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                MusicListControllerGroup(musics: musics),
               ],
             ),
           ),
@@ -183,7 +109,6 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
   }
 
   loadLibrary() async {
-    isSetCurrentPlaylist = false;
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     playerProvider.currentLibraryId = widget.libraryId;
     var libs = await libraryService.getListAsync(id: widget.libraryId);
@@ -195,18 +120,5 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
       loaded = true;
     });
     return library;
-  }
-
-  Future<void> setCurrentPlaylist() async {
-    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
-    if (playerProvider.audioHandler.playlist.length !=
-        playerProvider.musics.length) {
-      isSetCurrentPlaylist = false;
-    }
-    if (isSetCurrentPlaylist) return;
-    isSetCurrentPlaylist = true;
-    await playerProvider.audioHandler.setPlaylistFromMusics(
-      playerProvider.musics,
-    );
   }
 }

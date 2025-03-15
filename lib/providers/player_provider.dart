@@ -77,5 +77,12 @@ class PlayerProvider extends ChangeNotifier {
     // if (isSkipSilent) {
     //   await musicService.fetchSkipSilentDurations();
     // }
+
+    audioHandler.player.currentIndexStream.listen((index) {
+      if (index == null) return;
+      musicService
+          .getMusicAsync(path: audioHandler.playlist[index].id)
+          .then((value) => setCurrentMusic(value));
+    });
   }
 }
