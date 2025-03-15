@@ -12,6 +12,12 @@ class PlayerProvider extends ChangeNotifier {
   AppAudioHandler get audioHandler => AppAudioHandler.instance;
   List<Music> musics = [];
   int? currentLibraryId;
+  Music? _currentMusic;
+  Music? get currentMusic => _currentMusic;
+  setCurrentMusic(Music? music) {
+    _currentMusic = music;
+    notifyListeners();
+  }
 
   void hideMiniPlayer() {
     isShowMiniPlayer = false;

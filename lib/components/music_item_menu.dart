@@ -287,6 +287,29 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                       },
                     ),
                   ListMenuOption(
+                    icon:
+                        widget.music.isFavorite
+                            ? Icons.heart_broken_outlined
+                            : Icons.favorite,
+                    title:
+                        widget.music.isFavorite
+                            ? 'Xóa khỏi Yêu thích'
+                            : 'Thêm vào Yêu thích',
+                    onTap: () {
+                      widget.music.isFavorite = !widget.music.isFavorite;
+                      musicService.updateMusicAsync(widget.music);
+                      ToastService.showSuccess(
+                        widget.music.isFavorite
+                            ? 'Đã thêm vào Yêu thích'
+                            : 'Đã xóa khỏi Yêu thích',
+                      );
+                      if (isCurrent) {
+                        playerProvider.setCurrentMusic(widget.music);
+                      }
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ListMenuOption(
                     icon: Icons.playlist_add,
                     title: 'Thêm vào thư viện',
                     onTap: () {

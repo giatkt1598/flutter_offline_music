@@ -8,6 +8,7 @@ import 'package:flutter_offline_music/components/countdown.dart';
 import 'package:flutter_offline_music/components/music_disc_illustrator.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
+import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +26,7 @@ class _PlayerAudioTabContentState extends State<PlayerAudioTabContent>
     with AutomaticKeepAliveClientMixin {
   Duration position = Duration.zero;
   late StreamSubscription<Duration?> positionSubscription;
+  final musicService = MusicService();
   @override
   void initState() {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
@@ -70,6 +72,7 @@ class _PlayerAudioTabContentState extends State<PlayerAudioTabContent>
         audioHandler.playingMediaItemId == audioHandler.currentMediaItem?.id
             ? position
             : Duration.zero;
+    final music = playerProvider.currentMusic;
     return DefaultTextStyle(
       style: TextStyle(color: Colors.white),
       child: IconTheme(
@@ -94,7 +97,42 @@ class _PlayerAudioTabContentState extends State<PlayerAudioTabContent>
                       ),
                     ),
                   ),
-                Expanded(child: MusicDiscIllustrator()),
+                Expanded(
+                  child: GestureDetector(
+                    onDoubleTap: () {
+                      widget.music.isFavorite = !widget.music.isFavorite;
+                      musicService.updateMusicAsync(widget.music);
+                      playerProvider.setCurrentMusic(widget.music);
+                    },
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Stack(
+                        children: [
+                          Center(child: MusicDiscIllustrator()),
+                          if (music?.isFavorite == true)
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.favorite,
+                                    size: 12,
+                                    color: const Color.fromARGB(
+                                      255,
+                                      255,
+                                      100,
+                                      151,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
                 Column(
                   children: [
                     Column(
