@@ -411,7 +411,7 @@ ${orderBy != null ? 'ORDER BY $orderBy' : ''}
       if (filePath == null) return null;
       final imgName = 'album_art_${filePath.replaceAll('/', '_')}.jpg';
       String albumArtFolder = '${appDir.path}/album_art';
-      FileHelper.createDirectoryIfNotExists(albumArtFolder);
+      await FileHelper.createDirectoryIfNotExists(albumArtFolder);
       final albumArtPath = "$albumArtFolder/$imgName";
 
       var albumArtFile = File(albumArtPath);
