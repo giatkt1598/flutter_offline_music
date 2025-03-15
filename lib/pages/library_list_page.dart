@@ -88,21 +88,17 @@ class _LibraryListPageState extends State<LibraryListPage>
             )
           else
             Expanded(
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 200),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        NoData(title: 'Chưa có thư viện nào!'),
-                        SizedBox(height: 12),
-                        OutlinedButton(
-                          onPressed: () => newLib,
-                          child: Text('Tạo mới'),
-                        ),
-                      ],
-                    ),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 200),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 28),
+                      NoData(title: 'Chưa có thư viện nào!'),
+                      SizedBox(height: 12),
+                      OutlinedButton(onPressed: newLib, child: Text('Tạo mới')),
+                    ],
                   ),
                 ),
               ),

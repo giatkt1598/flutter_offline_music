@@ -189,6 +189,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
     final bool hasStopTime = playerProvider.audioHandler.stopTime != null;
     final Duration? stopDuration = playerProvider.audioHandler.stopTime
         ?.difference(DateTime.now());
+    final isCurrent = widget.music.path == audioHandler.currentMediaItem?.id;
     bool? hideMiniPlayer = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
@@ -234,11 +235,22 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
               Opacity(opacity: .3, child: Divider()),
               Column(
                 children: [
-                  if (widget.type == MusicMenuType.inMusicList ||
-                      widget.type == MusicMenuType.inPlaylist)
+                  if (widget.type == MusicMenuType.inPlaylist)
+                    ListMenuOption(
+                      title: 'Phát',
+                      icon: Icons.play_arrow_rounded,
+                      enabled: !isCurrent,
+                      onTap: () {
+                        audioHandler.playMusic(widget.music);
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  if ((widget.type == MusicMenuType.inMusicList ||
+                      widget.type == MusicMenuType.inPlaylist))
                     ListMenuOption(
                       icon: Icons.post_add_sharp,
                       title: 'Phát tiếp theo',
+                      enabled: !isCurrent,
                       onTap: () {
                         audioHandler
                             .insertItemToPlaylist(
@@ -261,6 +273,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                     ListMenuOption(
                       title: 'Xóa khỏi danh sách phát',
                       icon: Icons.delete_rounded,
+                      enabled: !isCurrent,
                       onTap: () {
                         audioHandler.removeItemInPlaylist(widget.music.path);
                         ToastService.showSuccess(
@@ -369,20 +382,21 @@ class ListMenuOption extends StatelessWidget {
     required this.icon,
     required this.onTap,
     this.iconColor,
+    this.enabled = true,
   });
 
   final String title;
   final IconData icon;
-  final Function onTap;
+  final Function? onTap;
   final Color? iconColor;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       visualDensity: VisualDensity(vertical: -2),
-      onTap: () {
-        onTap();
-      },
+      enabled: enabled,
+      onTap: onTap != null ? () => onTap!() : null,
       leading: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),

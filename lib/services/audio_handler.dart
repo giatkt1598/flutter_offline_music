@@ -300,6 +300,10 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       ),
     );
 
+    if (isShuffle) {
+      await setShuffle(true);
+    }
+
     addArtPictureToPlaylist() async {
       for (var item in _playlist) {
         var art = await getPictureFile(item.id);

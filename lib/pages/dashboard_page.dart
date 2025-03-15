@@ -8,6 +8,9 @@ import 'package:flutter_offline_music/components/music_list_item.dart';
 import 'package:flutter_offline_music/components/music_list_item_card.dart';
 import 'package:flutter_offline_music/components/music_list_item_rrect.dart';
 import 'package:flutter_offline_music/models/music.dart';
+import 'package:flutter_offline_music/pages/music_list_latest_page.dart';
+import 'package:flutter_offline_music/pages/music_list_most_listened_page.dart';
+import 'package:flutter_offline_music/pages/music_list_recent_playing_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/tab_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
@@ -50,7 +53,7 @@ class _DashboardPageState extends State<DashboardPage>
               .where(
                 (x) =>
                     DateTime.now().difference(x.creationTime) <
-                    Duration(days: 90),
+                    Duration(days: 30),
               )
               .orderByDescending((x) => x.creationTime)
               .take(10)
@@ -134,13 +137,43 @@ class _DashboardPageState extends State<DashboardPage>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _GroupTitle(title: 'Đã phát gần đây'),
+                _GroupTitle(
+                  title: 'Đã phát gần đây',
+                  onViewMore:
+                      _recentMusics.isEmpty
+                          ? null
+                          : () {
+                            Navigator.of(context)
+                                .push(
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) =>
+                                            MusicListRecentPlayingPage(),
+                                  ),
+                                )
+                                .then((_) => fetchData());
+                          },
+                ),
                 for (var music in _recentMusics)
                   MusicListItem(music: music, afterHideItem: () => fetchData()),
                 if (_recentMusics.isEmpty) MusicListEmpty(),
               ],
             ),
-            _GroupTitle(title: 'Đã thêm gần đây'),
+            _GroupTitle(
+              title: 'Đã thêm gần đây',
+              onViewMore:
+                  _newestMusics.isEmpty
+                      ? null
+                      : () {
+                        Navigator.of(context)
+                            .push(
+                              MaterialPageRoute(
+                                builder: (context) => MusicListLatestPage(),
+                              ),
+                            )
+                            .then((_) => fetchData());
+                      },
+            ),
             SizedBox(
               height: 160,
               width: SharedData.fullWidth,
@@ -155,7 +188,22 @@ class _DashboardPageState extends State<DashboardPage>
                                 MusicListItemRrect(music: _newestMusics[idx]),
                       ),
             ),
-            _GroupTitle(title: 'Lượt nghe nhiều nhất'),
+            _GroupTitle(
+              title: 'Lượt nghe nhiều nhất',
+              onViewMore:
+                  _topPlayedCountMusics.isEmpty
+                      ? null
+                      : () {
+                        Navigator.of(context)
+                            .push(
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => MusicListMostListenedPage(),
+                              ),
+                            )
+                            .then((_) => fetchData());
+                      },
+            ),
             SizedBox(
               height: 200,
               child:
@@ -187,17 +235,30 @@ class _DashboardPageState extends State<DashboardPage>
 }
 
 class _GroupTitle extends StatelessWidget {
-  const _GroupTitle({required this.title});
+  const _GroupTitle({required this.title, this.onViewMore});
   final String title;
+  final Function? onViewMore;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(title, style: Theme.of(context).textTheme.titleSmall),
-        TextButton(onPressed: () {}, child: Text('Xem thêm >')),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 16, bottom: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(title, style: Theme.of(context).textTheme.titleSmall),
+          if (onViewMore != null)
+            GestureDetector(
+              onTap: () => onViewMore!(),
+              child: Text(
+                'Xem thêm >',
+                style: TextStyle(
+                  color: Theme.of(context).buttonTheme.colorScheme?.primary,
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/library_list_item_menu_button.dart';
 import 'package:flutter_offline_music/components/music_item_menu.dart';
 import 'package:flutter_offline_music/components/music_list.dart';
+import 'package:flutter_offline_music/components/music_list_simple_info.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/pages/music_select_to_library_page.dart';
@@ -65,9 +66,7 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 12.0),
-                      child: Text(
-                        '${musics.length} bài hát ・ ${musicService.calcTotalDuration(musics)}',
-                      ),
+                      child: MusicListSimpleInfo(musics: musics),
                     ),
                     IconButton(
                       onPressed: addMusicToLibrary,
@@ -172,7 +171,6 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
                 onChanged: (value) => loadLibrary(),
               ),
             ),
-          SizedBox(height: 90),
         ],
       ),
     );

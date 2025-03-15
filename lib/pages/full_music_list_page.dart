@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/music_list.dart';
+import 'package:flutter_offline_music/components/music_list_simple_info.dart';
 import 'package:flutter_offline_music/components/song_list_sort_button.dart';
 import 'package:flutter_offline_music/constants/constant.dart';
 import 'package:flutter_offline_music/models/music.dart';
@@ -83,9 +84,7 @@ class _FullMusicListPageState extends State<FullMusicListPage>
               leadingItem: Column(
                 children: [
                   SizedBox(height: 12),
-                  Text(
-                    '${musics.length} bài hát ・ ${_musicService.calcTotalDuration(musics)}',
-                  ),
+                  MusicListSimpleInfo(musics: musics),
                   SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

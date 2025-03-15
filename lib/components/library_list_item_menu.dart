@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/create_edit_library_dialog.dart';
 import 'package:flutter_offline_music/components/library_thumbnail.dart';
+import 'package:flutter_offline_music/components/music_list_simple_info.dart';
 import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/pages/music_select_to_library_page.dart';
@@ -64,11 +65,9 @@ class LibraryListItemMenu extends StatelessWidget {
           Text(library.title, style: TextStyle(fontWeight: FontWeight.bold)),
           Opacity(
             opacity: 0.4,
-            child: Text(
-              '${library.musics.length} bài hát ・ ${musicService.calcTotalDuration(library.musics)}',
+            child: MusicListSimpleInfo(
+              musics: library.musics,
               style: TextStyle(fontSize: 12),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
           Padding(
