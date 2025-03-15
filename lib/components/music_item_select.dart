@@ -1,7 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/models/music.dart';
-import 'package:flutter_offline_music/providers/player_provider.dart';
-import 'package:provider/provider.dart';
 
 class MusicItemSelect extends StatelessWidget {
   const MusicItemSelect({
@@ -16,10 +16,8 @@ class MusicItemSelect extends StatelessWidget {
   final ValueChanged<bool?> onChanged;
   @override
   Widget build(BuildContext context) {
-    final audioHandler = Provider.of<PlayerProvider>(context).audioHandler;
-
     getThumbnail() async {
-      return await audioHandler.getPictureFile(music.path);
+      return music.thumbnail != null ? File(music.thumbnail!) : null;
     }
 
     return InkWell(

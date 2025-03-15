@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:audio_metadata_reader/audio_metadata_reader.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/models/music.dart';
@@ -10,7 +9,6 @@ import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:toastification/toastification.dart';
 
 class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
@@ -97,10 +95,6 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       notifyListeners();
       return true;
     } else {
-      var art = await getPictureFile(item.id);
-      if (art != null) {
-        item = item.copyWith(artUri: art.uri);
-      }
       _playlist.insert(index ?? _playlist.length, item);
       if (!_originPlaylist.any((x) => x.id == item.id)) {
         _originPlaylist.add(item);
@@ -141,36 +135,6 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       _player.setVolume(volume);
     });
     return completer.future;
-  }
-
-  Picture? getPicture(String? path) {
-    if (path == null) {
-      return null;
-    }
-    final metadata = readMetadata(File(path), getImage: true);
-    if (metadata.pictures.isNotEmpty) {
-      Picture pic = metadata.pictures.first;
-      return pic;
-    } else {
-      return null;
-    }
-  }
-
-  Future<File?> getPictureFile(String? filePath) async {
-    if (filePath == null) return null;
-    final tempDir = await getTemporaryDirectory();
-    final imgName = 'album_art_${filePath.replaceAll('/', '_')}.jpg';
-    final albumArtPath = "${tempDir.path}/$imgName";
-    var albumArtFile = File(albumArtPath);
-    if (albumArtFile.existsSync()) {
-      return albumArtFile;
-    }
-    final pic = getPicture(filePath);
-    if (pic != null) {
-      albumArtFile.writeAsBytesSync(pic.bytes);
-      return albumArtFile;
-    }
-    return null;
   }
 
   @override
@@ -307,16 +271,19 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       await setShuffle(true);
     }
 
-    addArtPictureToPlaylist() async {
-      for (var item in _playlist) {
-        var art = await getPictureFile(item.id);
-        if (art == null) continue;
-        _playlist[_playlist.indexOf(item)] = item.copyWith(artUri: art.uri);
-      }
-      notifyListeners();
-    }
+    addThumbnailToPlaylistItems();
+  }
 
-    addArtPictureToPlaylist();
+  Future<void> addThumbnailToPlaylistItems() async {
+    var musics = await _musicService.getListMusicAsync();
+    for (var item in _playlist) {
+      final music = musics.where((x) => x.path == item.id).firstOrNull;
+      if (music?.thumbnail != null) {
+        _playlist[_playlist.indexOf(item)] = _playlist[_playlist.indexOf(item)]
+            .copyWith(artUri: music!.toMediaItem().artUri);
+      }
+    }
+    notifyListeners();
   }
 
   Future<void> setShuffle(bool isShuffle) async {
@@ -534,14 +501,8 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   }
 
   Future<void> _setCurrentMediaItem(MediaItem? mediaItem) async {
-    var albumArtFile = await getPictureFile(mediaItem?.id);
-    _currentMediaItem =
-        albumArtFile != null
-            ? mediaItem?.copyWith(artUri: albumArtFile.uri)
-            : mediaItem;
-
+    _currentMediaItem = mediaItem;
     this.mediaItem.add(_currentMediaItem?.copyWith(extras: null));
-    notifyListeners();
   }
 
   static Future<AppAudioHandler> createInstance() async {

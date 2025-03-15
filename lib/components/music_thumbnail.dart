@@ -1,9 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_offline_music/providers/player_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_offline_music/services/music_service.dart';
 
 class MusicThumbnail extends StatelessWidget {
-  const MusicThumbnail({
+  MusicThumbnail({
     super.key,
     required this.musicPath,
     this.size,
@@ -17,14 +18,14 @@ class MusicThumbnail extends StatelessWidget {
   final BoxShape? boxShape;
   final BorderRadiusGeometry? borderRadius;
   final Widget? fallbackWidget;
+  final _musicService = MusicService();
+
+  Future<File?> getThumbnail() {
+    return _musicService.getMusicThumbnailAsync(musicPath);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final audioHandler = Provider.of<PlayerProvider>(context).audioHandler;
-
-    getThumbnail() async {
-      return await audioHandler.getPictureFile(musicPath);
-    }
-
     var currentBorderRadius =
         borderRadius ?? BorderRadius.all(Radius.circular(8));
 
@@ -52,9 +53,9 @@ class MusicThumbnail extends StatelessWidget {
           return boxShape == BoxShape.rectangle
               ? ClipRRect(
                 borderRadius: currentBorderRadius,
-                child: Image.file(snapshot.data!),
+                child: Image.file(snapshot.data!, fit: BoxFit.cover),
               )
-              : ClipOval(child: Image.file(snapshot.data!));
+              : ClipOval(child: Image.file(snapshot.data!, fit: BoxFit.cover));
         },
       ),
     );

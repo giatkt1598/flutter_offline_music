@@ -7,8 +7,10 @@ import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/services/database_helper.dart';
 import 'package:flutter_offline_music/services/db_table.dart';
 import 'package:flutter_offline_music/utilities/debug_helper.dart';
+import 'package:flutter_offline_music/utilities/file_helper.dart';
 import 'package:flutter_offline_music/utilities/find_nonsilent_position.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:remove_diacritic/remove_diacritic.dart';
 import 'package:sqflite/sqlite_api.dart';
 
@@ -301,6 +303,11 @@ ${orderBy != null ? 'ORDER BY $orderBy' : ''}
         progressStream.add(musicPath);
       }
     }
+
+    if (addedFileCount > 0) {
+      await addThumbnailFromMetadataToMusicsAsync();
+    }
+
     var list = await getMusicFolderListAsync();
     if (onCompleted != null) {
       onCompleted(addedFileCount, removedFileCount);
@@ -388,5 +395,47 @@ ${orderBy != null ? 'ORDER BY $orderBy' : ''}
         }).toList();
 
     return filteredItems;
+  }
+
+  Future<File?> getMusicThumbnailAsync(String musicPath) async {
+    final music = await getMusicAsync(path: musicPath);
+    if (music.thumbnail == null) return null;
+    File img = File(music.thumbnail!);
+    return img.existsSync() ? img : null;
+  }
+
+  Future<void> addThumbnailFromMetadataToMusicsAsync() async {
+    var appDir = await getApplicationDocumentsDirectory();
+
+    Future<File?> getPictureFile(String? filePath) async {
+      if (filePath == null) return null;
+      final imgName = 'album_art_${filePath.replaceAll('/', '_')}.jpg';
+      String albumArtFolder = '${appDir.path}/album_art';
+      FileHelper.createDirectoryIfNotExists(albumArtFolder);
+      final albumArtPath = "$albumArtFolder/$imgName";
+
+      var albumArtFile = File(albumArtPath);
+      if (albumArtFile.existsSync()) {
+        return albumArtFile;
+      }
+      final pic =
+          readMetadata(File(filePath), getImage: true).pictures.firstOrNull;
+      if (pic != null) {
+        albumArtFile.writeAsBytesSync(pic.bytes);
+        return albumArtFile;
+      }
+      return null;
+    }
+
+    var musics = await getListMusicAsync(isHidden: null);
+    musics = musics.where((x) => x.thumbnail == null).toList();
+
+    for (var music in musics) {
+      var art = await getPictureFile(music.path);
+      if (art == null) continue;
+      music.isOriginThumbnail = true;
+      music.thumbnail = art.path;
+      await updateMusicAsync(music);
+    }
   }
 }

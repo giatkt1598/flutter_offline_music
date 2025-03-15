@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_offline_music/components/add_music_item_to_library.dart';
 import 'package:flutter_offline_music/components/app_button.dart';
 import 'package:flutter_offline_music/components/duration_picker.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/library_service.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
+import 'package:flutter_offline_music/services/youtube_service.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +38,7 @@ class MusicItemMenu extends StatefulWidget {
 class _MusicItemMenuState extends State<MusicItemMenu> {
   final musicService = MusicService();
   final libraryService = LibraryService();
+  final youtubeService = YoutubeService();
   showMusicInfo() async {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     playerProvider.hideMiniPlayer();
@@ -388,6 +391,48 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                       Navigator.pop(context, true);
                     },
                   ),
+                  if (!widget.music.isOriginThumbnail &&
+                      widget.music.thumbnail == null)
+                    ListMenuOption(
+                      title: 'Tải thumbnail từ youtube',
+                      icon: Icons.image,
+                      onTap: () async {
+                        EasyLoading.show(
+                          maskType: EasyLoadingMaskType.black,
+                          status: 'Đang xử lý...',
+                          dismissOnTap: false,
+                        );
+                        var thumbUrl = await youtubeService
+                            .getVideoThumbnailAsync(widget.music.title);
+                        if (thumbUrl != null) {
+                          widget.music.thumbnail = thumbUrl;
+                          await musicService.updateMusicAsync(widget.music);
+                          ToastService.showSuccess(
+                            'Đã cập nhật thumbnail cho bài hát từ youtube',
+                          );
+                          audioHandler.addThumbnailToPlaylistItems();
+                        } else {
+                          ToastService.showError(
+                            'Xảy ra lỗi hoặc không tìm thấy thumbnail phù hợp',
+                          );
+                        }
+                        EasyLoading.dismiss();
+                        Navigator.pop(context);
+                      },
+                    ),
+                  if (!widget.music.isOriginThumbnail &&
+                      widget.music.thumbnail != null)
+                    ListMenuOption(
+                      title: 'Xóa thumbnail đã tải',
+                      icon: Icons.image_not_supported,
+                      onTap: () async {
+                        widget.music.thumbnail = null;
+                        await musicService.updateMusicAsync(widget.music);
+                        ToastService.showSuccess('Đã xóa thumbnail');
+                        audioHandler.addThumbnailToPlaylistItems();
+                        Navigator.pop(context);
+                      },
+                    ),
                   Opacity(opacity: .3, child: Divider()),
                   ListMenuOption(
                     icon: Icons.delete_forever,

@@ -108,7 +108,9 @@ class _PlayerAudioTabContentState extends State<PlayerAudioTabContent>
                       color: Colors.transparent,
                       child: Stack(
                         children: [
-                          Center(child: MusicDiscIllustrator()),
+                          Center(
+                            child: MusicDiscIllustrator(music: widget.music),
+                          ),
                           if (music?.isFavorite == true)
                             Padding(
                               padding: const EdgeInsets.all(8.0),

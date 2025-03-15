@@ -26,9 +26,8 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final playerProvider = Provider.of<PlayerProvider>(context);
-    final audioHandler = playerProvider.audioHandler;
     final settingProvider = Provider.of<SettingProvider>(context);
-    final thumbnail = audioHandler.currentMediaItem?.artUri?.toFilePath();
+    final thumbnail = widget.music.thumbnail;
     final backgroundImage =
         thumbnail ?? settingProvider.appSetting.playerBackgroundImage;
     bool isDarkBottom =

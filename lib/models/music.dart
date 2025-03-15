@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 
@@ -11,6 +12,7 @@ class Music {
   int lengthInSecond;
   Duration get duration => Duration(seconds: lengthInSecond);
   String? thumbnail;
+  bool isOriginThumbnail; //Thumbnail image read from metadata of file
   String? genre;
   final DateTime creationTime;
   bool isHidden;
@@ -40,6 +42,7 @@ class Music {
     this.playedLastTime,
     this.playedCount = 0,
     this.isFavorite = false,
+    this.isOriginThumbnail = false,
   });
 
   Map<String, dynamic> toJson() {
@@ -59,6 +62,7 @@ class Music {
       'playedLastTime': playedLastTime?.toIso8601String(),
       'playedCount': playedCount,
       'isFavorite': isFavorite ? 1 : 0,
+      'isOriginThumbnail': isOriginThumbnail ? 1 : 0,
     };
   }
 
@@ -79,6 +83,7 @@ class Music {
       playedLastTime: DateTime.tryParse(json['playedLastTime'] ?? ''),
       playedCount: json['playedCount'],
       isFavorite: json['isFavorite'] == 1,
+      isOriginThumbnail: json['isOriginThumbnail'] == 1,
     );
   }
 
@@ -89,8 +94,8 @@ class Music {
       artist: artist ?? '<Không rõ tác giả>',
       album: 'Tất cả',
       duration: duration,
-      extras: {'music': this},
       genre: genre,
+      artUri: thumbnail != null ? File(thumbnail!).uri : null,
     );
   }
 
