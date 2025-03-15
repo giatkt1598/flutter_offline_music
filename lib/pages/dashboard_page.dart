@@ -75,14 +75,20 @@ class _DashboardPageState extends State<DashboardPage>
     final playerProvider = Provider.of<PlayerProvider>(context);
     final audioHandler = playerProvider.audioHandler;
     playNow() async {
-      if (playerProvider.musics.isEmpty) {
+      var musics = playerProvider.musics;
+      if (musics.isEmpty) {
+        musics = await _musicService.getListMusicAsync();
+      }
+
+      if (musics.isEmpty) {
         ToastService.showError('Không có bài hát nào để phát');
         return;
       }
+
       await audioHandler.stop();
       await audioHandler.player.setShuffleModeEnabled(true);
       await audioHandler.setPlaylist([]);
-      await audioHandler.setPlaylistFromMusics(playerProvider.musics);
+      await audioHandler.setPlaylistFromMusics(musics);
       await audioHandler.playMediaItem(audioHandler.playlist.first);
       playerProvider.showMiniPlayer();
     }
