@@ -83,9 +83,9 @@ class _SettingPageState extends State<SettingPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   for (var mode in [
-                    ThemeMode.system,
-                    ThemeMode.dark,
                     ThemeMode.light,
+                    ThemeMode.dark,
+                    ThemeMode.system,
                   ])
                     Column(
                       children: [
@@ -95,17 +95,28 @@ class _SettingPageState extends State<SettingPage> {
                           },
                           child: SizedBox(
                             width: 100,
-                            height: 140,
+                            height: 100,
                             child: Container(
                               decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 51, 51, 51),
+                                color: Colors.white,
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(4),
+                                ),
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                    {
+                                      ThemeMode.system:
+                                          'assets/moon_mix_sun.jpg',
+                                      ThemeMode.dark: 'assets/moon.png',
+                                      ThemeMode.light: 'assets/sun.png',
+                                    }[mode]!,
+                                  ),
+                                  fit: BoxFit.cover,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withValues(alpha: 0.1),
-                                    spreadRadius: 5,
+                                    spreadRadius: 3,
                                     blurRadius: 7,
                                     offset: Offset(0, 3),
                                   ),

@@ -356,7 +356,11 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                     icon: Icons.delete_forever,
                     title: 'Xóa khỏi thiết bị',
                     iconColor: Colors.red,
-                    onTap: () {},
+                    onTap: () {
+                      ToastService.show(
+                        message: 'Chưa làm tính năng xóa này : <',
+                      );
+                    },
                   ),
                 ],
               ),
