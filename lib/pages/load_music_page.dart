@@ -62,12 +62,12 @@ class _LoadMusicPageState extends State<LoadMusicPage>
     super.build(context);
     final musicFolderProvider = Provider.of<MusicFolderProvider>(context);
     Future<void> scanMusic() async {
-      EasyLoading.show(
-        maskType: EasyLoadingMaskType.black,
-        status: 'Đang quét nhạc...',
-        dismissOnTap: false,
-      );
-      if (await _permissionService.requestStoragePermissionAsync()) {
+      if (await _permissionService.requestStoragePermissionAsync(context)) {
+        EasyLoading.show(
+          maskType: EasyLoadingMaskType.black,
+          status: 'Đang quét nhạc...',
+          dismissOnTap: false,
+        );
         var list = await _musicService.scanMusicAsync(
           onCompleted: (totalNewFile, totalDeletedFile) {
             ToastService.showSuccess(
@@ -89,7 +89,9 @@ class _LoadMusicPageState extends State<LoadMusicPage>
           _musicFolders = list;
         });
       } else {
-        logDebug("Permission Denied");
+        ToastService.showError(
+          'Không có quyền truy cập bộ nhớ để quét nhạc. Vui lòng cấp quyền "Quản lý tất cả tệp"',
+        );
       }
       EasyLoading.dismiss();
     }

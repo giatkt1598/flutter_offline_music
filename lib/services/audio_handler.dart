@@ -11,7 +11,6 @@ import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:toastification/toastification.dart';
 
 class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
@@ -547,9 +546,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   static Future<AppAudioHandler> createInstance() async {
     WidgetsFlutterBinding.ensureInitialized();
-    if (await Permission.notification.isDenied) {
-      await Permission.notification.request();
-    }
+
     instance = await AudioService.init(
       builder: () => AppAudioHandler(),
       config: const AudioServiceConfig(

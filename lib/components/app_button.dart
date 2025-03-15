@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/utilities/theme_helper.dart';
 
 enum AppButtonType { primary, secondary }
 
@@ -30,8 +31,14 @@ class AppButton extends StatelessWidget {
         : ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-            foregroundColor: Theme.of(context).textTheme.bodyMedium!.color,
+            backgroundColor:
+                isDarkMode()
+                    ? Theme.of(context).colorScheme.primaryContainer
+                    : Theme.of(context).colorScheme.primary,
+            foregroundColor:
+                isDarkMode()
+                    ? Theme.of(context).textTheme.bodyMedium!.color
+                    : Colors.white,
             shadowColor: Colors.transparent,
           ),
           child: child,

@@ -4,6 +4,7 @@ import 'package:flutter_offline_music/components/mini_player.dart';
 import 'package:flutter_offline_music/pages/search_page.dart';
 import 'package:flutter_offline_music/pages/setting_page.dart';
 import 'package:flutter_offline_music/providers/tab_provider.dart';
+import 'package:flutter_offline_music/services/permission_service.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:flutter_offline_music/utilities/app_background_helper.dart';
 import 'package:flutter_offline_music/utilities/theme_helper.dart';
@@ -18,9 +19,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   bool initMiniPlayer = false;
-
   @override
   void initState() {
+    Future.delayed(Duration(seconds: 2)).then(
+      (_) => PermissionService().requestNotificationPermissionAsync(context),
+    );
     super.initState();
     final tabProvider = Provider.of<TabProvider>(context, listen: false);
     tabProvider.initTabController(vsync: this);
