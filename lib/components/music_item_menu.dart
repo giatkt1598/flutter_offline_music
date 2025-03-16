@@ -308,6 +308,8 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                             ? 'Đã thêm vào Yêu thích'
                             : 'Đã xóa khỏi Yêu thích',
                       );
+                      //TODO: refactor
+
                       final musicInList =
                           playerProvider.musics
                               .where((x) => x.id == widget.music.id)

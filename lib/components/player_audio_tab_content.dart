@@ -102,6 +102,25 @@ class _PlayerAudioTabContentState extends State<PlayerAudioTabContent>
                     onDoubleTap: () {
                       music.isFavorite = !music.isFavorite;
                       musicService.updateMusicAsync(music);
+
+                      //TODO: refactor
+                      final musicInList =
+                          playerProvider.musics
+                              .where((x) => x.id == music.id)
+                              .firstOrNull;
+
+                      if (musicInList != null) {
+                        musicInList.isFavorite = music.isFavorite;
+                      }
+
+                      final musicInPlaylist =
+                          playerProvider.audioHandler.musics
+                              .where((x) => x.id == music.id)
+                              .firstOrNull;
+                      if (musicInPlaylist != null) {
+                        musicInPlaylist.isFavorite = music.isFavorite;
+                        playerProvider.notifyChanges();
+                      }
                     },
                     child: Container(
                       color: Colors.transparent,
