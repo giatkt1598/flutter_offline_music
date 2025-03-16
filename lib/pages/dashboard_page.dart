@@ -184,7 +184,12 @@ class _DashboardPageState extends State<DashboardPage>
                         },
               ),
               for (var music in _recentMusics)
-                MusicListItem(music: music, afterHideItem: () => fetchData()),
+                MusicListItem(
+                  music: music,
+                  afterHideItem: () => fetchData(),
+                  afterToggleFavorite: () => fetchData(),
+                  onPop: () => fetchData(),
+                ),
               if (_recentMusics.isEmpty) MusicListEmpty(),
             ],
           ),

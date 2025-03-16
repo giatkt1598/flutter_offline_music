@@ -24,6 +24,7 @@ class MusicListItem extends StatelessWidget {
     this.menuType = MusicMenuType.inMusicList,
     this.showMiniPlayer = true,
     this.afterToggleFavorite,
+    this.onPop,
   });
 
   final Music music;
@@ -40,6 +41,7 @@ class MusicListItem extends StatelessWidget {
   final Color? tileColor;
   final MusicMenuType menuType;
   final bool showMiniPlayer;
+  final Function? onPop;
   @override
   Widget build(BuildContext context) {
     final playerProvider = Provider.of<PlayerProvider>(context);
@@ -79,7 +81,13 @@ class MusicListItem extends StatelessWidget {
                 : null),
         onTap:
             onTap ??
-            () => playerProvider.openAudioPlayerPage(context, music: music),
+            () => {
+              playerProvider.openAudioPlayerPage(context, music: music).then((
+                _,
+              ) {
+                if (onPop != null) onPop!();
+              }),
+            },
         leading:
             leading ??
             Opacity(
