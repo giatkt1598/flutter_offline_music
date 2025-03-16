@@ -97,7 +97,7 @@ class _PlayerPlaylistTabContentState extends State<PlayerPlaylistTabContent>
                   if (isConfirm == true) {
                     Navigator.of(context).pop(true);
                     audioHandler.stop().then((_) {
-                      audioHandler.setPlaylist([]);
+                      audioHandler.setPlaylistFromMusics([]);
                     });
                   }
                 });

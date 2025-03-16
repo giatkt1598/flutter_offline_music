@@ -25,10 +25,8 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   List<MediaItem> _originPlaylist = [];
   MediaItem? _currentMediaItem;
   String? playingMediaItemId;
-  Music? get currentMusic =>
-      _currentMediaItem != null
-          ? _musics.where((x) => x.path == _currentMediaItem!.id).firstOrNull
-          : null;
+  Music? _currentMusic;
+  Music? get currentMusic => _currentMusic;
 
   StreamSubscription<Duration>? _positionSubscription;
   final _musicService = MusicService();
@@ -96,7 +94,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     }
 
     if (_player.audioSource == null) {
-      await setPlaylist([item]);
+      await _setPlaylist([item]);
       notifyListeners();
       return true;
     } else {
@@ -196,7 +194,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       if (!File(mediaItem.id).existsSync()) {
         ToastService.showError('Không tìm thấy tệp "${mediaItem.id}"');
         final mediaIndex = _playlist.indexWhere((x) => x.id == mediaItem.id);
-        await setPlaylist(
+        await _setPlaylist(
           _playlist.where((x) => x.id != mediaItem.id).toList(),
         );
         if (mediaIndex < _playlist.length) {
@@ -234,6 +232,9 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   Future<void> playMusic(Music music) async {
     MediaItem item = music.toMediaItem();
+    if (!_musics.any((x) => x.id == music.id)) {
+      _musics.add(music);
+    }
     await playMediaItem(item);
   }
 
@@ -257,10 +258,10 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   Future<void> setPlaylistFromMusics(List<Music> musics) async {
     _musics.clear();
     _musics.addAll(musics);
-    await setPlaylist(musics.map((x) => x.toMediaItem()).toList());
+    await _setPlaylist(musics.map((x) => x.toMediaItem()).toList());
   }
 
-  Future<void> setPlaylist(List<MediaItem> playlist) async {
+  Future<void> _setPlaylist(List<MediaItem> playlist) async {
     _playlist.clear();
     _playlist.addAll(playlist);
     _originPlaylist = [...playlist];
@@ -287,6 +288,8 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       final music = allMusics.where((x) => x.path == item.id).firstOrNull;
       _playlist[_playlist.indexOf(item)] = _playlist[_playlist.indexOf(item)]
           .copyWith(artUri: music?.toMediaItem().artUri);
+      _musics.where((x) => x.path == item.id).firstOrNull?.thumbnail =
+          music?.thumbnail;
     }
     // notifyListeners();
   }
@@ -511,6 +514,10 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   Future<void> _setCurrentMediaItem(MediaItem? mediaItem) async {
     _currentMediaItem = mediaItem;
+    _currentMusic =
+        _currentMediaItem != null
+            ? _musics.where((x) => x.path == _currentMediaItem!.id).firstOrNull
+            : null;
     this.mediaItem.add(_currentMediaItem?.copyWith(extras: null));
   }
 

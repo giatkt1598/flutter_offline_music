@@ -96,7 +96,7 @@ class _PlayerPageState extends State<PlayerPage> with TickerProviderStateMixin {
                 children: [
                   SizedBox(height: SharedData.statusBarHeight),
                   PlayerHeader(
-                    music: widget.music,
+                    music: music,
                     playerTab:
                         tabIndex == 0 ? PlayerTab.playlist : PlayerTab.audio,
                   ),

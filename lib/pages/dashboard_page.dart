@@ -109,7 +109,7 @@ class _DashboardPageState extends State<DashboardPage>
 
       await audioHandler.stop();
       await audioHandler.player.setShuffleModeEnabled(true);
-      await audioHandler.setPlaylist([]);
+      await audioHandler.setPlaylistFromMusics([]);
       await audioHandler.setPlaylistFromMusics(musics);
       await audioHandler.playMediaItem(audioHandler.playlist.first);
       playerProvider.showMiniPlayer();

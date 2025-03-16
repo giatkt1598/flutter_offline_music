@@ -13,7 +13,7 @@ class MusicListControllerGroup extends StatelessWidget {
     Future<void> playNow({bool isShuffle = false}) async {
       await audioHandler.stop();
       await audioHandler.player.setShuffleModeEnabled(isShuffle);
-      await audioHandler.setPlaylist([]);
+      await audioHandler.setPlaylistFromMusics([]);
       await audioHandler.setPlaylistFromMusics(musics);
       await audioHandler.playMediaItem(audioHandler.playlist.first);
       playerProvider.showMiniPlayer();
