@@ -316,8 +316,14 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                       if (musicInList != null) {
                         musicInList.isFavorite = widget.music.isFavorite;
                       }
-                      if (isCurrent) {
-                        playerProvider.setCurrentMusic(widget.music);
+
+                      final musicInPlaylist =
+                          playerProvider.audioHandler.musics
+                              .where((x) => x.id == widget.music.id)
+                              .firstOrNull;
+                      if (musicInPlaylist != null) {
+                        musicInPlaylist.isFavorite = widget.music.isFavorite;
+                        playerProvider.notifyChanges();
                       }
 
                       if (widget.afterToggleFavorite != null) {

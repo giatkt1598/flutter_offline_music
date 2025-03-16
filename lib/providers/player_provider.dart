@@ -12,12 +12,6 @@ class PlayerProvider extends ChangeNotifier {
   AppAudioHandler get audioHandler => AppAudioHandler.instance;
   List<Music> musics = [];
   int? currentLibraryId;
-  Music? _currentMusic;
-  Music? get currentMusic => _currentMusic;
-  setCurrentMusic(Music? music) {
-    _currentMusic = music;
-    notifyListeners();
-  }
 
   void hideMiniPlayer() {
     isShowMiniPlayer = false;
@@ -31,6 +25,10 @@ class PlayerProvider extends ChangeNotifier {
 
   Future<void> setMusics(List<Music> musics) async {
     this.musics = musics;
+    notifyListeners();
+  }
+
+  void notifyChanges() {
     notifyListeners();
   }
 
@@ -77,12 +75,5 @@ class PlayerProvider extends ChangeNotifier {
     // if (isSkipSilent) {
     //   await musicService.fetchSkipSilentDurations();
     // }
-
-    audioHandler.player.currentIndexStream.listen((index) {
-      if (index == null) return;
-      musicService
-          .getMusicAsync(path: audioHandler.playlist[index].id)
-          .then((value) => setCurrentMusic(value));
-    });
   }
 }

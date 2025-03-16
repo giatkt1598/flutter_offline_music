@@ -20,10 +20,15 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   DateTime? _stopTime;
   Timer? _timerStop;
   final List<MediaItem> _playlist = [];
-
+  final List<Music> _musics = [];
+  List<Music> get musics => _musics;
   List<MediaItem> _originPlaylist = [];
   MediaItem? _currentMediaItem;
   String? playingMediaItemId;
+  Music? get currentMusic =>
+      _currentMediaItem != null
+          ? _musics.where((x) => x.path == _currentMediaItem!.id).firstOrNull
+          : null;
 
   StreamSubscription<Duration>? _positionSubscription;
   final _musicService = MusicService();
@@ -250,6 +255,8 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   }
 
   Future<void> setPlaylistFromMusics(List<Music> musics) async {
+    _musics.clear();
+    _musics.addAll(musics);
     await setPlaylist(musics.map((x) => x.toMediaItem()).toList());
   }
 
@@ -283,7 +290,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
             .copyWith(artUri: music!.toMediaItem().artUri);
       }
     }
-    notifyListeners();
+    // notifyListeners();
   }
 
   Future<void> setShuffle(bool isShuffle) async {
@@ -412,7 +419,11 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
       final currentMediaItem = _findMediaItem(index);
       playingMediaItemId = currentMediaItem?.id;
+      bool isNullCurrent = _currentMediaItem == null;
       _setCurrentMediaItem(currentMediaItem);
+      if (!isNullCurrent) {
+        notifyListeners();
+      }
       if (currentMediaItem?.id.isNotEmpty == true) {
         _musicService.updateMusicPlayedLastTime(currentMediaItem!.id);
       }

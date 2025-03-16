@@ -72,7 +72,7 @@ class _PlayerAudioTabContentState extends State<PlayerAudioTabContent>
         audioHandler.playingMediaItemId == audioHandler.currentMediaItem?.id
             ? position
             : Duration.zero;
-    final music = playerProvider.currentMusic;
+    final music = audioHandler.currentMusic ?? widget.music;
     return DefaultTextStyle(
       style: TextStyle(color: Colors.white),
       child: IconTheme(
@@ -100,18 +100,15 @@ class _PlayerAudioTabContentState extends State<PlayerAudioTabContent>
                 Expanded(
                   child: GestureDetector(
                     onDoubleTap: () {
-                      widget.music.isFavorite = !widget.music.isFavorite;
-                      musicService.updateMusicAsync(widget.music);
-                      playerProvider.setCurrentMusic(widget.music);
+                      music.isFavorite = !music.isFavorite;
+                      musicService.updateMusicAsync(music);
                     },
                     child: Container(
                       color: Colors.transparent,
                       child: Stack(
                         children: [
-                          Center(
-                            child: MusicDiscIllustrator(music: widget.music),
-                          ),
-                          if (music?.isFavorite == true)
+                          Center(child: MusicDiscIllustrator(music: music)),
+                          if (music.isFavorite == true)
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(

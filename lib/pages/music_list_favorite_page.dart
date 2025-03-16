@@ -42,10 +42,12 @@ class _MusicListFavoritePageState extends State<MusicListFavoritePage> {
                   m.isFavorite = false;
                 }
                 await musicService.unfavoriteAllMusicAsync();
-                playerProvider.setMusics(playerProvider.musics);
-                if (playerProvider.currentMusic != null) {
-                  playerProvider.currentMusic!.isFavorite = false;
-                  playerProvider.setCurrentMusic(playerProvider.currentMusic);
+                if (playerProvider.musics.isNotEmpty) {
+                  playerProvider.setMusics(playerProvider.musics);
+                  for (var m in playerProvider.audioHandler.musics) {
+                    m.isFavorite = false;
+                  }
+                  playerProvider.notifyChanges();
                 }
 
                 ToastService.showSuccess(
@@ -77,7 +79,7 @@ class _MusicListFavoritePageState extends State<MusicListFavoritePage> {
             return Center(child: CircularProgressIndicator());
           }
 
-          playerProvider.setMusics(snapshot.data!);
+          playerProvider.musics = snapshot.data!;
           final musics = playerProvider.musics;
 
           return Column(
