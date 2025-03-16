@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/button_card.dart';
@@ -29,11 +31,33 @@ class _DashboardPageState extends State<DashboardPage>
   List<Music> _recentMusics = [];
   List<Music> _newestMusics = [];
   List<Music> _topPlayedCountMusics = [];
+  StreamSubscription<int?>? playingChangeSubscription;
   final _musicService = MusicService();
   @override
   void initState() {
-    fetchData();
+    fetchData().then((_) {
+      final playerProvider = Provider.of<PlayerProvider>(
+        context,
+        listen: false,
+      );
+
+      playingChangeSubscription ??= playerProvider
+          .audioHandler
+          .player
+          .currentIndexStream
+          .listen((index) {
+            if (index != null) {
+              fetchData();
+            }
+          });
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    playingChangeSubscription?.cancel();
+    super.dispose();
   }
 
   Future<void> fetchData() async {
