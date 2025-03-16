@@ -278,17 +278,15 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       await setShuffle(true);
     }
 
-    addThumbnailToPlaylistItems();
+    updateThumbnailToPlaylistItems();
   }
 
-  Future<void> addThumbnailToPlaylistItems() async {
-    var musics = await _musicService.getListMusicAsync();
+  Future<void> updateThumbnailToPlaylistItems() async {
+    var allMusics = await _musicService.getListMusicAsync();
     for (var item in _playlist) {
-      final music = musics.where((x) => x.path == item.id).firstOrNull;
-      if (music?.thumbnail != null) {
-        _playlist[_playlist.indexOf(item)] = _playlist[_playlist.indexOf(item)]
-            .copyWith(artUri: music!.toMediaItem().artUri);
-      }
+      final music = allMusics.where((x) => x.path == item.id).firstOrNull;
+      _playlist[_playlist.indexOf(item)] = _playlist[_playlist.indexOf(item)]
+          .copyWith(artUri: music?.toMediaItem().artUri);
     }
     // notifyListeners();
   }

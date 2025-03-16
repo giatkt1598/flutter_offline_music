@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/create_edit_library_dialog.dart';
+import 'package:flutter_offline_music/components/download_all_music_thumbnail_from_youtube.dart';
 import 'package:flutter_offline_music/components/library_thumbnail.dart';
 import 'package:flutter_offline_music/components/music_list_simple_info.dart';
 import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
@@ -45,6 +46,17 @@ class LibraryListItemMenu extends StatelessWidget {
       ToastService.showSuccess('Đã xóa thư viện "${library.title}"');
       Navigator.of(context).pop();
       onRefresh();
+    }
+
+    Future<void> getThumbnails(BuildContext context) async {
+      Navigator.pop(context);
+      await showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return DownloadAllMusicThumbnailFromYoutube(musics: library.musics);
+        },
+      );
     }
 
     return SizedBox(
@@ -100,6 +112,11 @@ class LibraryListItemMenu extends StatelessWidget {
             onTap: null,
             leading: Icon(Icons.sort_rounded),
             title: Text('Sắp xếp bài hát'),
+          ),
+          ListTile(
+            onTap: () => getThumbnails(context),
+            leading: Icon(Icons.image),
+            title: Text('Tải thumbnail cho tất cả bài hát từ Youtube'),
           ),
           ListTile(
             onTap: () => deleteLibrary(context),

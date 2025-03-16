@@ -48,7 +48,7 @@ class MusicListItemCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               MusicThumbnail(
-                musicPath: music.path,
+                thumbnailPath: music.thumbnail,
                 boxShape: BoxShape.circle,
                 size: 90,
                 fallbackWidget: CircleAvatar(

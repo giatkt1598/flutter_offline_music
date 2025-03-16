@@ -28,6 +28,7 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage>
     with TabProviderListenerMixin, AutomaticKeepAliveClientMixin {
+  List<Music> _allMusics = [];
   List<Music> _recentMusics = [];
   List<Music> _newestMusics = [];
   List<Music> _topPlayedCountMusics = [];
@@ -61,18 +62,17 @@ class _DashboardPageState extends State<DashboardPage>
   }
 
   Future<void> fetchData() async {
-    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
-    var allMusics = await _musicService.getListMusicAsync();
+    _allMusics = await _musicService.getListMusicAsync();
     setState(() {
       _recentMusics =
-          allMusics
+          _allMusics
               .where((x) => x.playedLastTime != null)
               .orderByDescending((x) => x.playedLastTime!)
               .take(3)
               .toList();
 
       _newestMusics =
-          allMusics
+          _allMusics
               .where(
                 (x) =>
                     DateTime.now().difference(x.creationTime) <
@@ -83,14 +83,12 @@ class _DashboardPageState extends State<DashboardPage>
               .toList();
 
       _topPlayedCountMusics =
-          allMusics
+          _allMusics
               .where((x) => x.playedCount > 0)
               .orderByDescending((x) => x.playedCount)
               .take(10)
               .toList();
     });
-
-    playerProvider.setMusics(allMusics); //TODO: workaround
   }
 
   @override
@@ -99,7 +97,7 @@ class _DashboardPageState extends State<DashboardPage>
     final playerProvider = Provider.of<PlayerProvider>(context);
     final audioHandler = playerProvider.audioHandler;
     playNow() async {
-      var musics = playerProvider.musics;
+      var musics = _allMusics;
       if (musics.isEmpty) {
         musics = await _musicService.getListMusicAsync();
       }

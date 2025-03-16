@@ -162,7 +162,7 @@ class _PlayerPlaylistTabContentState extends State<PlayerPlaylistTabContent>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.sort, color: Colors.white),
-                        MusicThumbnail(musicPath: music.path),
+                        MusicThumbnail(thumbnailPath: music.thumbnail),
                       ],
                     ),
                   ),

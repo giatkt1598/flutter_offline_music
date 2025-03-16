@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:provider/provider.dart';
 
 class MusicListControllerGroup extends StatelessWidget {
-  const MusicListControllerGroup({super.key, required this.musics});
-  final List<Music> musics;
+  const MusicListControllerGroup({super.key});
 
   @override
   Widget build(BuildContext context) {
     final playerProvider = Provider.of<PlayerProvider>(context);
     final audioHandler = playerProvider.audioHandler;
-
+    final musics = playerProvider.musics;
     Future<void> playNow({bool isShuffle = false}) async {
       await audioHandler.stop();
       await audioHandler.player.setShuffleModeEnabled(isShuffle);

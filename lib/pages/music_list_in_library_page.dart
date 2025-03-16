@@ -72,7 +72,7 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
                     ),
                   ],
                 ),
-                MusicListControllerGroup(musics: musics),
+                MusicListControllerGroup(),
               ],
             ),
           ),

@@ -146,7 +146,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
                       child:
                           hasThumbnail
                               ? MusicThumbnail(
-                                musicPath: mediaItem.id,
+                                thumbnailPath: mediaItem.artUri?.toFilePath(),
                                 size: 50,
                                 boxShape: BoxShape.rectangle,
                               )

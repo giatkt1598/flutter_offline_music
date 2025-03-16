@@ -88,7 +88,7 @@ class _MusicListFavoritePageState extends State<MusicListFavoritePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: MusicListSimpleInfo(musics: musics),
               ),
-              MusicListControllerGroup(musics: musics),
+              MusicListControllerGroup(),
               if (musics.isEmpty)
                 Expanded(child: NoData(title: 'Danh sách trống!')),
               Expanded(

@@ -207,7 +207,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
               SizedBox(height: 8),
               ListTile(
                 leading: MusicThumbnail(
-                  musicPath: widget.music.path,
+                  thumbnailPath: widget.music.thumbnail,
                   boxShape: BoxShape.rectangle,
                 ),
                 trailing: IconButton(
@@ -416,7 +416,8 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                           ToastService.showSuccess(
                             'Đã cập nhật thumbnail cho bài hát từ youtube',
                           );
-                          audioHandler.addThumbnailToPlaylistItems();
+                          audioHandler.updateThumbnailToPlaylistItems();
+                          playerProvider.notifyChanges();
                         } else {
                           ToastService.showError(
                             'Xảy ra lỗi hoặc không tìm thấy thumbnail phù hợp',
@@ -435,7 +436,8 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                         widget.music.thumbnail = null;
                         await musicService.updateMusicAsync(widget.music);
                         ToastService.showSuccess('Đã xóa thumbnail');
-                        audioHandler.addThumbnailToPlaylistItems();
+                        audioHandler.updateThumbnailToPlaylistItems();
+                        playerProvider.notifyChanges();
                         Navigator.pop(context);
                       },
                     ),

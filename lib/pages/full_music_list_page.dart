@@ -92,7 +92,7 @@ class _FullMusicListPageState extends State<FullMusicListPage>
                   SizedBox(height: 12),
                   MusicListSimpleInfo(musics: musics!),
                   SizedBox(height: 12),
-                  MusicListControllerGroup(musics: musics!),
+                  MusicListControllerGroup(),
                   SizedBox(height: 12),
                   Row(
                     children: [

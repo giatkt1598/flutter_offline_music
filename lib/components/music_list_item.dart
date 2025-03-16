@@ -84,7 +84,7 @@ class MusicListItem extends StatelessWidget {
             leading ??
             Opacity(
               opacity: music.isHidden ? 0.3 : 1,
-              child: MusicThumbnail(musicPath: music.path),
+              child: MusicThumbnail(thumbnailPath: music.thumbnail),
             ),
         trailing:
             trailing ??

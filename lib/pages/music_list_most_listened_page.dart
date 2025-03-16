@@ -69,7 +69,9 @@ class _MusicListMostListenedPageState extends State<MusicListMostListenedPage> {
                                       ),
                                     ),
                                     Icon(Icons.headphones, size: 16),
-                                    MusicThumbnail(musicPath: music.path),
+                                    MusicThumbnail(
+                                      thumbnailPath: music.thumbnail,
+                                    ),
                                   ],
                                 ),
                               ),

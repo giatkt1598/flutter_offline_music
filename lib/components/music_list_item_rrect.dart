@@ -31,7 +31,7 @@ class MusicListItemRrect extends StatelessWidget {
                 alignment: Alignment.center,
                 children: [
                   MusicThumbnail(
-                    musicPath: music.path,
+                    thumbnailPath: music.thumbnail,
                     boxShape: BoxShape.rectangle,
                     fallbackWidget: Container(
                       padding: EdgeInsets.all(8),
