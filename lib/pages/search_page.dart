@@ -45,7 +45,7 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         title: SearchField(
           autoFocus: true,
-          onSubmitted: (value) {
+          onChanged: (value) {
             handleSearch(value);
           },
         ),

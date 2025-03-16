@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_offline_music/components/add_music_item_to_library.dart';
 import 'package:flutter_offline_music/components/app_button.dart';
 import 'package:flutter_offline_music/components/duration_picker.dart';
 import 'package:flutter_offline_music/components/music_info.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/models/music.dart';
+import 'package:flutter_offline_music/pages/music_thumbnail_select_from_youtube_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/library_service.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
@@ -397,34 +397,43 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                       Navigator.pop(context, true);
                     },
                   ),
-                  if (!widget.music.isOriginThumbnail &&
-                      widget.music.thumbnail == null)
+                  if (!widget.music.isOriginThumbnail)
                     ListMenuOption(
                       title: 'Tải thumbnail từ youtube',
                       icon: Icons.image,
                       onTap: () async {
-                        EasyLoading.show(
-                          maskType: EasyLoadingMaskType.black,
-                          status: 'Đang xử lý...',
-                          dismissOnTap: false,
-                        );
-                        var thumbUrl = await youtubeService
-                            .getVideoThumbnailAsync(widget.music.title);
-                        if (thumbUrl != null) {
-                          widget.music.thumbnail = thumbUrl;
-                          await musicService.updateMusicAsync(widget.music);
-                          ToastService.showSuccess(
-                            'Đã cập nhật thumbnail cho bài hát từ youtube',
-                          );
-                          audioHandler.updateThumbnailToPlaylistItems();
-                          playerProvider.notifyChanges();
-                        } else {
-                          ToastService.showError(
-                            'Xảy ra lỗi hoặc không tìm thấy thumbnail phù hợp',
-                          );
-                        }
-                        EasyLoading.dismiss();
+                        // EasyLoading.show(
+                        //   maskType: EasyLoadingMaskType.black,
+                        //   status: 'Đang xử lý...',
+                        //   dismissOnTap: false,
+                        // );
+                        // var thumbUrl = await youtubeService
+                        //     .getVideoThumbnailAsync(widget.music.title);
+                        // if (thumbUrl != null) {
+                        //   widget.music.thumbnail = thumbUrl;
+                        //   await musicService.updateMusicAsync(widget.music);
+                        //   ToastService.showSuccess(
+                        //     'Đã cập nhật thumbnail cho bài hát từ youtube',
+                        //   );
+                        //   audioHandler.updateThumbnailToPlaylistItems();
+                        //   playerProvider.notifyChanges();
+                        // } else {
+                        //   ToastService.showError(
+                        //     'Xảy ra lỗi hoặc không tìm thấy thumbnail phù hợp',
+                        //   );
+                        // }
+                        // EasyLoading.dismiss();
                         Navigator.pop(context);
+
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder:
+                                (context) =>
+                                    MusicThumbnailSelectFromYoutubePage(
+                                      music: widget.music,
+                                    ),
+                          ),
+                        );
                       },
                     ),
                   if (!widget.music.isOriginThumbnail &&

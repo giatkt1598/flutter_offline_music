@@ -7,46 +7,40 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 import 'package:http/http.dart' as http;
 
 class YoutubeService {
+  var yt = YoutubeExplode();
   Future<String?> getVideoThumbnailAsync(String videoName) async {
-    if (videoName.endsWith('_Audio_128k')) {
-      videoName = videoName.replaceAll('_Audio_128k', '');
-    }
-    String? videoUrl = await _searchYouTube(videoName);
-    if (videoUrl != null) {
-      String videoId = videoUrl.split("v=")[1]; // Lấy ID video từ URL
-      return await _downloadThumbnail(videoId);
-    }
-    return null;
+    VideoSearchList? videos = await searchYouTube(videoName);
+    return videos.isEmpty ? null : await downloadThumbnail(videos.first);
   }
 
-  Future<String?> _searchYouTube(String query) async {
-    var yt = YoutubeExplode();
-    var searchResults = await yt.search.search(query);
-    if (searchResults.isNotEmpty) {
-      var video = searchResults.first; // Lấy video đầu tiên
-      yt.close();
-      return video.url; // Trả về URL video
-    }
-
-    yt.close();
-    return null;
+  Future<VideoSearchList> searchYouTube(String query) async {
+    VideoSearchList result = await yt.search.search(query);
+    return result;
   }
 
-  String _getThumbnailUrl(String videoId) {
-    return "https://img.youtube.com/vi/$videoId/maxresdefault.jpg";
-  }
-
-  Future<String?> _downloadThumbnail(String videoId) async {
+  Future<String?> downloadThumbnail(Video video) async {
     try {
-      String url = _getThumbnailUrl(videoId);
-      var response = await http.get(Uri.parse(url));
+      late http.Response response;
+      List<String> thumbUrls = [
+        video.thumbnails.maxResUrl,
+        video.thumbnails.highResUrl,
+        video.thumbnails.mediumResUrl,
+        video.thumbnails.standardResUrl,
+        video.thumbnails.lowResUrl,
+      ];
+      for (var url in thumbUrls) {
+        response = await http.get(Uri.parse(url));
+        if (response.statusCode == 200) {
+          break;
+        }
+      }
 
       if (response.statusCode == 200) {
         var dir = await getApplicationDocumentsDirectory();
         String folderPath = '${dir.path}/youtube_thumbnail';
         await FileHelper.createDirectoryIfNotExists(folderPath);
 
-        File file = File('$folderPath/$videoId.jpg');
+        File file = File('$folderPath/${video.id}.jpg');
         await file.writeAsBytes(response.bodyBytes);
         return file.path;
       }

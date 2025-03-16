@@ -191,7 +191,7 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
           Padding(
             padding: const EdgeInsets.only(left: 12, right: 12, top: 4),
             child: SearchField(
-              onSubmitted: (value) {
+              onChanged: (value) {
                 setState(() {
                   keywordSearch = value;
                 });

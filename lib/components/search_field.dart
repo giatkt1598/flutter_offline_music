@@ -3,10 +3,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class SearchField extends StatefulWidget {
-  const SearchField({super.key, this.onSubmitted, this.autoFocus = false});
+  const SearchField({
+    super.key,
+    this.onChanged,
+    this.autoFocus = false,
+    this.initialValue,
+    this.onSubmitted,
+  });
 
+  final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
   final bool autoFocus;
+  final String? initialValue;
   @override
   State<SearchField> createState() => _SearchFieldState();
 }
@@ -18,16 +26,22 @@ class _SearchFieldState extends State<SearchField> {
   String lastText = "";
   bool isTyping = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _searchInputController.text = widget.initialValue ?? '';
+  }
+
   void _startTimer() {
     _timer?.cancel();
 
     _timer = Timer.periodic(_debounceDuration, (timer) {
       if ((isTyping || lastText.isNotEmpty) &&
           lastText != _searchInputController.text &&
-          widget.onSubmitted != null) {
+          widget.onChanged != null) {
         lastText = _searchInputController.text;
 
-        widget.onSubmitted!(lastText);
+        widget.onChanged!(lastText);
       }
 
       if (!isTyping) {
@@ -43,11 +57,6 @@ class _SearchFieldState extends State<SearchField> {
     if (_timer == null || !_timer!.isActive) {
       _startTimer();
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 
   @override
@@ -82,6 +91,11 @@ class _SearchFieldState extends State<SearchField> {
         ),
         filled: true,
       ),
+      onFieldSubmitted: (value) {
+        if (widget.onSubmitted != null) {
+          widget.onSubmitted!(value);
+        }
+      },
       onChanged: (value) {
         setState(() {});
         _onTextChanged(value);

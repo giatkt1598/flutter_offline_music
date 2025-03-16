@@ -288,11 +288,17 @@ ${orderBy != null ? 'ORDER BY $orderBy' : ''}
         bool isNew = !oldMusics.any((x) => x.path == musicPath);
         if (isNew) addedFileCount++;
         final metadata = readMetadata(File(musicPath));
+        String title =
+            metadata.title ??
+            fileName
+                .replaceAll('_Audio_128k', '')
+                .replaceAll(RegExp(r'^_+|_+$'), '');
+
         await insertMusicAsync(
           Music(
             id: 0,
             musicFolderId: musicFolderId,
-            title: metadata.title ?? fileName,
+            title: title,
             path: musicPath,
             artist: metadata.artist,
             genre: metadata.genres.join(', '),
