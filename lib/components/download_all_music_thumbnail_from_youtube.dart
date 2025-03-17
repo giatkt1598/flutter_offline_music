@@ -7,6 +7,7 @@ import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:flutter_offline_music/services/youtube_service.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
+import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:provider/provider.dart';
 
 class DownloadAllMusicThumbnailFromYoutube extends StatefulWidget {
@@ -58,13 +59,18 @@ class _DownloadAllMusicThumbnailFromYoutubeState
         String? thumbFilePath = await youtubeService.getVideoThumbnailAsync(
           currentMusic!.title,
         );
+
+        //Workaround to fix: ClientException: Redirect limit exceeded
+        await Future.delayed(Duration(seconds: 1));
+
         if (thumbFilePath != null) {
           currentMusic!.thumbnail = thumbFilePath;
           numSuccess++;
         } else {
           numFailed++;
         }
-      } catch (_) {
+      } catch (e) {
+        logDebug('Get thumbnail from youtube failed: $e');
         numFailed++;
       }
     }
