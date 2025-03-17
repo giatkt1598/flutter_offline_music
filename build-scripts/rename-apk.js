@@ -12,11 +12,12 @@ const getAppVersion = () => {
 
 const apkDir = path.join(import.meta.dirname, '..', 'build/app/outputs/flutter-apk');
 const apkOldPath = path.join(apkDir, 'app-release.apk');
-const apkNewPath = path.join(apkDir, `music_player_${getAppVersion()}.apk`);
+const apkNewName = `music_player_${getAppVersion()}.apk`;
+const apkNewPath = path.join(apkDir, apkNewName);
 
 if (fs.existsSync(apkOldPath)) {
     fs.renameSync(apkOldPath, apkNewPath);
-    console.log(`Apk: ${apkNewPath}`);
+    console.log(`app-release.apk is renamed to ${apkNewName}`);
     cp.execSync(`start ${apkDir}`);
 } else {
     console.error(`Not found ${apkOldPath}`);
