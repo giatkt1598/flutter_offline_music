@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/components/search_field.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
@@ -75,12 +76,17 @@ class _MusicThumbnailSelectFromYoutubePageState
     _isFullResult = false;
     _selectedVideo = null;
     EasyLoading.show(status: 'Đang tải');
-    var searchResult = await youtubeService.searchYouTube(keywords);
-    setState(() {
-      videos = searchResult;
-    });
-    EasyLoading.dismiss();
-    _isLoading = false;
+    try {
+      var searchResult = await youtubeService.searchYouTube(keywords);
+      setState(() {
+        videos = searchResult;
+      });
+    } catch (e) {
+      ToastService.showError('Xảy ra lỗi: $e');
+    } finally {
+      EasyLoading.dismiss();
+      _isLoading = false;
+    }
   }
 
   handleSave() async {
@@ -95,7 +101,7 @@ class _MusicThumbnailSelectFromYoutubePageState
       await playerProvider.audioHandler.updateThumbnailToPlaylistItems();
       playerProvider.notifyChanges();
       ToastService.showSuccess(
-        'Đã cập nhật thumbnail cho "${widget.music.title}"',
+        'Đã cập nhật ảnh bìa cho "${widget.music.title}"',
       );
     } else {
       ToastService.showError('Xảy ra lỗi, vui lòng thử lại!');
@@ -133,7 +139,8 @@ class _MusicThumbnailSelectFromYoutubePageState
                 },
               ),
             ),
-            if (videos != null)
+            if (videos?.isEmpty == true) NoData(),
+            if (videos?.isNotEmpty == true)
               Expanded(
                 child: SingleChildScrollView(
                   controller: _scrollController,
