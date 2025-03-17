@@ -7,7 +7,7 @@ const filePath = path.join(import.meta.dirname, '..', 'pubspec.yaml');
 const lines = fs.readFileSync(filePath, 'utf-8').split('\n');
 
 const verIndex = lines.findIndex(x => x.startsWith('version: '));
-let verNumber = lines[verIndex].split(' ')[1];
+const verNumber = lines[verIndex].split(' ')[1];
 const verNumArr = verNumber.split('.');
 const lastNumbers = verNumArr[2].split('+');
 verNumArr.pop();

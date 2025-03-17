@@ -15,7 +15,8 @@ const apkNewPath = path.join(apkDir, `music_player_${getAppVersion()}.apk`);
 
 if (fs.existsSync(apkOldPath)) {
     fs.renameSync(apkOldPath, apkNewPath);
-    console.log(`Apk: ${apkNewPath}`);
+    console.log(`Output Folder: ${apkDir}`);
+    console.log(`Output Apk: ${apkNewPath}`);
 } else {
     console.error(`Not found ${apkOldPath}`);
 }
