@@ -41,6 +41,7 @@ class _DashboardPageState extends State<DashboardPage>
         context,
         listen: false,
       );
+      playerProvider.setMusics(_allMusics);
 
       playingChangeSubscription ??= playerProvider
           .audioHandler
@@ -259,7 +260,14 @@ class _DashboardPageState extends State<DashboardPage>
 
   @override
   void onTabActive() {
-    Future.delayed(Duration(milliseconds: 500)).then((_) => fetchData());
+    Future.delayed(Duration(milliseconds: 500)).then((_) {
+      final playerProvider = Provider.of<PlayerProvider>(
+        context,
+        listen: false,
+      );
+      playerProvider.setMusics(_allMusics);
+      fetchData();
+    });
   }
 
   @override
