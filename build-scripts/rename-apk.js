@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import cp from 'child_process';
 
 const getAppVersion = () => {
     const filePath = path.join(import.meta.dirname, '..', 'pubspec.yaml');
@@ -15,8 +16,8 @@ const apkNewPath = path.join(apkDir, `music_player_${getAppVersion()}.apk`);
 
 if (fs.existsSync(apkOldPath)) {
     fs.renameSync(apkOldPath, apkNewPath);
-    console.log(`Output Folder: ${apkDir}`);
-    console.log(`Output Apk: ${apkNewPath}`);
+    console.log(`Apk: ${apkNewPath}`);
+    cp.execSync(`start ${apkDir}`);
 } else {
     console.error(`Not found ${apkOldPath}`);
 }
