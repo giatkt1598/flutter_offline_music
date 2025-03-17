@@ -24,8 +24,9 @@ class PlayerPlaylistTabContent extends StatefulWidget {
 class _PlayerPlaylistTabContentState extends State<PlayerPlaylistTabContent>
     with AutomaticKeepAliveClientMixin {
   final _musicService = MusicService();
-  final _scrollController = ScrollController(keepScrollOffset: true);
+  final _scrollController = ScrollController();
   List<Music> musics = [];
+  final _firstItemKey = GlobalKey(); // use for finding height of item to scroll
   @override
   void initState() {
     fetchData().then((_) {
@@ -57,7 +58,7 @@ class _PlayerPlaylistTabContentState extends State<PlayerPlaylistTabContent>
   }
 
   void jumpToIndex(int index) {
-    double itemHeight = 60;
+    double itemHeight = _firstItemKey.currentContext?.size?.height ?? 60;
     double offset = max(
       index * itemHeight - itemHeight * 2 + itemHeight / 2,
       0,
@@ -154,7 +155,7 @@ class _PlayerPlaylistTabContentState extends State<PlayerPlaylistTabContent>
 
               final isCurrent = audioHandler.currentMediaItem?.id == music.path;
               return Container(
-                key: ValueKey(music.path),
+                key: index == 0 ? _firstItemKey : ValueKey(music.path),
                 color:
                     isCurrent
                         ? Theme.of(
