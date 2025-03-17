@@ -108,7 +108,7 @@ class _MusicThumbnailSelectFromYoutubePageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Đổi thumbnail'),
+        title: Text('Đổi ảnh bìa'),
         actions: [
           TextButton(
             onPressed: _selectedVideo != null ? handleSave : null,
@@ -139,6 +139,21 @@ class _MusicThumbnailSelectFromYoutubePageState
                   controller: _scrollController,
                   child: Column(
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Opacity(
+                          opacity: 0.6,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                'Ảnh cung cấp bởi Youtube',
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       StaggeredGrid.count(
                         crossAxisCount: 2,
                         crossAxisSpacing: 4,

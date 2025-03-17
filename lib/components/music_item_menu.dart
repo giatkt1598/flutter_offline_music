@@ -296,6 +296,8 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                         widget.music.isFavorite
                             ? Icons.heart_broken_outlined
                             : Icons.favorite,
+                    iconColor:
+                        widget.music.isFavorite ? null : Colors.pinkAccent,
                     title:
                         widget.music.isFavorite
                             ? 'Xóa khỏi Yêu thích'
@@ -385,6 +387,59 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                     },
                   ),
                   ListMenuOption(
+                    title: 'Đổi ảnh bìa',
+                    icon: Icons.image,
+                    onTap: () async {
+                      // EasyLoading.show(
+                      //   maskType: EasyLoadingMaskType.black,
+                      //   status: 'Đang xử lý...',
+                      //   dismissOnTap: false,
+                      // );
+                      // var thumbUrl = await youtubeService
+                      //     .getVideoThumbnailAsync(widget.music.title);
+                      // if (thumbUrl != null) {
+                      //   widget.music.thumbnail = thumbUrl;
+                      //   await musicService.updateMusicAsync(widget.music);
+                      //   ToastService.showSuccess(
+                      //     'Đã cập nhật thumbnail cho bài hát từ youtube',
+                      //   );
+                      //   audioHandler.updateThumbnailToPlaylistItems();
+                      //   playerProvider.notifyChanges();
+                      // } else {
+                      //   ToastService.showError(
+                      //     'Xảy ra lỗi hoặc không tìm thấy thumbnail phù hợp',
+                      //   );
+                      // }
+                      // EasyLoading.dismiss();
+                      Navigator.pop(context);
+
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder:
+                              (context) => MusicThumbnailSelectFromYoutubePage(
+                                music: widget.music,
+                              ),
+                        ),
+                      );
+                    },
+                  ),
+                  Opacity(opacity: .3, child: Divider()),
+                  if (widget.music.thumbnail != null)
+                    ListMenuOption(
+                      title: 'Xóa ảnh bìa',
+                      icon: Icons.image_not_supported,
+                      onTap: () async {
+                        widget.music.thumbnail = null;
+                        await musicService.updateMusicAsync(widget.music);
+                        ToastService.showSuccess(
+                          'Đã xóa ảnh bìa "${widget.music.title}"',
+                        );
+                        audioHandler.updateThumbnailToPlaylistItems();
+                        playerProvider.notifyChanges();
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ListMenuOption(
                     icon:
                         widget.music.isHidden
                             ? Icons.visibility
@@ -399,60 +454,6 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                       Navigator.pop(context, true);
                     },
                   ),
-                  if (!widget.music.isOriginThumbnail)
-                    ListMenuOption(
-                      title: 'Tải thumbnail từ youtube',
-                      icon: Icons.image,
-                      onTap: () async {
-                        // EasyLoading.show(
-                        //   maskType: EasyLoadingMaskType.black,
-                        //   status: 'Đang xử lý...',
-                        //   dismissOnTap: false,
-                        // );
-                        // var thumbUrl = await youtubeService
-                        //     .getVideoThumbnailAsync(widget.music.title);
-                        // if (thumbUrl != null) {
-                        //   widget.music.thumbnail = thumbUrl;
-                        //   await musicService.updateMusicAsync(widget.music);
-                        //   ToastService.showSuccess(
-                        //     'Đã cập nhật thumbnail cho bài hát từ youtube',
-                        //   );
-                        //   audioHandler.updateThumbnailToPlaylistItems();
-                        //   playerProvider.notifyChanges();
-                        // } else {
-                        //   ToastService.showError(
-                        //     'Xảy ra lỗi hoặc không tìm thấy thumbnail phù hợp',
-                        //   );
-                        // }
-                        // EasyLoading.dismiss();
-                        Navigator.pop(context);
-
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder:
-                                (context) =>
-                                    MusicThumbnailSelectFromYoutubePage(
-                                      music: widget.music,
-                                    ),
-                          ),
-                        );
-                      },
-                    ),
-                  if (!widget.music.isOriginThumbnail &&
-                      widget.music.thumbnail != null)
-                    ListMenuOption(
-                      title: 'Xóa thumbnail đã tải',
-                      icon: Icons.image_not_supported,
-                      onTap: () async {
-                        widget.music.thumbnail = null;
-                        await musicService.updateMusicAsync(widget.music);
-                        ToastService.showSuccess('Đã xóa thumbnail');
-                        audioHandler.updateThumbnailToPlaylistItems();
-                        playerProvider.notifyChanges();
-                        Navigator.pop(context);
-                      },
-                    ),
-                  Opacity(opacity: .3, child: Divider()),
                   ListMenuOption(
                     icon: Icons.delete_forever,
                     title: 'Xóa khỏi thiết bị',

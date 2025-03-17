@@ -116,7 +116,7 @@ class LibraryListItemMenu extends StatelessWidget {
           ListTile(
             onTap: () => getThumbnails(context),
             leading: Icon(Icons.image),
-            title: Text('Tải thumbnail cho tất cả bài hát từ Youtube'),
+            title: Text('Tải ảnh bìa cho tất cả bài hát'),
           ),
           ListTile(
             onTap: () => deleteLibrary(context),

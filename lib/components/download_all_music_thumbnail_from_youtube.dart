@@ -26,7 +26,7 @@ class _DownloadAllMusicThumbnailFromYoutubeState
   Music? currentMusic;
   int numSuccess = 0;
   int numFailed = 0;
-  late List<Music> musics;
+  final List<Music> musics = [];
 
   @override
   void initState() {
@@ -35,9 +35,11 @@ class _DownloadAllMusicThumbnailFromYoutubeState
   }
 
   Future downloadThumbnails() async {
-    musics = await musicService.getListMusicAsync();
-    musics =
-        musics.where((x) => widget.musics.any((p) => x.id == p.id)).toList();
+    musics.clear();
+    final allMusics = await musicService.getListMusicAsync();
+    for (var m in widget.musics) {
+      musics.add(allMusics.firstWhere((x) => x.id == m.id));
+    }
     numHasThumbnail = musics.where((x) => x.thumbnail != null).length;
 
     if (musics.isEmpty) return;
@@ -52,16 +54,21 @@ class _DownloadAllMusicThumbnailFromYoutubeState
         currentMusic = musics[i];
       });
 
-      final thumb = await youtubeService.getVideoThumbnailAsync(
-        currentMusic!.title,
-      );
-      if (thumb != null) {
-        currentMusic!.thumbnail = thumb;
-        numSuccess++;
-      } else {
+      try {
+        String? thumbFilePath = await youtubeService.getVideoThumbnailAsync(
+          currentMusic!.title,
+        );
+        if (thumbFilePath != null) {
+          currentMusic!.thumbnail = thumbFilePath;
+          numSuccess++;
+        } else {
+          numFailed++;
+        }
+      } catch (_) {
         numFailed++;
       }
     }
+
     setState(() {
       currentMusic = null;
       progress = 1;
@@ -93,7 +100,7 @@ class _DownloadAllMusicThumbnailFromYoutubeState
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        'Tải thumbnail từ Youtube',
+        'Tải ảnh bìa từ Youtube',
         style: Theme.of(context).textTheme.titleMedium,
       ),
       content: SizedBox(
@@ -166,7 +173,7 @@ class _DownloadAllMusicThumbnailFromYoutubeState
         ),
         AppButton(
           type: AppButtonType.primary,
-          onPressed: progress < 1 ? null : handleSave,
+          onPressed: progress < 1 || numSuccess == 0 ? null : handleSave,
           child: Text('Lưu'),
         ),
       ],

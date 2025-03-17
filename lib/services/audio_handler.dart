@@ -425,9 +425,6 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       if (!isNullCurrent) {
         notifyListeners();
       }
-      if (currentMediaItem?.id.isNotEmpty == true) {
-        _musicService.updateMusicPlayedLastTime(currentMediaItem!.id);
-      }
     });
 
     _player.processingStateStream.listen((state) {
@@ -519,6 +516,10 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
             ? _musics.where((x) => x.path == _currentMediaItem!.id).firstOrNull
             : null;
     this.mediaItem.add(_currentMediaItem?.copyWith(extras: null));
+
+    if (mediaItem != null) {
+      await _musicService.updateMusicPlayedLastTime(mediaItem.id);
+    }
   }
 
   static Future<AppAudioHandler> createInstance() async {

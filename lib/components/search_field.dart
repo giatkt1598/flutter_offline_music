@@ -9,12 +9,14 @@ class SearchField extends StatefulWidget {
     this.autoFocus = false,
     this.initialValue,
     this.onSubmitted,
+    this.hintText = 'Tìm kiếm',
   });
 
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
   final bool autoFocus;
   final String? initialValue;
+  final String hintText;
   @override
   State<SearchField> createState() => _SearchFieldState();
 }
@@ -82,7 +84,7 @@ class _SearchFieldState extends State<SearchField> {
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(999),
         ),
-        hintText: 'Tìm kiếm',
+        hintText: widget.hintText,
         contentPadding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
         fillColor: Color.lerp(
           Theme.of(context).cardColor,
