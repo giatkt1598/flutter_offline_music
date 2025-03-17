@@ -13,15 +13,14 @@ import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:provider/provider.dart';
 
-class PlayerPlaylistTabContent extends StatefulWidget {
-  const PlayerPlaylistTabContent({super.key});
+class MusicPlaylist extends StatefulWidget {
+  const MusicPlaylist({super.key});
 
   @override
-  State<PlayerPlaylistTabContent> createState() =>
-      _PlayerPlaylistTabContentState();
+  State<MusicPlaylist> createState() => _MusicPlaylistState();
 }
 
-class _PlayerPlaylistTabContentState extends State<PlayerPlaylistTabContent>
+class _MusicPlaylistState extends State<MusicPlaylist>
     with AutomaticKeepAliveClientMixin {
   final _musicService = MusicService();
   final _scrollController = ScrollController();

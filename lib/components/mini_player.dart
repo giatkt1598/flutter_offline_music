@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/auto_scroll_text.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/components/rotating_disc.dart';
-import 'package:flutter_offline_music/pages/player_page.dart';
+import 'package:flutter_offline_music/pages/player_pages/player_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';

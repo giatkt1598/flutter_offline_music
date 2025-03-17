@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/models/music.dart';
-import 'package:flutter_offline_music/pages/player_page.dart';
+import 'package:flutter_offline_music/pages/player_pages/player_page.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/services/audio_handler.dart';
 import 'package:flutter_offline_music/services/music_service.dart';

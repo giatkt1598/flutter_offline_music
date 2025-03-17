@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/models/music.dart';
-import 'package:flutter_offline_music/pages/player_page.dart';
+import 'package:flutter_offline_music/pages/player_pages/player_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:provider/provider.dart';
 

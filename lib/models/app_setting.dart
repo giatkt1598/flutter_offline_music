@@ -8,6 +8,7 @@ class AppSetting {
   String languageCode = 'vi';
   String playerBackgroundImage = '';
   double backgroundBlurValue; // Value from 0 -> 1.0
+  String playerTheme;
 
   AppSetting({
     this.themeMode = ThemeMode.system,
@@ -17,6 +18,7 @@ class AppSetting {
     this.languageCode = 'vi',
     this.playerBackgroundImage = '',
     this.backgroundBlurValue = 1.0,
+    this.playerTheme = 'default',
   });
 
   Map<String, dynamic> toJson() {
@@ -28,6 +30,7 @@ class AppSetting {
       'languageCode': languageCode,
       'playerBackgroundImage': playerBackgroundImage,
       'backgroundBlurValue': backgroundBlurValue,
+      'playerTheme': playerTheme,
     };
   }
 
@@ -40,6 +43,7 @@ class AppSetting {
       languageCode: json['languageCode'],
       playerBackgroundImage: json['playerBackgroundImage'],
       backgroundBlurValue: json['backgroundBlurValue'],
+      playerTheme: json['playerTheme'],
     );
   }
 }
