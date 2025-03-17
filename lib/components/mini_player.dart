@@ -4,10 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/auto_scroll_text.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/components/rotating_disc.dart';
-import 'package:flutter_offline_music/pages/player_pages/player_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
-import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:provider/provider.dart';
 
 class MiniPlayer extends StatefulWidget {
@@ -93,16 +91,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
 
     openPlayerPage() async {
       var music = await musicService.getMusicAsync(path: mediaItem.id);
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (context) {
-          return SizedBox(
-            height: SharedData.fullHeight,
-            child: PlayerPage(music: music),
-          );
-        },
-      );
+      playerProvider.openAudioPlayerPage(context, music: music);
     }
 
     bool hasThumbnail = audioHandler.currentMediaItem?.artUri != null;
