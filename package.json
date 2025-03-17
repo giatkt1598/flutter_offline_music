@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A new Flutter project.",
   "main": "index.js",
+  "type": "module",
   "directories": {
     "lib": "lib",
     "test": "test"
@@ -11,7 +12,7 @@
     "splash": "flutter pub run flutter_native_splash:create",
     "icon": "flutter pub run flutter_launcher_icons:main",
     "apk": "flutter build apk --release",
-    "build": "yarn apk",
+    "build": "node build-scripts/up-version.js && yarn apk && node build-scripts/rename-apk.js",
     "lint": "dart fix --apply"
   },
   "keywords": [],
