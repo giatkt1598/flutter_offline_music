@@ -18,7 +18,7 @@ lines[verIndex] = 'version: ' + newVersion;
 
 fs.writeFileSync(filePath, lines.join('\n'), 'utf-8');
 
-cp.execSync(`git add . && git commit -m "${newVersion}"`);
+cp.execSync(`git add . && git commit -m "[Build APK] ${newVersion}"`);
 
 console.log(`Up version: ${newVersion}`);
 
