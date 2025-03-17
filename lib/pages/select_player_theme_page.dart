@@ -6,6 +6,7 @@ import 'package:flutter_offline_music/pages/player_pages/default_player_page.dar
 import 'package:flutter_offline_music/pages/player_pages/player_page.dart';
 import 'package:flutter_offline_music/pages/player_pages/player_ver_one_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
+import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:provider/provider.dart';
@@ -21,16 +22,11 @@ class SelectPlayerThemePage extends StatefulWidget {
 
 class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
   final PageController _pageController = PageController(viewportFraction: 0.6);
-  double _currentPage = 0.0;
+  int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
-    _pageController.addListener(() {
-      setState(() {
-        _currentPage = _pageController.page!;
-      });
-    });
   }
 
   @override
@@ -42,10 +38,26 @@ class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
   @override
   Widget build(BuildContext context) {
     final playerProvider = Provider.of<PlayerProvider>(context);
+    final settingProvider = Provider.of<SettingProvider>(context);
+    final currentThemeId = settingProvider.appSetting.playerTheme;
     final Map<String, BasePlayerWidget> playerWidgets = {
       'default': DefaultPlayerPage(music: widget.music),
       'one': PlayerVerOnePage(music: widget.music),
     };
+
+    final isApplied =
+        playerWidgets.keys.toList()[_currentPage] == currentThemeId;
+
+    handleApply() {
+      if (_currentPage.toInt() != _currentPage) {
+        return;
+      }
+
+      final themeId = playerWidgets.keys.toList()[_currentPage.toInt()];
+      settingProvider.setting(playerTheme: themeId);
+      Navigator.of(context).pop();
+    }
+
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
         //TODO: Workaround
@@ -62,6 +74,11 @@ class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
             Expanded(
               child: SizedBox(
                 child: PageView.builder(
+                  onPageChanged: (value) {
+                    setState(() {
+                      _currentPage = value;
+                    });
+                  },
                   controller: _pageController,
                   itemCount: playerWidgets.length, // Số lượng item
                   physics: BouncingScrollPhysics(),
@@ -70,14 +87,14 @@ class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
                       0.7,
                       1.2,
                     );
-
+                    String themeId = playerWidgets.keys.toList()[index];
                     return Transform.scale(
                       scale: scale,
                       child: Transform.scale(
-                        scale: 0.8,
+                        scale: 0.6,
                         child: FractionallySizedBox(
-                          widthFactor: 1.2,
-                          heightFactor: 0.85,
+                          widthFactor: 1.5,
+                          heightFactor: 1.1,
                           child: IgnorePointer(
                             child: Container(
                               decoration: BoxDecoration(
@@ -102,9 +119,7 @@ class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(16),
-                                child:
-                                    playerWidgets[playerWidgets.keys
-                                        .toList()[index]],
+                                child: playerWidgets[themeId],
                               ),
                             ),
                           ),
@@ -124,8 +139,8 @@ class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
                       padding: const EdgeInsets.all(8.0),
                       child: AppButton(
                         type: AppButtonType.primary,
-                        onPressed: () {},
-                        child: Text('Áp dụng'),
+                        onPressed: isApplied ? null : handleApply,
+                        child: Text(isApplied ? 'Đang dùng' : 'Áp dụng'),
                       ),
                     ),
                   ),

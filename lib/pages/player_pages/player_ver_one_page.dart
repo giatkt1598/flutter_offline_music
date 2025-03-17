@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/pages/player_pages/base/base_player_widget.dart';
 import 'package:flutter_offline_music/pages/player_pages/base/base_player_widget_state.dart';
+import 'package:flutter_offline_music/pages/select_player_theme_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/audio_handler.dart';
 import 'package:just_audio/just_audio.dart';
@@ -36,6 +37,23 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
     required Future<void> Function(Duration position) seek,
     required Future<void> Function() changeLoopMode,
   }) {
-    return Container(child: Center(child: Text('Player ver 2')));
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SelectPlayerThemePage(music: music),
+                ),
+              );
+            },
+            child: Text('Change UI'),
+          ),
+          Container(child: Center(child: Text('Player ver 2'))),
+        ],
+      ),
+    );
   }
 }

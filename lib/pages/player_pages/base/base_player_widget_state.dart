@@ -9,7 +9,8 @@ import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 
-abstract class BasePlayerWidgetState extends State<BasePlayerWidget> {
+abstract class BasePlayerWidgetState extends State<BasePlayerWidget>
+    with AutomaticKeepAliveClientMixin {
   Duration position = Duration.zero;
   late StreamSubscription<Duration?> positionSubscription;
   final musicService = MusicService();
@@ -59,6 +60,7 @@ abstract class BasePlayerWidgetState extends State<BasePlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final playerProvider = Provider.of<PlayerProvider>(context);
     final audioHandler = playerProvider.audioHandler;
     final settingProvider = Provider.of<SettingProvider>(context);
@@ -180,4 +182,7 @@ abstract class BasePlayerWidgetState extends State<BasePlayerWidget> {
     required Future<void> Function(Duration position) seek,
     required Future<void> Function() changeLoopMode,
   });
+
+  @override
+  bool get wantKeepAlive => true;
 }
