@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/music_item_menu.dart';
 import 'package:flutter_offline_music/components/music_list_item.dart';
@@ -26,7 +28,18 @@ class _PlayerPlaylistTabContentState extends State<PlayerPlaylistTabContent>
   List<Music> musics = [];
   @override
   void initState() {
-    fetchData();
+    fetchData().then((_) {
+      final currentIndex =
+          Provider.of<PlayerProvider>(
+            context,
+            listen: false,
+          ).audioHandler.currentIndex;
+      if (currentIndex > -1) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          jumpToIndex(currentIndex);
+        });
+      }
+    });
     super.initState();
   }
 
@@ -41,6 +54,16 @@ class _PlayerPlaylistTabContentState extends State<PlayerPlaylistTabContent>
     setState(() {
       musics = rs;
     });
+  }
+
+  void jumpToIndex(int index) {
+    double itemHeight = 60;
+    double offset = max(
+      index * itemHeight - itemHeight * 2 + itemHeight / 2,
+      0,
+    );
+    offset = min(offset, _scrollController.position.maxScrollExtent);
+    _scrollController.jumpTo(offset);
   }
 
   @override
