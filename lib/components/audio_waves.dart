@@ -51,7 +51,9 @@ class _AudioWavesState extends State<AudioWaves> with TickerProviderStateMixin {
       });
     });
 
-    _startWaveAnimations();
+    if (widget.playing) {
+      _startWaveAnimations();
+    }
   }
 
   void _startWaveAnimations() {

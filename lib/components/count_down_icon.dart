@@ -83,7 +83,7 @@ class _CountDownIconState extends State<CountDownIcon> {
                   Positioned(
                     bottom: 0,
                     child: Transform.translate(
-                      offset: Offset(0, -2),
+                      offset: Offset(0, -4),
                       child: Center(
                         child: Text(
                           '${duration.inMinutes.toString().padLeft(2, '0')}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}',

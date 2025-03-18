@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/audio_slider_flat.dart';
 import 'package:flutter_offline_music/components/audio_waves.dart';
-import 'package:flutter_offline_music/components/auto_scroll_text.dart';
 import 'package:flutter_offline_music/components/count_down_icon.dart';
 import 'package:flutter_offline_music/components/player_header.dart';
 import 'package:flutter_offline_music/models/music.dart';
@@ -28,8 +27,6 @@ class PlayerVerOnePage extends BasePlayerWidget {
 }
 
 class _PlayerVerOnePageState extends BasePlayerWidgetState {
-  final sampleWaves = List.generate(30, (index) => Random().nextDouble());
-
   @override
   Widget buildUI({
     required BuildContext context,
@@ -113,37 +110,44 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                       ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AutoScrollText(
-                            text: music.title,
-                            containerWidth: 300,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      spacing: 8,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                music.title,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                              Opacity(
+                                opacity: 0.4,
+                                child: Text(
+                                  music.artist ?? '<Không rõ tác giả>',
+                                  style: TextStyle(fontSize: 10),
+                                ),
+                              ),
+                            ],
                           ),
-                          Opacity(
-                            opacity: 0.4,
-                            child: Text(
-                              music.artist ?? '<Không rõ tác giả>',
-                              style: TextStyle(fontSize: 10),
-                            ),
-                          ),
-                        ],
-                      ),
-                      IconButton(
-                        onPressed: () => playerProvider.setStopTime(context),
-                        icon: CountDownIcon(endTime: audioHandler.stopTime),
-                      ),
-                    ],
+                        ),
+                        IconButton(
+                          onPressed: () => playerProvider.setStopTime(context),
+                          icon: CountDownIcon(endTime: audioHandler.stopTime),
+                        ),
+                      ],
+                    ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    padding: const EdgeInsets.only(top: 16),
                     child: Column(
                       children: [
                         Padding(
@@ -161,62 +165,68 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                           onChanged:
                               (value) => seek(Duration(seconds: value.toInt())),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 28),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(fDurationHHMMSS(position, short: true)),
-                              Text(fDurationHHMMSS(duration, short: true)),
-                            ],
+                        Transform.translate(
+                          offset: Offset(0, -8),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 28),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(fDurationHHMMSS(position, short: true)),
+                                Text(fDurationHHMMSS(duration, short: true)),
+                              ],
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        onPressed: hasPrevious ? skipToPrevious : null,
-                        icon: Icon(Icons.fast_rewind_rounded),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          seek(position - Duration(seconds: 10));
-                        },
-                        icon: Icon(Icons.replay_10_rounded),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [Colors.red, Colors.purple],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: hasPrevious ? skipToPrevious : null,
+                          icon: Icon(Icons.fast_rewind_rounded),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            seek(position - Duration(seconds: 10));
+                          },
+                          icon: Icon(Icons.replay_10_rounded),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: [Colors.red, Colors.purple],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
+                          child: IconButton(
+                            onPressed: playPause,
+                            icon: Icon(
+                              isPlaying ? Icons.pause : Icons.play_arrow,
+                              color: isDarkMode() ? null : Colors.white,
+                            ),
+                            iconSize: 50,
+                            style: ButtonStyle(),
                           ),
                         ),
-                        child: IconButton(
-                          onPressed: playPause,
-                          icon: Icon(
-                            isPlaying ? Icons.pause : Icons.play_arrow,
-                            color: isDarkMode() ? null : Colors.white,
-                          ),
-                          iconSize: 50,
-                          style: ButtonStyle(),
+                        IconButton(
+                          onPressed: () {
+                            seek(position + Duration(seconds: 30));
+                          },
+                          icon: Icon(Icons.forward_30_rounded),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          seek(position + Duration(seconds: 30));
-                        },
-                        icon: Icon(Icons.forward_30_rounded),
-                      ),
-                      IconButton(
-                        onPressed: hasNext ? skipToNext : null,
-                        icon: Icon(Icons.fast_forward_rounded),
-                      ),
-                    ],
+                        IconButton(
+                          onPressed: hasNext ? skipToNext : null,
+                          icon: Icon(Icons.fast_forward_rounded),
+                        ),
+                      ],
+                    ),
                   ),
                   Container(
                     margin: EdgeInsets.only(bottom: 32),
