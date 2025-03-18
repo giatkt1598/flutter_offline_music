@@ -5,7 +5,6 @@ import 'package:flutter_offline_music/components/music_playlist.dart';
 import 'package:flutter_offline_music/components/simple_tab.dart';
 import 'package:flutter_offline_music/constants/constant.dart';
 import 'package:flutter_offline_music/models/music.dart';
-import 'package:flutter_offline_music/pages/select_player_theme_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
@@ -235,17 +234,6 @@ class _DefaultPlayerState extends BasePlayerWidgetState {
                       ),
                     ),
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder:
-                            (context) => SelectPlayerThemePage(music: music),
-                      ),
-                    );
-                  },
-                  child: Text('Change UI'),
                 ),
                 Column(
                   children: [

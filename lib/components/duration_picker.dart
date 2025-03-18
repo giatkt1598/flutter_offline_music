@@ -174,9 +174,9 @@ class NumberWheelState extends State<NumberWheel> {
         children: [
           SizedBox(
             height: 80,
-            width: 30,
+            width: 34,
             child: ListWheelScrollView.useDelegate(
-              itemExtent: 30,
+              itemExtent: 34,
               perspective: 0.01,
               magnification: 0.5,
               controller: _controller,

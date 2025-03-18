@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/add_music_item_to_library.dart';
-import 'package:flutter_offline_music/components/app_button.dart';
-import 'package:flutter_offline_music/components/duration_picker.dart';
 import 'package:flutter_offline_music/components/music_info.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/pages/music_thumbnail_select_from_youtube_page.dart';
+import 'package:flutter_offline_music/pages/select_player_theme_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/library_service.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
@@ -106,82 +105,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
 
   setStopTime() async {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
-    final audioHandler = playerProvider.audioHandler;
-    await showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        Duration? newDuration = audioHandler.stopTime?.difference(
-          DateTime.now(),
-        );
-
-        return SizedBox(
-          height: 400,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Hẹn giờ ngủ',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 16, width: 30, child: Divider()),
-              DurationPicker(
-                value: newDuration,
-                onChanged: (du) {
-                  newDuration = du == Duration.zero ? null : du;
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8, right: 64, left: 64),
-                child: Divider(),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                spacing: 8,
-                children: [
-                  SizedBox(
-                    width: 120,
-                    child: AppButton(
-                      type: AppButtonType.secondary,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        'Hủy',
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.titleMedium?.color,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 120,
-                    child: AppButton(
-                      type: AppButtonType.primary,
-                      onPressed: () {
-                        audioHandler.setStopTime(duration: newDuration);
-                        String message = '';
-                        if (newDuration != null &&
-                            newDuration! > Duration.zero) {
-                          message =
-                              'Tắt nhạc sau ${fDurationLong(newDuration!)}';
-                        } else {
-                          message = "Đã tắt hẹn giờ";
-                        }
-                        ToastService.showSuccess(message);
-                        Navigator.pop(context);
-                      },
-                      child: Text('OK'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
-    );
+    await playerProvider.setStopTime(context);
     if (widget.showMiniPlayer) {
       playerProvider.showMiniPlayer();
     }
@@ -423,6 +347,21 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                       );
                     },
                   ),
+                  if (widget.type == MusicMenuType.inPlayer)
+                    ListMenuOption(
+                      title: 'Đổi giao diện',
+                      icon: Icons.color_lens_outlined,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder:
+                                (context) =>
+                                    SelectPlayerThemePage(music: widget.music),
+                          ),
+                        );
+                      },
+                    ),
                   Opacity(opacity: .3, child: Divider()),
                   if (widget.music.thumbnail != null)
                     ListMenuOption(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/components/app_button.dart';
+import 'package:flutter_offline_music/components/duration_picker.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/pages/player_pages/player_page.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_offline_music/services/audio_handler.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
+import 'package:flutter_offline_music/utilities/time_helper.dart';
 
 class PlayerProvider extends ChangeNotifier {
   bool isShowMiniPlayer = true;
@@ -41,6 +44,84 @@ class PlayerProvider extends ChangeNotifier {
         return SizedBox(
           height: SharedData.fullHeight,
           child: PlayerPage(music: music),
+        );
+      },
+    );
+  }
+
+  Future<void> setStopTime(BuildContext context) async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        Duration? newDuration = audioHandler.stopTime?.difference(
+          DateTime.now(),
+        );
+
+        return SizedBox(
+          height: 400,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Hẹn giờ ngủ',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 16, width: 30, child: Divider()),
+              DurationPicker(
+                value: newDuration,
+                onChanged: (du) {
+                  newDuration = du == Duration.zero ? null : du;
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8, right: 64, left: 64),
+                child: Divider(),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: 8,
+                children: [
+                  SizedBox(
+                    width: 120,
+                    child: AppButton(
+                      type: AppButtonType.secondary,
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        'Hủy',
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.titleMedium?.color,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 120,
+                    child: AppButton(
+                      type: AppButtonType.primary,
+                      onPressed: () {
+                        audioHandler.setStopTime(duration: newDuration);
+                        String message = '';
+                        if (newDuration != null &&
+                            newDuration! > Duration.zero) {
+                          message =
+                              'Tắt nhạc sau ${fDurationLong(newDuration!)}';
+                        } else {
+                          message = "Đã tắt hẹn giờ";
+                        }
+                        ToastService.showSuccess(message);
+                        Navigator.pop(context);
+                      },
+                      child: Text('OK'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         );
       },
     );
