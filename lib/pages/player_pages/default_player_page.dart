@@ -22,7 +22,7 @@ import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:just_audio/just_audio.dart';
 
 class DefaultPlayerPage extends BasePlayerWidget {
-  const DefaultPlayerPage({super.key, required super.music});
+  const DefaultPlayerPage({super.key});
 
   @override
   State<BasePlayerWidget> createState() => _DefaultPlayerPageState();
@@ -129,10 +129,7 @@ class _DefaultPlayerPageState extends BasePlayerWidgetState
                 Expanded(
                   child: SimpleTab(
                     initialIndex: tabIndex,
-                    tabViews: [
-                      MusicPlaylist(),
-                      _DefaultPlayer(music: widget.music),
-                    ],
+                    tabViews: [MusicPlaylist(), _DefaultPlayer()],
                     onTabChanged: (value) {
                       setState(() {
                         tabIndex = value;
@@ -150,7 +147,7 @@ class _DefaultPlayerPageState extends BasePlayerWidgetState
 }
 
 class _DefaultPlayer extends BasePlayerWidget {
-  const _DefaultPlayer({required super.music});
+  const _DefaultPlayer();
 
   @override
   State<BasePlayerWidget> createState() => _DefaultPlayerState();

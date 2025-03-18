@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -18,15 +19,53 @@ import 'package:flutter_offline_music/utilities/theme_helper.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:provider/provider.dart';
 
 class PlayerVerOnePage extends BasePlayerWidget {
-  const PlayerVerOnePage({super.key, required super.music});
+  const PlayerVerOnePage({super.key});
 
   @override
   State<BasePlayerWidget> createState() => _PlayerVerOnePageState();
 }
 
 class _PlayerVerOnePageState extends BasePlayerWidgetState {
+  late PageController _pageController;
+  late PlayerProvider _playerProvider;
+
+  @override
+  void onInitState() {
+    _playerProvider = Provider.of<PlayerProvider>(context, listen: false);
+    final indexOfMusic = _playerProvider.audioHandler.currentIndex;
+    _pageController = PageController(initialPage: indexOfMusic);
+
+    _pageController.addListener(() {
+      if (_pageController.page?.toInt() == _pageController.page &&
+          _pageController.page != null) {
+        _playerProvider.audioHandler.playMediaItem(
+          _playerProvider.audioHandler.playlist[_pageController.page!.toInt()],
+        );
+      }
+    });
+
+    _playerProvider.addListener(moveToPage);
+    super.onInitState();
+  }
+
+  void moveToPage() {
+    _pageController.animateToPage(
+      _playerProvider.audioHandler.currentIndex,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOutCubic,
+    );
+  }
+
+  @override
+  void onDispose() {
+    _playerProvider.removeListener(moveToPage);
+    _pageController.dispose();
+    super.onDispose();
+  }
+
   @override
   Widget buildUI({
     required BuildContext context,
@@ -60,6 +99,8 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
       );
     }
 
+    final playlist = audioHandler.playlist;
+
     return Scaffold(
       body: Column(
         children: [
@@ -72,42 +113,50 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                 spacing: 16,
                 children: [
                   Expanded(
-                    child: Center(
-                      child: Container(
-                        width: SharedData.fullWidth * 0.7,
-                        height: SharedData.fullWidth * 0.7,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color:
-                                  Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.white.withValues(alpha: 0.2)
-                                      : Colors.black.withValues(alpha: 0.2),
-                              blurRadius: 10,
-                              spreadRadius: 2,
-                              offset: Offset.zero,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: playlist.length,
+                      itemBuilder: (context, index) {
+                        final item = playlist[index];
+                        final thumbnail = item.artUri?.toFilePath();
+                        return Center(
+                          child: Container(
+                            width: SharedData.fullWidth * 0.7,
+                            height: SharedData.fullWidth * 0.7,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color:
+                                      Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Colors.white.withValues(alpha: 0.2)
+                                          : Colors.black.withValues(alpha: 0.2),
+                                  blurRadius: 10,
+                                  spreadRadius: 2,
+                                  offset: Offset.zero,
+                                ),
+                              ],
+                              color: Theme.of(context).cardColor,
                             ),
-                          ],
-                          color: Theme.of(context).cardColor,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(16),
-                          child:
-                              music.thumbnail != null
-                                  ? Image.file(
-                                    File(music.thumbnail!),
-                                    fit: BoxFit.cover,
-                                  )
-                                  : Image.asset(
-                                    'assets/music_note_2.png',
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.none,
-                                  ),
-                        ),
-                      ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child:
+                                  thumbnail != null
+                                      ? Image.file(
+                                        File(thumbnail),
+                                        fit: BoxFit.cover,
+                                      )
+                                      : Image.asset(
+                                        'assets/music_note_2.png',
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.none,
+                                      ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                   Padding(
@@ -119,6 +168,7 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
                                 music.title,
@@ -192,7 +242,9 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                         ),
                         IconButton(
                           onPressed: () {
-                            seek(position - Duration(seconds: 10));
+                            var newPos = position - Duration(seconds: 10);
+                            if (newPos < Duration.zero) newPos = Duration.zero;
+                            seek(newPos);
                           },
                           icon: Icon(Icons.replay_10_rounded),
                         ),
@@ -217,7 +269,9 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                         ),
                         IconButton(
                           onPressed: () {
-                            seek(position + Duration(seconds: 30));
+                            var newPos = position + Duration(seconds: 30);
+                            if (newPos > duration) newPos = duration;
+                            seek(newPos);
                           },
                           icon: Icon(Icons.forward_30_rounded),
                         ),

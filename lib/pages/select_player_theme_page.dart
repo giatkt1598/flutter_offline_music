@@ -49,8 +49,8 @@ class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
     final settingProvider = Provider.of<SettingProvider>(context);
     final currentThemeId = settingProvider.appSetting.playerTheme;
     final Map<String, BasePlayerWidget> playerWidgets = {
-      themeIds[0]: DefaultPlayerPage(music: widget.music),
-      themeIds[1]: PlayerVerOnePage(music: widget.music),
+      themeIds[0]: DefaultPlayerPage(),
+      themeIds[1]: PlayerVerOnePage(),
     };
 
     final isApplied =
@@ -70,7 +70,7 @@ class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
             child: SizedBox(
               child: PageView.builder(
                 controller: _pageController,
-                itemCount: playerWidgets.length, // Số lượng item
+                itemCount: playerWidgets.length,
                 physics: BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
                   double scale = (1.2 - (_currentPage - index).abs()).clamp(

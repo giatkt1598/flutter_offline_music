@@ -35,16 +35,29 @@ class PlayerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future openAudioPlayerPage(BuildContext context, {required Music music}) {
-    return showModalBottomSheet(
+  Future openAudioPlayerPage(
+    BuildContext context, {
+    required Music music,
+  }) async {
+    Future play() async {
+      if (audioHandler.playlist.isEmpty) {
+        await audioHandler.setPlaylistFromMusics(musics);
+      }
+
+      if (music.path != audioHandler.currentMediaItem?.id) {
+        await audioHandler.stop();
+        await audioHandler.playMusic(music);
+      }
+    }
+
+    await play();
+
+    return await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(),
       builder: (context) {
-        return SizedBox(
-          height: SharedData.fullHeight,
-          child: PlayerPage(music: music),
-        );
+        return SizedBox(height: SharedData.fullHeight, child: PlayerPage());
       },
     );
   }

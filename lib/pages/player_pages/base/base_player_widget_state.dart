@@ -12,7 +12,7 @@ import 'package:provider/provider.dart';
 abstract class BasePlayerWidgetState extends State<BasePlayerWidget>
     with AutomaticKeepAliveClientMixin {
   Duration position = Duration.zero;
-  late StreamSubscription<Duration?> positionSubscription;
+  StreamSubscription<Duration?>? positionSubscription;
   final musicService = MusicService();
 
   @override
@@ -35,7 +35,7 @@ abstract class BasePlayerWidgetState extends State<BasePlayerWidget>
   }
 
   void onDispose() {
-    positionSubscription.cancel();
+    positionSubscription?.cancel();
   }
 
   @override
@@ -50,7 +50,7 @@ abstract class BasePlayerWidgetState extends State<BasePlayerWidget>
     final playerProvider = Provider.of<PlayerProvider>(context);
     final audioHandler = playerProvider.audioHandler;
     final settingProvider = Provider.of<SettingProvider>(context);
-    final music = playerProvider.audioHandler.currentMusic ?? widget.music;
+    final music = playerProvider.audioHandler.currentMusic!;
     String? backgroundImage = settingProvider.appSetting.playerBackgroundImage;
     if (backgroundImage == '') backgroundImage = null;
     final duration = audioHandler.currentMediaItem?.duration ?? Duration.zero;
