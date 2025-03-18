@@ -49,106 +49,88 @@ class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
         playerWidgets.keys.toList()[_currentPage] == currentThemeId;
 
     handleApply() {
-      if (_currentPage.toInt() != _currentPage) {
-        return;
-      }
-
       final themeId = playerWidgets.keys.toList()[_currentPage.toInt()];
       settingProvider.setting(playerTheme: themeId);
       Navigator.of(context).pop();
     }
 
-    return PopScope(
-      onPopInvokedWithResult: (didPop, result) {
-        //TODO: Workaround
-        Future.delayed(Duration(milliseconds: 50)).then((_) {
-          playerProvider.isShowMiniPlayer = false;
-          playerProvider.notifyChanges();
-          logDebug('select theme is pop');
-        });
-      },
-      child: Scaffold(
-        appBar: AppBar(title: Text('Đổi giao diện Phát nhạc')),
-        body: Column(
-          children: [
-            Expanded(
-              child: SizedBox(
-                child: PageView.builder(
-                  onPageChanged: (value) {
-                    setState(() {
-                      _currentPage = value;
-                    });
-                  },
-                  controller: _pageController,
-                  itemCount: playerWidgets.length, // Số lượng item
-                  physics: BouncingScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    double scale = (1.2 - (_currentPage - index).abs()).clamp(
-                      0.7,
-                      1.2,
-                    );
-                    String themeId = playerWidgets.keys.toList()[index];
-                    return Transform.scale(
-                      scale: scale,
-                      child: Transform.scale(
-                        scale: 0.6,
-                        child: FractionallySizedBox(
-                          widthFactor: 1.5,
-                          heightFactor: 1.1,
-                          child: IgnorePointer(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.surface,
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color:
-                                        Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white.withValues(
-                                              alpha: 0.2,
-                                            )
-                                            : Colors.black.withValues(
-                                              alpha: 0.2,
-                                            ),
-                                    blurRadius: 10,
-                                    spreadRadius: 2,
-                                    offset: Offset.zero,
-                                  ),
-                                ],
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: playerWidgets[themeId],
-                              ),
+    return Scaffold(
+      appBar: AppBar(title: Text('Đổi giao diện Phát nhạc')),
+      body: Column(
+        children: [
+          Expanded(
+            child: SizedBox(
+              child: PageView.builder(
+                onPageChanged: (value) {
+                  setState(() {
+                    _currentPage = value;
+                  });
+                },
+                controller: _pageController,
+                itemCount: playerWidgets.length, // Số lượng item
+                physics: BouncingScrollPhysics(),
+                itemBuilder: (context, index) {
+                  double scale = (1.2 - (_currentPage - index).abs()).clamp(
+                    0.7,
+                    1.2,
+                  );
+                  String themeId = playerWidgets.keys.toList()[index];
+                  return Transform.scale(
+                    scale: scale,
+                    child: Transform.scale(
+                      scale: 0.6,
+                      child: FractionallySizedBox(
+                        widthFactor: 1.5,
+                        heightFactor: 1.1,
+                        child: IgnorePointer(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.surface,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color:
+                                      Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? Colors.white.withValues(alpha: 0.2)
+                                          : Colors.black.withValues(alpha: 0.2),
+                                  blurRadius: 10,
+                                  spreadRadius: 2,
+                                  offset: Offset.zero,
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: playerWidgets[themeId],
                             ),
                           ),
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
             ),
-            Container(
-              margin: EdgeInsets.only(right: 32, left: 32, bottom: 40),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: AppButton(
-                        type: AppButtonType.primary,
-                        onPressed: isApplied ? null : handleApply,
-                        child: Text(isApplied ? 'Đang dùng' : 'Áp dụng'),
-                      ),
+          ),
+          Container(
+            margin: EdgeInsets.only(right: 32, left: 32, bottom: 40),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: AppButton(
+                      type: AppButtonType.primary,
+                      onPressed: isApplied ? null : handleApply,
+                      child: Text(isApplied ? 'Đang dùng' : 'Áp dụng'),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

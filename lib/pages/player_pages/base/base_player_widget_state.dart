@@ -131,33 +131,26 @@ abstract class BasePlayerWidgetState extends State<BasePlayerWidget>
       }
     }
 
-    return PopScope<bool>(
-      onPopInvokedWithResult: (didPop, result) {
-        if (result != true) {
-          playerProvider.isShowMiniPlayer = true;
-        }
-      },
-      child: buildUI(
-        context: context,
-        music: music,
-        backgroundImage: backgroundImage,
-        duration: duration,
-        position: currentPosition,
-        hasNext: hasNext,
-        hasPrevious: hasPrevious,
-        isPlaying: isPlaying,
-        isShuffle: isShuffle,
-        loopMode: loopMode,
-        playerProvider: playerProvider,
-        audioHandler: audioHandler,
-        toggleFavorite: toggleFavorite,
-        playPause: playPause,
-        skipToNext: skiptoNext,
-        skipToPrevious: skipToPrevious,
-        seek: seek,
-        toggleShuffle: toggleShuffle,
-        changeLoopMode: changeLoopMode,
-      ),
+    return buildUI(
+      context: context,
+      music: music,
+      backgroundImage: backgroundImage,
+      duration: duration,
+      position: currentPosition,
+      hasNext: hasNext,
+      hasPrevious: hasPrevious,
+      isPlaying: isPlaying,
+      isShuffle: isShuffle,
+      loopMode: loopMode,
+      playerProvider: playerProvider,
+      audioHandler: audioHandler,
+      toggleFavorite: toggleFavorite,
+      playPause: playPause,
+      skipToNext: skiptoNext,
+      skipToPrevious: skipToPrevious,
+      seek: seek,
+      toggleShuffle: toggleShuffle,
+      changeLoopMode: changeLoopMode,
     );
   }
 
