@@ -178,16 +178,8 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder:
-                                  (context) =>
-                                      SelectPlayerThemePage(music: music),
-                            ),
-                          );
-                        },
-                        icon: Icon(Icons.color_lens_outlined),
+                        onPressed: hasPrevious ? skipToPrevious : null,
+                        icon: Icon(Icons.fast_rewind_rounded),
                       ),
                       IconButton(
                         onPressed: () {
@@ -221,13 +213,8 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                         icon: Icon(Icons.forward_30_rounded),
                       ),
                       IconButton(
-                        onPressed: toggleFavorite,
-                        icon: Icon(
-                          music.isFavorite
-                              ? Icons.favorite_rounded
-                              : Icons.favorite_border_rounded,
-                          color: music.isFavorite ? Colors.pinkAccent : null,
-                        ),
+                        onPressed: hasNext ? skipToNext : null,
+                        icon: Icon(Icons.fast_forward_rounded),
                       ),
                     ],
                   ),
@@ -253,8 +240,16 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
-                          onPressed: hasPrevious ? skipToPrevious : null,
-                          icon: Icon(Icons.fast_rewind_rounded),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder:
+                                    (context) =>
+                                        SelectPlayerThemePage(music: music),
+                              ),
+                            );
+                          },
+                          icon: Icon(Icons.color_lens_outlined),
                         ),
                         Opacity(
                           opacity: isShuffle ? 1 : 0.4,
@@ -296,8 +291,13 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                           icon: Icon(Icons.queue_music),
                         ),
                         IconButton(
-                          onPressed: hasNext ? skipToNext : null,
-                          icon: Icon(Icons.fast_forward_rounded),
+                          onPressed: toggleFavorite,
+                          icon: Icon(
+                            music.isFavorite
+                                ? Icons.favorite_rounded
+                                : Icons.favorite_border_rounded,
+                            color: music.isFavorite ? Colors.pinkAccent : null,
+                          ),
                         ),
                       ],
                     ),

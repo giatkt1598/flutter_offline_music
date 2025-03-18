@@ -37,6 +37,7 @@ class _DownloadAllMusicThumbnailFromYoutubeState
 
   Future downloadThumbnails() async {
     musics.clear();
+    var debounceDuration = Duration(seconds: 1);
     final allMusics = await musicService.getListMusicAsync();
     for (var m in widget.musics) {
       musics.add(allMusics.firstWhere((x) => x.id == m.id));
@@ -61,7 +62,7 @@ class _DownloadAllMusicThumbnailFromYoutubeState
         );
 
         //Workaround to fix: ClientException: Redirect limit exceeded
-        await Future.delayed(Duration(seconds: 1));
+        await Future.delayed(debounceDuration);
 
         if (thumbFilePath != null) {
           currentMusic!.thumbnail = thumbFilePath;
@@ -72,6 +73,10 @@ class _DownloadAllMusicThumbnailFromYoutubeState
       } catch (e) {
         logDebug('Get thumbnail from youtube failed: $e');
         numFailed++;
+
+        if (debounceDuration < Duration(seconds: 5)) {
+          debounceDuration += Duration(seconds: 1);
+        }
       }
     }
 
