@@ -24,20 +24,6 @@ abstract class BasePlayerWidgetState extends State<BasePlayerWidget>
   void onInitState() {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     final audioHandler = playerProvider.audioHandler;
-    playerProvider.isShowMiniPlayer = false;
-
-    Future play() async {
-      if (audioHandler.playlist.isEmpty) {
-        await audioHandler.setPlaylistFromMusics(playerProvider.musics);
-      }
-
-      if (widget.music.path != audioHandler.currentMediaItem?.id) {
-        await audioHandler.stop();
-        await audioHandler.playMusic(widget.music);
-      }
-    }
-
-    play();
 
     setState(() {
       positionSubscription = audioHandler.player.positionStream.listen((p) {

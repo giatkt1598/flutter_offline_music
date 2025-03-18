@@ -3,12 +3,8 @@ import 'package:flutter_offline_music/components/app_button.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/pages/player_pages/base/base_player_widget.dart';
 import 'package:flutter_offline_music/pages/player_pages/default_player_page.dart';
-import 'package:flutter_offline_music/pages/player_pages/player_page.dart';
 import 'package:flutter_offline_music/pages/player_pages/player_ver_one_page.dart';
-import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
-import 'package:flutter_offline_music/shared/shared_data.dart';
-import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:provider/provider.dart';
 
 class SelectPlayerThemePage extends StatefulWidget {
@@ -21,11 +17,24 @@ class SelectPlayerThemePage extends StatefulWidget {
 }
 
 class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
-  final PageController _pageController = PageController(viewportFraction: 0.6);
-  int _currentPage = 0;
+  late PageController _pageController;
+  late double _currentPage;
+  final List<String> themeIds = ['default', 'one'];
 
   @override
   void initState() {
+    _pageController = PageController(
+      viewportFraction: 0.6,
+      initialPage: themeIds.indexOf(
+        SettingProvider.staticAppSetting.playerTheme,
+      ),
+    );
+    _currentPage = _pageController.initialPage.toDouble();
+    _pageController.addListener(() {
+      setState(() {
+        _currentPage = _pageController.page ?? 0;
+      });
+    });
     super.initState();
   }
 
@@ -37,19 +46,18 @@ class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
 
   @override
   Widget build(BuildContext context) {
-    final playerProvider = Provider.of<PlayerProvider>(context);
     final settingProvider = Provider.of<SettingProvider>(context);
     final currentThemeId = settingProvider.appSetting.playerTheme;
     final Map<String, BasePlayerWidget> playerWidgets = {
-      'default': DefaultPlayerPage(music: widget.music),
-      'one': PlayerVerOnePage(music: widget.music),
+      themeIds[0]: DefaultPlayerPage(music: widget.music),
+      themeIds[1]: PlayerVerOnePage(music: widget.music),
     };
 
     final isApplied =
-        playerWidgets.keys.toList()[_currentPage] == currentThemeId;
+        playerWidgets.keys.toList()[_currentPage.toInt()] == currentThemeId;
 
     handleApply() {
-      final themeId = playerWidgets.keys.toList()[_currentPage.toInt()];
+      final themeId = playerWidgets.keys.toList()[_currentPage.round()];
       settingProvider.setting(playerTheme: themeId);
       Navigator.of(context).pop();
     }
@@ -61,11 +69,6 @@ class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
           Expanded(
             child: SizedBox(
               child: PageView.builder(
-                onPageChanged: (value) {
-                  setState(() {
-                    _currentPage = value;
-                  });
-                },
                 controller: _pageController,
                 itemCount: playerWidgets.length, // Số lượng item
                 physics: BouncingScrollPhysics(),
@@ -75,34 +78,41 @@ class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
                     1.2,
                   );
                   String themeId = playerWidgets.keys.toList()[index];
-                  return Transform.scale(
-                    scale: scale,
+                  return GestureDetector(
+                    onTap: handleApply,
                     child: Transform.scale(
-                      scale: 0.6,
-                      child: FractionallySizedBox(
-                        widthFactor: 1.5,
-                        heightFactor: 1.1,
-                        child: IgnorePointer(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.surface,
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                  color:
-                                      Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? Colors.white.withValues(alpha: 0.2)
-                                          : Colors.black.withValues(alpha: 0.2),
-                                  blurRadius: 10,
-                                  spreadRadius: 2,
-                                  offset: Offset.zero,
-                                ),
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: playerWidgets[themeId],
+                      scale: scale,
+                      child: Transform.scale(
+                        scale: 0.6,
+                        child: FractionallySizedBox(
+                          widthFactor: 1.5,
+                          heightFactor: 1.1,
+                          child: AbsorbPointer(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.surface,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:
+                                        Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.white.withValues(
+                                              alpha: 0.2,
+                                            )
+                                            : Colors.black.withValues(
+                                              alpha: 0.2,
+                                            ),
+                                    blurRadius: 10,
+                                    spreadRadius: 2,
+                                    offset: Offset.zero,
+                                  ),
+                                ],
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: playerWidgets[themeId],
+                              ),
                             ),
                           ),
                         ),
@@ -122,7 +132,10 @@ class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
                     padding: const EdgeInsets.all(8.0),
                     child: AppButton(
                       type: AppButtonType.primary,
-                      onPressed: isApplied ? null : handleApply,
+                      onPressed:
+                          isApplied || _currentPage.toInt() != _currentPage
+                              ? null
+                              : handleApply,
                       child: Text(isApplied ? 'Đang dùng' : 'Áp dụng'),
                     ),
                   ),
