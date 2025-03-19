@@ -38,14 +38,15 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
     final indexOfMusic = _playerProvider.audioHandler.currentIndex;
     _pageController = PageController(initialPage: indexOfMusic);
 
-    _pageController.addListener(() {
-      if (_pageController.page?.toInt() == _pageController.page &&
-          _pageController.page != null) {
-        _playerProvider.audioHandler.playMediaItem(
-          _playerProvider.audioHandler.playlist[_pageController.page!.toInt()],
-        );
-      }
-    });
+    // _pageController.addListener(() {
+    //   if (_pageController.page?.toInt() == _pageController.page &&
+    //       _pageController.page != null &&
+    //       _playerProvider.audioHandler.currentIndex != _pageController.page) {
+    //     _playerProvider.audioHandler.playMediaItem(
+    //       _playerProvider.audioHandler.playlist[_pageController.page!.toInt()],
+    //     );
+    //   }
+    // });
 
     _playerProvider.addListener(moveToPage);
     super.onInitState();
@@ -116,6 +117,11 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                     child: PageView.builder(
                       controller: _pageController,
                       itemCount: playlist.length,
+                      onPageChanged: (page) {
+                        _playerProvider.audioHandler.playMediaItem(
+                          _playerProvider.audioHandler.playlist[page],
+                        );
+                      },
                       itemBuilder: (context, index) {
                         final item = playlist[index];
                         final thumbnail = item.artUri?.toFilePath();
