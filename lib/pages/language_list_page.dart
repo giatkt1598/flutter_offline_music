@@ -16,11 +16,7 @@ class _LanguageListPageState extends State<LanguageListPage> {
     final settingProvider = context.getSettingProvider();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          tr().languageTitle + settingProvider.appSetting.languageCode,
-        ),
-      ),
+      appBar: AppBar(title: Text(tr().languageTitle)),
       body: SingleChildScrollView(
         child: ListView(
           shrinkWrap: true,
