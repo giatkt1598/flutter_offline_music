@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/app_button.dart';
 import 'package:flutter_offline_music/components/duration_picker.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/pages/player_pages/player_page.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
@@ -84,7 +85,7 @@ class PlayerProvider extends ChangeNotifier {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Hẹn giờ ngủ',
+                tr().setStopTimeTitle,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 16, width: 30, child: Divider()),

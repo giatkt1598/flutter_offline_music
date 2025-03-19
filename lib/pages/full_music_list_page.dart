@@ -5,6 +5,7 @@ import 'package:flutter_offline_music/components/music_list_controller_group.dar
 import 'package:flutter_offline_music/components/music_list_simple_info.dart';
 import 'package:flutter_offline_music/components/song_list_sort_button.dart';
 import 'package:flutter_offline_music/constants/constant.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/tab_provider.dart';
@@ -31,7 +32,7 @@ class _FullMusicListPageState extends State<FullMusicListPage>
   @override
   void initState() {
     super.initState();
-    EasyLoading.show(status: 'Đang tải...');
+    EasyLoading.show(status: tr().status_loading);
     fetchData();
   }
 

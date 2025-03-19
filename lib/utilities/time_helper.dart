@@ -1,9 +1,11 @@
+import 'package:flutter_offline_music/i18n/i18n.dart';
+
 String fDurationLong(Duration duration) {
   int minutes = duration.inMinutes;
-  if (minutes < 60) return '$minutes phút';
+  if (minutes < 60) return tr().nMinutes(minutes);
   int hours = minutes ~/ 60;
   minutes = minutes % 60;
-  return '$hours giờ $minutes phút';
+  return '${tr().nHours(hours)} ${tr().nMinutes(minutes)}';
 }
 
 String fDurationHHMMSS(Duration duration, {bool? short = false}) {

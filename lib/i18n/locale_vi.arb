@@ -23,24 +23,40 @@
     "setting_aboutTitle": "Thông tin ứng dụng",
     "about_intro": "Giới thiệu",
     "about_version": "Phiên bản",
-    "about_contact": "Thông tin & hỗ trợ",
+    "about_contact": "Thông tin & Hỗ trợ",
     "setting_deleteDataPermanently": "Xóa dữ liệu",
+    "setting_deleteDataPermanentlyConfirmMessage": "Xóa tất cả dữ liệu, sau khi xóa, bạn cần khởi động lại app?",
+    "setting_deleteDataPermanentlySuccess": "Đã xóa dữ liệu, vui lòng khởi động lại app...",
     "dashboard_playingRecently": "Đã phát gần đây",
     "dashboard_viewMore": "Xem thêm >",
     "dashboard_newFiles": "Đã thêm gần đây",
     "dashboard_mostListening": "Lượt nghe nhiều nhất",
     "dashboard_noSongsToPlay": "Không có bài hát nào để phát",
+    "musicMenu_play": "Phát",
     "musicMenu_playNext": "Phát tiếp theo",
     "musicMenu_addToFavorite": "Thêm vào Yêu thích",
+    "musicMenu_addToFavoriteSuccess": "Đã thêm vào Yêu thích",
     "musicMenu_removeFromFavorite": "Xóa khỏi Yêu thích",
+    "musicMenu_removeFromFavoriteSuccess": "Đã xóa khỏi Yêu thích",
     "musicMenu_addToLibrary": "Thêm vào thư viện",
     "musicMenu_removeFromLibrary": "Xóa khỏi thư viện",
+    "musicMenu_removeFromLibrarySuccess": "Đã xóa bài hát \"{musicTitle}\" khỏi thư viện",
     "musicMenu_setStopTime": "Hẹn giờ ngủ",
     "musicMenu_changeThumbnail": "Đổi ảnh bìa",
     "musicMenu_removeThumbnail": "Xóa ảnh bìa",
+    "musicMenu_removeThumbnailSuccess": "Đã xóa ảnh bìa \"{name}\"",
+    "musicMenu_changePlayerTheme": "Đổi giao diện",
+    "musicMenu_musicShown": "Đã hiển thị \"{name}\"",
+    "musicMenu_musicHidden": "Đã ẩn \"{name}\"",
+    "musicMenu_show": "Hiển thị",
     "musicMenu_hide": "Ẩn",
     "musicMenu_deleteOnDevice": "Xóa khỏi thiết bị",
-    "libraryMenu_addItem": "Thêm bài hát vào thư viện",
+    "musicMenu_playNextMessage": "Tiếp theo sẽ phát bài \"{musicTitle}\"",
+    "musicMenu_error": "Xảy ra lỗi",
+    "musicMenu_removeFromPlaylist": "Xóa khỏi danh sách phát",
+    "musicMenu_removeFromPlaylistSuccess": "Đã xóa \"{musicTitle}\" khỏi danh sách phát",
+    "musicMenu_notFoundLibrary": "Không tìm thấy thư viện",
+    "libraryMenu_addItems": "Thêm bài hát vào thư viện",
     "libraryMenu_edit": "Sửa thông tin",
     "libraryMenu_sortItems": "Sắp xếp bài hát",
     "libraryMenu_downloadItemThumbnails": "Tải ảnh bìa cho tất cả bài hát",
@@ -48,6 +64,7 @@
     "createLibraryTitle": "Tạo thư viện",
     "libraryName": "Tên thư viện",
     "error_requiredName": "Tên không được để trống",
+    "error_existedName": "Tên đã tồn tại",
     "error_checkAgain": "Vui lòng kiểm tra lại thông tin",
     "searchPlaceholder": "Tìm kiếm",
     "searchNoResults": "Không có kết quả",
@@ -63,6 +80,9 @@
     "detail_size": "Kích thước",
     "detail_filePath": "Vị trí",
     "detail_creationDate": "Ngày tạo",
+    "detail_lastModificationDate": "Sửa lần cuối",
+    "detail_empty": "<trống>",
+    "folderName": "Tên thư mục",
     "sortByTitle": "Sắp xếp theo",
     "sortField_musicName": "Tên bài hát",
     "sortField_artist": "Tên nghệ sĩ",
@@ -77,6 +97,7 @@
     "favorites": "Yêu thích",
     "songTitle": "Bài hát",
     "setStopTimeTitle": "Hẹn giờ ngủ",
+    "remainingTitle": "Còn lại",
     "playlistTitle": "Danh sách phát",
     "nHours": "{hour, plural, other{{hour} giờ}}",
     "@nHours": {
@@ -91,6 +112,15 @@
     "@nMinutes": {
         "placeholders": {
             "minute": {
+                "type": "num",
+                "format": "compact"
+            }
+        }
+    },
+    "nSeconds": "{seconds, plural, other{{seconds} giây}}",
+    "@nSeconds": {
+        "placeholders": {
+            "seconds": {
                 "type": "num",
                 "format": "compact"
             }
@@ -121,6 +151,7 @@
     "status_saving": "Đang lưu...",
     "status_completed": "Hoàn thành!",
     "status_waiting": "Vui lòng chờ chút",
+    "status_loading": "Đang tải...",
     "downloadThumbnail_progress": "Tiến độ: {percent}%",
     "downloadThumbnail_totalCount": "Tổng: {total}",
     "downloadThumbnail_existsCount": "Đã có (không tải nữa): {total}",
@@ -200,5 +231,51 @@
     "viewHiddenFiles": "Xem tệp bị ẩn",
     "hideHiddenFiles": "Không hiển thị tệp ẩn",
     "music_hidden": "Bị ẩn",
-    "music_unknownArtist": "<Không rõ tác giả>"
+    "music_unknownArtist": "<Không rõ tác giả>",
+    "nLibraries": "{count, plural, other{{count} thư viện}}",
+    "@nLibraries": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "noLibraries": "Chưa có thư viện nào!",
+    "createNew": "Tạo mới",
+    "removeAllFromFavorite": "Gỡ bỏ tất cả",
+    "removeAllFromFavoriteSuccess": "Đã gỡ bỏ tất cả bài hát khỏi mục Yêu thích",
+    "emptyList": "Danh sách trống!",
+    "addSongsToLibrary": "Thêm bài hát",
+    "nLastDays": "{count, plural, other{{count} ngày gần đây}}",
+    "@nLastDays": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "libraryTitle": "Thư viện",
+    "folderTitle": "Thư mục",
+    "allSongs": "Tất cả bài hát",
+    "doneTitle": "Xong",
+    "selectAll": "Chọn tất cả",
+    "selected": "Đã chọn",
+    "displayedAllResult": "Đã hiển thị tất cả kết quả!",
+    "pictureProvidedByYoutube": "Ảnh cung cấp bởi Youtube",
+    "errorTryAgain": "Xảy ra lỗi, vui lòng thử lại!",
+    "changeMusicThumbnailSuccess": "Đã cập nhật ảnh bìa cho \"${title}\"",
+    "themeIsUsed": "Đang dùng",
+    "themeApply": "Áp dụng",
+    "auto": "Tự động",
+    "picture": "Hình",
+    "blur": "Độ mờ",
+    "optionsTitle": "Tùy chỉnh",
+    "stopAfter": "Dừng sau",
+    "createLibrary": "Tạo thư viện",
+    "updateLibrary": "Cập nhật thư viện",
+    "off": "Tắt",
+    "playlist_shuffleSuccess": "Đã trộn danh sách",
+    "playlist_removeAllItemsConfirmMessage": "Xóa tất cả bài hát khỏi danh sách phát?",
+    "confirmDialog_defaultTitle": "Xác nhận",
+    "confirmDialog_defaultMessage": "Bạn chắc chắn?"
 }

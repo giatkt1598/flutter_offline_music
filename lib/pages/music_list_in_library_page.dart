@@ -5,6 +5,7 @@ import 'package:flutter_offline_music/components/music_list.dart';
 import 'package:flutter_offline_music/components/music_list_controller_group.dart';
 import 'package:flutter_offline_music/components/music_list_simple_info.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/pages/music_select_to_library_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
@@ -81,10 +82,10 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
             Expanded(
               child: Column(
                 children: [
-                  NoData(title: 'Danh sách trống!'),
+                  NoData(title: tr().emptyList),
                   ElevatedButton(
                     onPressed: addMusicToLibrary,
-                    child: Text('Thêm bài hát'),
+                    child: Text(tr().addSongsToLibrary),
                   ),
                 ],
               ),

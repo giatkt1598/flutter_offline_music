@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/app_button.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/pages/player_pages/base/base_player_widget.dart';
 import 'package:flutter_offline_music/pages/player_pages/default_player_page.dart';
@@ -63,7 +64,7 @@ class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Đổi giao diện Phát nhạc')),
+      appBar: AppBar(title: Text(tr().changePlayerThemeTitle)),
       body: Column(
         children: [
           Expanded(
@@ -136,7 +137,9 @@ class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
                           isApplied || _currentPage.toInt() != _currentPage
                               ? null
                               : handleApply,
-                      child: Text(isApplied ? 'Đang dùng' : 'Áp dụng'),
+                      child: Text(
+                        isApplied ? tr().themeIsUsed : tr().themeApply,
+                      ),
                     ),
                   ),
                 ),

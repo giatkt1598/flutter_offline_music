@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/pages/music_select_to_library_page.dart';
 import 'package:flutter_offline_music/services/library_service.dart';
@@ -68,7 +69,7 @@ class _CreateEditLibraryDialogState extends State<CreateEditLibraryDialog> {
 
   Future<void> _submitForm() async {
     if (!_formKey.currentState!.validate()) {
-      ToastService.showError('Vui lòng kiểm tra lại thông tin');
+      ToastService.showError(tr().error_checkAgain);
       return;
     }
 
@@ -103,12 +104,15 @@ class _CreateEditLibraryDialogState extends State<CreateEditLibraryDialog> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text('Hủy'),
+          child: Text(tr().formAction_cancel),
         ),
-        ElevatedButton(onPressed: _submitForm, child: Text('Xác nhận')),
+        ElevatedButton(
+          onPressed: _submitForm,
+          child: Text(tr().formAction_confirm),
+        ),
       ],
       title: Text(
-        widget.libraryId == null ? 'Tạo thư viện' : 'Cập nhật thư viện',
+        widget.libraryId == null ? tr().createLibrary : tr().updateLibrary,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
       ),
       content: SizedBox(
@@ -126,7 +130,7 @@ class _CreateEditLibraryDialogState extends State<CreateEditLibraryDialog> {
                   autofocus: true,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return "Tên không được để trống";
+                      return tr().error_requiredName;
                     }
 
                     bool isExistsTitle = allLibraries
@@ -134,11 +138,11 @@ class _CreateEditLibraryDialogState extends State<CreateEditLibraryDialog> {
                         .any(
                           (x) => x.title.toLowerCase() == value.toLowerCase(),
                         );
-                    if (isExistsTitle) return 'Tên đã tồn tại';
+                    if (isExistsTitle) return tr().error_existedName;
                     return null;
                   },
                   decoration: InputDecoration(
-                    label: Text('Tên thư viện'),
+                    label: Text(tr().libraryName),
                     border: UnderlineInputBorder(),
                     contentPadding: EdgeInsets.symmetric(
                       vertical: 0,

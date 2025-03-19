@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/components/language_flag_icon.dart';
 import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 
@@ -29,6 +30,7 @@ class _LanguageListPageState extends State<LanguageListPage> {
                       !isSelected
                           ? null
                           : Theme.of(context).colorScheme.surfaceContainer,
+                  leading: LanguageFlagIcon(languageCode: langCode),
                   title: Text(tr().langOptionDisplayName(langCode)),
                   onTap: () {
                     settingProvider.setting(languageCode: langCode);

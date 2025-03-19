@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:provider/provider.dart';
@@ -17,10 +18,10 @@ class MusicFolderInfo extends StatelessWidget {
     return Table(
       columnWidths: {0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
       children: [
-        createRow(label: 'Tên thư mục', value: folder.name),
-        createRow(label: 'Vị trí', value: folder.path),
+        createRow(label: tr().folderName, value: folder.name),
+        createRow(label: tr().detail_filePath, value: folder.path),
         createRow(
-          label: 'Sửa lần cuối',
+          label: tr().detail_lastModificationDate,
           widgetValue: Opacity(
             opacity: 0.6,
             child: Column(
@@ -61,7 +62,7 @@ class MusicFolderInfo extends StatelessWidget {
                 Opacity(
                   opacity: 0.6,
                   child: Text(
-                    value?.isNotEmpty == true ? value! : '<trống>',
+                    value?.isNotEmpty == true ? value! : tr().detail_empty,
                     style: TextStyle(
                       fontStyle:
                           value?.isNotEmpty != true ? FontStyle.italic : null,

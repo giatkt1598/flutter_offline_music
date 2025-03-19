@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 
 Future<bool?> showConfirmDialog({
   required BuildContext context,
@@ -12,11 +13,11 @@ Future<bool?> showConfirmDialog({
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text(
-          title ?? "Xác nhận",
+          title ?? tr().confirmDialog_defaultTitle,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         content: Text(
-          message ?? "Bạn chắc chắn?",
+          message ?? tr().confirmDialog_defaultMessage,
           style: Theme.of(context).textTheme.bodyMedium,
         ),
         actions: [
@@ -24,13 +25,13 @@ Future<bool?> showConfirmDialog({
             onPressed: () {
               Navigator.of(context).pop(false); // Hủy
             },
-            child: Text(cancelText ?? "Hủy"),
+            child: Text(cancelText ?? tr().formAction_cancel),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.of(context).pop(true); // Xác nhận
             },
-            child: Text(okText ?? "Xác nhận"),
+            child: Text(okText ?? tr().formAction_confirm),
           ),
         ],
       );

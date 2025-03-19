@@ -195,7 +195,7 @@ class _DefaultPlayerState extends BasePlayerWidgetState {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text('Dừng sau '),
+                          Text('${tr().stopAfter} '),
                           Countdown(endTime: audioHandler.stopTime),
                         ],
                       ),

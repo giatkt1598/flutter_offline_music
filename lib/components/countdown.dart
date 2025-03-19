@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 
 class Countdown extends StatefulWidget {
   const Countdown({super.key, this.endTime, this.onEnded});
@@ -63,8 +64,8 @@ class _CountdownState extends State<Countdown> {
   Widget build(BuildContext context) {
     final txt =
         duration > Duration(minutes: 5)
-            ? '${duration.inHours > 0 ? '${duration.inHours} giờ ' : ''}${duration.inMinutes % 60} phút'
-            : '${duration.inMinutes > 0 ? '${duration.inMinutes} phút ' : ''}${duration.inSeconds % 60} giây';
+            ? '${duration.inHours > 0 ? '${tr().nHours(duration.inHours)} ' : ''}${tr().nMinutes(duration.inMinutes % 60)}'
+            : '${duration.inMinutes > 0 ? '${tr().nMinutes(duration.inMinutes)} ' : ''}${tr().nSeconds(duration.inSeconds % 60)}';
     return Text(txt);
   }
 }

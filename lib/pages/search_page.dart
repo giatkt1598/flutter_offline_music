@@ -3,6 +3,7 @@ import 'package:flutter_offline_music/components/music_folder_item.dart';
 import 'package:flutter_offline_music/components/library_list_item.dart';
 import 'package:flutter_offline_music/components/music_list_item.dart';
 import 'package:flutter_offline_music/components/search_field.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
@@ -53,7 +54,8 @@ class _SearchPageState extends State<SearchPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            if (_musics.isNotEmpty) _SearchResultGroupTitle(title: 'Bài hát'),
+            if (_musics.isNotEmpty)
+              _SearchResultGroupTitle(title: tr().songTitle),
             for (var music in _musics)
               MusicListItem(
                 music: music,
@@ -66,7 +68,7 @@ class _SearchPageState extends State<SearchPage> {
             if (_libraries.isNotEmpty)
               Container(
                 margin: EdgeInsets.only(bottom: 4),
-                child: _SearchResultGroupTitle(title: 'Thư viện'),
+                child: _SearchResultGroupTitle(title: tr().libraryTitle),
               ),
             for (var library in _libraries)
               Container(
@@ -82,7 +84,7 @@ class _SearchPageState extends State<SearchPage> {
             if (_folders.isNotEmpty)
               Container(
                 margin: EdgeInsets.only(bottom: 4),
-                child: _SearchResultGroupTitle(title: 'Thư mục'),
+                child: _SearchResultGroupTitle(title: tr().folderTitle),
               ),
             for (var folder in _folders)
               MusicFolderItem(
@@ -97,7 +99,7 @@ class _SearchPageState extends State<SearchPage> {
               Center(
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 32),
-                  child: Text('Không có kết quả'),
+                  child: Text(tr().searchNoResults),
                 ),
               ),
           ],

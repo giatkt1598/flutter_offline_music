@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -51,7 +52,7 @@ class MusicListControllerGroup extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 4,
-              children: [Icon(Icons.play_arrow), Text('Phát nhạc')],
+              children: [Icon(Icons.play_arrow), Text(tr().playMusic)],
             ),
           ),
         ),
@@ -74,7 +75,7 @@ class MusicListControllerGroup extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 4,
-              children: [Icon(Icons.shuffle), Text('Ngẫu nhiên')],
+              children: [Icon(Icons.shuffle), Text(tr().playMusicRandom)],
             ),
           ),
         ),

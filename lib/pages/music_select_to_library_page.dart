@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_offline_music/components/music_item_select.dart';
 import 'package:flutter_offline_music/components/search_field.dart';
 import 'package:flutter_offline_music/components/song_list_sort_button.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
@@ -26,7 +27,7 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
   String sourceSelect = 'all';
 
   final ScrollController _scrollController = ScrollController();
-  Map<String, String> menuOptions = {'all': 'Tất cả bài hát'};
+  Map<String, String> menuOptions = {'all': tr().allSongs};
   List<Music> musics = [];
   List<Music> selectedMusics = [];
   String sortField = 'creationTime';
@@ -89,11 +90,13 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
 
       setState(() {
         for (var folder in musicFolders) {
-          menuOptions['Folder/${folder.id}'] = 'Thư mục / ${folder.name}';
+          menuOptions['Folder/${folder.id}'] =
+              '${tr().folderTitle} / ${folder.name}';
         }
 
         for (var lib in libraries) {
-          menuOptions['Library/${lib.id}'] = 'Thư viện / ${lib.title}';
+          menuOptions['Library/${lib.id}'] =
+              '${tr().libraryTitle} / ${lib.title}';
         }
       });
 
@@ -124,7 +127,7 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
                       )
                       : val.startsWith('Folder')
                       ? Icon(Icons.folder, color: Colors.amber)
-                      : Icon(Icons.list),
+                      : Icon(Icons.queue_music),
                   Text(menuOptions[val]!),
                 ],
               ),
@@ -151,7 +154,7 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
       try {
         EasyLoading.show(
           maskType: EasyLoadingMaskType.black,
-          status: 'Đang lưu...',
+          status: tr().status_saving,
           dismissOnTap: false,
         );
 
@@ -175,12 +178,12 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Thêm bài hát'),
+        title: Text(tr().addSongsToLibrary),
         actions: [
           TextButton(
             onPressed: handleSave,
             child: Text(
-              'Xong',
+              tr().doneTitle,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
           ),
@@ -241,7 +244,7 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
                   children: [
                     Checkbox(value: isSelectAll, onChanged: selectAll),
                     Text(
-                      'Chọn tất cả',
+                      tr().selectAll,
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Expanded(child: Container()),
@@ -249,7 +252,9 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
                       padding: EdgeInsets.only(right: 16),
                       child: Opacity(
                         opacity: 0.4,
-                        child: Text('Đã chọn ${selectedMusics.length} bài hát'),
+                        child: Text(
+                          '${tr().selected} ${tr().nSongs(selectedMusics.length).toLowerCase()}',
+                        ),
                       ),
                     ),
                   ],

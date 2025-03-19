@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -19,12 +20,6 @@ class SongListSortButton extends StatefulWidget {
 }
 
 class _SongListSortButtonState extends State<SongListSortButton> {
-  final Map<String, Map<String, IconData>> sortFieldOptions = {
-    "title": {"Tên bài hát": Icons.music_note_rounded},
-    "artist": {"Tên nghệ sĩ": Icons.person_outline_outlined},
-    "lengthInSecond": {"Độ dài": Icons.swap_horiz},
-  };
-
   String sortField = '';
   String sortDirection = '';
 
@@ -39,6 +34,12 @@ class _SongListSortButtonState extends State<SongListSortButton> {
   @override
   Widget build(BuildContext context) {
     final playerProvider = Provider.of<PlayerProvider>(context);
+    final Map<String, Map<String, IconData>> sortFieldOptions = {
+      "title": {tr().sortField_musicName: Icons.music_note_rounded},
+      "artist": {tr().sortField_artist: Icons.person_outline_outlined},
+      "lengthInSecond": {tr().sortField_length: Icons.swap_horiz},
+    };
+
     showModal() async {
       playerProvider.hideMiniPlayer();
       await showModalBottomSheet(
@@ -57,7 +58,7 @@ class _SongListSortButtonState extends State<SongListSortButton> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ModalTitle(title: 'Sắp xếp theo'),
+                      ModalTitle(title: tr().sortByTitle),
                       for (var item in sortFieldOptions.entries)
                         ListTile(
                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
@@ -91,7 +92,7 @@ class _SongListSortButtonState extends State<SongListSortButton> {
                           closeModal();
                         },
                         minTileHeight: 30,
-                        title: Text('Mới nhất'),
+                        title: Text(tr().sortField_newest),
                         leading: Icon(Icons.fiber_new_rounded),
                         trailing: Radio(
                           value: 'creationTime desc',
@@ -115,7 +116,7 @@ class _SongListSortButtonState extends State<SongListSortButton> {
                           });
                           closeModal();
                         },
-                        title: Text('Cũ nhất'),
+                        title: Text(tr().sortField_oldest),
                         leading: Icon(Icons.history),
                         trailing: Radio(
                           value: 'creationTime asc',
@@ -131,10 +132,10 @@ class _SongListSortButtonState extends State<SongListSortButton> {
                       ),
                       Divider(),
                       SizedBox(height: 16),
-                      ModalTitle(title: 'Theo thứ tự'),
+                      ModalTitle(title: tr().sortDirectionTitle),
                       ListTile(
                         contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        title: Text('Tăng dần (A ⇀ Z)'),
+                        title: Text(tr().sortDirection_ascending),
                         leading: Icon(Icons.arrow_upward_rounded),
                         minTileHeight: 30,
                         onTap: () {
@@ -155,7 +156,7 @@ class _SongListSortButtonState extends State<SongListSortButton> {
                       ),
                       ListTile(
                         contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        title: Text('Giảm dần (Z ⇀ A)'),
+                        title: Text(tr().sortDirection_descending),
                         leading: Icon(Icons.arrow_downward_rounded),
                         minTileHeight: 30,
                         onTap: () {
@@ -187,7 +188,10 @@ class _SongListSortButtonState extends State<SongListSortButton> {
 
     String? label = sortFieldOptions[sortField]?.keys.first;
     if (sortField == 'creationTime') {
-      label = sortDirection == 'asc' ? 'Cũ nhất' : 'Mới nhất';
+      label =
+          sortDirection == 'asc'
+              ? tr().sortField_oldest
+              : tr().sortField_newest;
     }
 
     return TextButton(

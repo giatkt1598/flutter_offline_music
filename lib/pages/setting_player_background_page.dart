@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/blur_image.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +59,7 @@ class _SettingPlayerBackgroundPageState
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Tùy chỉnh',
+                      tr().optionsTitle,
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     SizedBox(width: 30, child: Divider()),
@@ -68,7 +69,7 @@ class _SettingPlayerBackgroundPageState
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Độ mờ: ${(blurValue * 100).round()}%'),
+                          Text('${tr().blur}: ${(blurValue * 100).round()}%'),
                           SizedBox(height: 8),
                           Slider(
                             value: blurValue,
@@ -99,7 +100,7 @@ class _SettingPlayerBackgroundPageState
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hình nền'),
+        title: Text(tr().settingPlayer_background),
         actions: [
           IconButton(onPressed: showBgSettings, icon: Icon(Icons.more_vert)),
         ],
@@ -163,7 +164,7 @@ class BackgroundItem extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.onSecondary,
                         ),
-                        child: Center(child: Text('Tự động')),
+                        child: Center(child: Text(tr().auto)),
                       )
                       : BlurImageWidget(
                         imagePath: value,

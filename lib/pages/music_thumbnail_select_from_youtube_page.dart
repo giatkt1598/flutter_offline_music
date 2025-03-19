@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/components/search_field.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
@@ -65,7 +66,7 @@ class _MusicThumbnailSelectFromYoutubePageState
         videos!.addAll(nextPage);
       } else {
         _isFullResult = true;
-        ToastService.show(message: 'Đã hiển thị toàn bộ kết quả');
+        ToastService.show(message: tr().displayedAllResult);
       }
       _isLoading = false;
     });
@@ -75,14 +76,14 @@ class _MusicThumbnailSelectFromYoutubePageState
     _isLoading = true;
     _isFullResult = false;
     _selectedVideo = null;
-    EasyLoading.show(status: 'Đang tải');
+    EasyLoading.show(status: tr().status_loading);
     try {
       var searchResult = await youtubeService.searchYouTube(keywords);
       setState(() {
         videos = searchResult;
       });
     } catch (e) {
-      ToastService.showError('Xảy ra lỗi: $e');
+      ToastService.showError('${tr().musicMenu_error}: $e');
     } finally {
       EasyLoading.dismiss();
       _isLoading = false;
@@ -90,7 +91,7 @@ class _MusicThumbnailSelectFromYoutubePageState
   }
 
   handleSave() async {
-    EasyLoading.show(status: 'Đang lưu...');
+    EasyLoading.show(status: tr().status_saving);
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     if (_selectedVideo == null) return;
     widget.music.thumbnail = await youtubeService.downloadThumbnail(
@@ -101,10 +102,10 @@ class _MusicThumbnailSelectFromYoutubePageState
       await playerProvider.audioHandler.updateThumbnailToPlaylistItems();
       playerProvider.notifyChanges();
       ToastService.showSuccess(
-        'Đã cập nhật ảnh bìa cho "${widget.music.title}"',
+        tr().changeMusicThumbnailSuccess(widget.music.title),
       );
     } else {
-      ToastService.showError('Xảy ra lỗi, vui lòng thử lại!');
+      ToastService.showError(tr().errorTryAgain);
     }
     EasyLoading.dismiss();
     Navigator.of(context).pop();
@@ -114,11 +115,11 @@ class _MusicThumbnailSelectFromYoutubePageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Đổi ảnh bìa'),
+        title: Text(tr().musicMenu_changeThumbnail),
         actions: [
           TextButton(
             onPressed: _selectedVideo != null ? handleSave : null,
-            child: Text('Xong'),
+            child: Text(tr().doneTitle),
           ),
         ],
       ),
@@ -154,7 +155,7 @@ class _MusicThumbnailSelectFromYoutubePageState
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                'Ảnh cung cấp bởi Youtube',
+                                tr().pictureProvidedByYoutube,
                                 style: TextStyle(fontSize: 12),
                               ),
                             ],
@@ -231,7 +232,7 @@ class _MusicThumbnailSelectFromYoutubePageState
                                   height: 16,
                                   child: CircularProgressIndicator(),
                                 ),
-                                Text('Đang tải...'),
+                                Text(tr().status_loading),
                               ],
                             ),
                           ),
@@ -239,9 +240,7 @@ class _MusicThumbnailSelectFromYoutubePageState
                       if (_isFullResult)
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Text('Đã hiển thị tất cả kết quả!'),
-                          ),
+                          child: Center(child: Text(tr().displayedAllResult)),
                         ),
                       SizedBox(height: 90),
                     ],

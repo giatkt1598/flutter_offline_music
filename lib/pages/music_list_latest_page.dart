@@ -2,6 +2,7 @@ import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/music_list.dart';
 import 'package:flutter_offline_music/components/music_list_simple_info.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 
@@ -31,10 +32,13 @@ class _MusicListLatestPageState extends State<MusicListLatestPage> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Đã thêm gần đây'),
+            Text(tr().dashboard_newFiles),
             Opacity(
               opacity: 0.4,
-              child: Text('(30 ngày gần đây)', style: TextStyle(fontSize: 12)),
+              child: Text(
+                '(${tr().nLastDays(30)})',
+                style: TextStyle(fontSize: 12),
+              ),
             ),
           ],
         ),

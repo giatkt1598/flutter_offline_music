@@ -4,6 +4,7 @@ import 'package:flutter_offline_music/components/music_list_controller_group.dar
 import 'package:flutter_offline_music/components/music_list_item.dart';
 import 'package:flutter_offline_music/components/music_list_simple_info.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
@@ -33,7 +34,7 @@ class _MusicListFavoritePageState extends State<MusicListFavoritePage> {
     final playerProvider = Provider.of<PlayerProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Yêu thích'),
+        title: Text(tr().favorites),
         actions: [
           MenuPopover<String>(
             onPopoverResult: (result) async {
@@ -50,9 +51,7 @@ class _MusicListFavoritePageState extends State<MusicListFavoritePage> {
                   playerProvider.notifyChanges();
                 }
 
-                ToastService.showSuccess(
-                  'Đã gỡ bỏ tất cả bài hát khỏi mục Yêu thích',
-                );
+                ToastService.showSuccess(tr().removeAllFromFavoriteSuccess);
               }
             },
             trigger:
@@ -65,7 +64,7 @@ class _MusicListFavoritePageState extends State<MusicListFavoritePage> {
                 value: 'remove_all',
                 child: ListTile(
                   leading: Icon(Icons.delete, color: Colors.red),
-                  title: Text('Gỡ bỏ tất cả'),
+                  title: Text(tr().removeAllFromFavorite),
                 ),
               ),
             ],
@@ -90,7 +89,7 @@ class _MusicListFavoritePageState extends State<MusicListFavoritePage> {
               ),
               MusicListControllerGroup(),
               if (musics.isEmpty)
-                Expanded(child: NoData(title: 'Danh sách trống!')),
+                Expanded(child: NoData(title: tr().emptyList)),
               Expanded(
                 child: ListView.builder(
                   itemCount: musics.length,

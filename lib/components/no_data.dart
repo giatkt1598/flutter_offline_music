@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 
 class NoData extends StatelessWidget {
   const NoData({super.key, this.title});
@@ -14,7 +15,7 @@ class NoData extends StatelessWidget {
             'assets/no_data.png',
             width: MediaQuery.of(context).size.width * 0.7,
           ),
-          Text(title ?? 'Không có dữ liệu'),
+          Text(title ?? tr().noData),
         ],
       ),
     );

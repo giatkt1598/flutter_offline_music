@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_offline_music/i18n/app_localizations.dart';
 import 'package:flutter_offline_music/i18n/time_ago_vi_message.dart';
 import 'package:flutter_offline_music/pages/home_page.dart';
 import 'package:flutter_offline_music/pages/splash_page.dart';
@@ -13,7 +14,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:toastification/toastification.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

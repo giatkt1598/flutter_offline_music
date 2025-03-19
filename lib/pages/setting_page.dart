@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/components/language_flag_icon.dart';
 import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
 import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/pages/language_list_page.dart';
@@ -38,8 +39,8 @@ class _SettingPageState extends State<SettingPage> {
   void handleDeleteData(BuildContext context) async {
     bool? confirmed = await showConfirmDialog(
       context: context,
-      title: "Xóa dữ liệu",
-      message: "Xóa tất cả dữ liệu, sau khi xóa, bạn cần khởi động lại app?",
+      title: tr().setting_deleteDataPermanently,
+      message: tr().setting_deleteDataPermanentlyConfirmMessage,
     );
     if (confirmed == true) {
       Future<void> clearTemporaryDirectory() async {
@@ -51,7 +52,7 @@ class _SettingPageState extends State<SettingPage> {
 
       await DatabaseHelper.resetDatabase();
       await clearTemporaryDirectory();
-      ToastService.showSuccess('Đã xóa dữ liệu, vui lòng khởi động lại app...');
+      ToastService.showSuccess(tr().setting_deleteDataPermanentlySuccess);
       Timer(Duration(seconds: 1), () {
         exit(0);
       });
@@ -65,10 +66,10 @@ class _SettingPageState extends State<SettingPage> {
     final appSetting = settingProvider.appSetting;
     String? backgroundName = '';
     if (appSetting.playerBackgroundImage.isEmpty) {
-      backgroundName = 'Tự động';
+      backgroundName = tr().auto;
     } else {
       backgroundName =
-          'Hình ${SettingPlayerBackgroundPage.images.indexOf(appSetting.playerBackgroundImage) + 1}';
+          '${tr().picture} ${SettingPlayerBackgroundPage.images.indexOf(appSetting.playerBackgroundImage) + 1}';
     }
     return Scaffold(
       appBar: AppBar(title: Text(tr().settingTitle), actions: []),
@@ -153,6 +154,26 @@ class _SettingPageState extends State<SettingPage> {
                 settingValue: tr().langOptionDisplayName(
                   appSetting.languageCode,
                 ),
+                settingValueWidget: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 4,
+                  children: [
+                    appSetting.languageCode == 'auto'
+                        ? Container()
+                        : Transform.scale(
+                          scale: 0.8,
+                          child: LanguageFlagIcon(
+                            languageCode: appSetting.languageCode,
+                          ),
+                        ),
+                    Opacity(
+                      opacity: 0.4,
+                      child: Text(
+                        tr().langOptionDisplayName(appSetting.languageCode),
+                      ),
+                    ),
+                  ],
+                ),
                 settingPage: LanguageListPage(),
               ),
               Divider(),
@@ -234,10 +255,12 @@ class SettingItemSelect extends StatelessWidget {
     required this.settingName,
     required this.settingPage,
     required this.settingValue,
+    this.settingValueWidget,
   });
 
   final String settingName;
   final String settingValue;
+  final Widget? settingValueWidget;
   final Widget settingPage;
 
   @override
@@ -264,7 +287,8 @@ class SettingItemSelect extends StatelessWidget {
       title: Row(
         children: [
           Expanded(child: Text(settingName)),
-          Opacity(opacity: 0.4, child: Text(settingValue)),
+          settingValueWidget ??
+              Opacity(opacity: 0.4, child: Text(settingValue)),
           Opacity(
             opacity: 0.4,
             child: Icon(Icons.keyboard_arrow_right_outlined),

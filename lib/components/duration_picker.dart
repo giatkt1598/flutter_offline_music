@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 
 class DurationPicker extends StatefulWidget {
   const DurationPicker({super.key, this.value, this.onChanged});
@@ -14,14 +15,6 @@ class _DurationPickerState extends State<DurationPicker> {
   int selectMinute = 0;
   final GlobalKey<NumberWheelState> _hourWheelKey = GlobalKey();
   final GlobalKey<NumberWheelState> _minuteWheelKey = GlobalKey();
-
-  Map<String, Duration> quickOptions = {
-    "15m": Duration(minutes: 15),
-    "30m": Duration(minutes: 30),
-    "45m": Duration(minutes: 45),
-    "60m": Duration(hours: 1),
-    "Tắt": Duration.zero,
-  };
 
   _handleValueChanged() {
     if (widget.onChanged != null) {
@@ -42,6 +35,14 @@ class _DurationPickerState extends State<DurationPicker> {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, Duration> quickOptions = {
+      "15m": Duration(minutes: 15),
+      "30m": Duration(minutes: 30),
+      "45m": Duration(minutes: 45),
+      "60m": Duration(hours: 1),
+      tr().off: Duration.zero,
+    };
+
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: 230,

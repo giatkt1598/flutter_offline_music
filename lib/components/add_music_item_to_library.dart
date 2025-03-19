@@ -59,7 +59,7 @@ class _AddMusicItemToLibraryState extends State<AddMusicItemToLibrary> {
             child: Row(
               children: [
                 Text(
-                  tr().libraryMenu_addItem,
+                  tr().libraryMenu_addItems,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],
@@ -94,7 +94,7 @@ class _AddMusicItemToLibraryState extends State<AddMusicItemToLibrary> {
                               Opacity(
                                 opacity: 0.4,
                                 child: Text(
-                                tr().nSongs(library.musics.length),
+                                  tr().nSongs(library.musics.length),
                                   style: TextStyle(fontSize: 12),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,

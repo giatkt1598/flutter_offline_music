@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/music_item_menu.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:provider/provider.dart';
@@ -34,8 +35,8 @@ class _PlayerHeaderState extends State<PlayerHeader> {
           child: Text(
             key: ValueKey(widget.playerTab),
             {
-              PlayerTab.audio: 'Bài hát',
-              PlayerTab.playlist: 'Danh sách phát',
+              PlayerTab.audio: tr().songTitle,
+              PlayerTab.playlist: tr().playlistTitle,
             }[widget.playerTab]!,
           ),
         ),

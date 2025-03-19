@@ -167,7 +167,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                 children: [
                   if (widget.type == MusicMenuType.inPlaylist)
                     ListMenuOption(
-                      title: 'Phát',
+                      title: tr().musicMenu_play,
                       icon: Icons.play_arrow_rounded,
                       enabled: !isCurrent,
                       onTap: () {
@@ -192,26 +192,28 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                         );
                         if (success) {
                           ToastService.showSuccess(
-                            'Tiếp theo sẽ phát bài "${widget.music.title}"',
+                            tr().musicMenu_playNextMessage(widget.music.title),
                           );
                           if (nextIndex == 0) {
                             await audioHandler.playMusic(widget.music);
                           }
                         } else {
-                          ToastService.showError('Xảy ra lỗi');
+                          ToastService.showError(tr().musicMenu_error);
                         }
                         Navigator.of(context).pop();
                       },
                     ),
                   if (widget.type == MusicMenuType.inPlaylist)
                     ListMenuOption(
-                      title: 'Xóa khỏi danh sách phát',
+                      title: tr().musicMenu_removeFromPlaylist,
                       icon: Icons.delete_rounded,
                       enabled: !isCurrent,
                       onTap: () {
                         audioHandler.removeItemInPlaylist(widget.music.path);
                         ToastService.showSuccess(
-                          'Đã xóa "${widget.music.title}" khỏi danh sách phát',
+                          tr().musicMenu_removeFromPlaylistSuccess(
+                            widget.music.title,
+                          ),
                         );
                         Navigator.of(context).pop();
                       },
@@ -225,15 +227,15 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                         widget.music.isFavorite ? null : Colors.pinkAccent,
                     title:
                         widget.music.isFavorite
-                            ? 'Xóa khỏi Yêu thích'
-                            : 'Thêm vào Yêu thích',
+                            ? tr().musicMenu_removeFromFavorite
+                            : tr().musicMenu_addToFavorite,
                     onTap: () {
                       widget.music.isFavorite = !widget.music.isFavorite;
                       musicService.updateMusicAsync(widget.music);
                       ToastService.showSuccess(
                         widget.music.isFavorite
-                            ? 'Đã thêm vào Yêu thích'
-                            : 'Đã xóa khỏi Yêu thích',
+                            ? tr().musicMenu_addToFavoriteSuccess
+                            : tr().musicMenu_removeFromFavoriteSuccess,
                       );
                       //TODO: refactor
 
@@ -263,7 +265,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                   ),
                   ListMenuOption(
                     icon: Icons.playlist_add,
-                    title: 'Thêm vào thư viện',
+                    title: tr().musicMenu_addToLibrary,
                     onTap: () {
                       Navigator.pop(context, true);
                       showAddToLibraryModal();
@@ -271,11 +273,13 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                   ),
                   if (widget.type == MusicMenuType.inLibrary)
                     ListMenuOption(
-                      title: 'Xóa khỏi thư viện',
+                      title: tr().musicMenu_removeFromLibrary,
                       icon: Icons.playlist_remove_rounded,
                       onTap: () async {
                         if (playerProvider.currentLibraryId == null) {
-                          ToastService.showError('Không tìm thấy thư viện');
+                          ToastService.showError(
+                            tr().musicMenu_notFoundLibrary,
+                          );
                           Navigator.of(context).pop();
                           return;
                         }
@@ -293,10 +297,12 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                           );
                           playerProvider.setMusics(playerProvider.musics);
                           ToastService.showSuccess(
-                            'Đã xóa bài hát "${widget.music.title}" khỏi thư viện',
+                            tr().musicMenu_removeFromLibrarySuccess(
+                              widget.music.title,
+                            ),
                           );
                         } else {
-                          ToastService.showError('Xảy ra lỗi');
+                          ToastService.showError(tr().musicMenu_error);
                         }
                         Navigator.of(context).pop();
                       },
@@ -305,14 +311,14 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                     iconColor: hasStopTime ? Colors.green : null,
                     icon: Icons.alarm_rounded,
                     title:
-                        'Hẹn giờ ngủ${hasStopTime ? ' - Còn lại ${fDurationLong(stopDuration!)}' : ''}',
+                        '${tr().setStopTimeTitle}${hasStopTime ? ' - ${tr().remainingTitle} ${fDurationLong(stopDuration!)}' : ''}',
                     onTap: () {
                       Navigator.pop(context, true);
                       setStopTime();
                     },
                   ),
                   ListMenuOption(
-                    title: 'Đổi ảnh bìa',
+                    title: tr().musicMenu_changeThumbnail,
                     icon: Icons.image,
                     onTap: () async {
                       // EasyLoading.show(
@@ -350,7 +356,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                   ),
                   if (widget.type == MusicMenuType.inPlayer)
                     ListMenuOption(
-                      title: 'Đổi giao diện',
+                      title: tr().musicMenu_changePlayerTheme,
                       icon: Icons.color_lens_outlined,
                       onTap: () {
                         Navigator.of(context).pop();
@@ -366,13 +372,15 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                   Opacity(opacity: .3, child: Divider()),
                   if (widget.music.thumbnail != null)
                     ListMenuOption(
-                      title: 'Xóa ảnh bìa',
+                      title: tr().musicMenu_removeThumbnail,
                       icon: Icons.image_not_supported,
                       onTap: () async {
                         widget.music.thumbnail = null;
                         await musicService.updateMusicAsync(widget.music);
                         ToastService.showSuccess(
-                          'Đã xóa ảnh bìa "${widget.music.title}"',
+                          tr().musicMenu_removeThumbnailSuccess(
+                            widget.music.title,
+                          ),
                         );
                         audioHandler.updateThumbnailToPlaylistItems();
                         playerProvider.notifyChanges();
@@ -384,24 +392,27 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                         widget.music.isHidden
                             ? Icons.visibility
                             : Icons.visibility_off_rounded,
-                    title: widget.music.isHidden ? 'Hiển thị' : 'Ẩn',
+                    title:
+                        widget.music.isHidden
+                            ? tr().musicMenu_show
+                            : tr().musicMenu_hide,
                     onTap: () async {
                       bool isHidden = widget.music.isHidden;
                       await toggleHide();
                       ToastService.showSuccess(
-                        'Đã ${isHidden ? 'hiển thị' : 'ẩn'} "${widget.music.title}"',
+                        isHidden
+                            ? tr().musicMenu_musicShown(widget.music.title)
+                            : tr().musicMenu_musicHidden(widget.music.title),
                       );
                       Navigator.pop(context, true);
                     },
                   ),
                   ListMenuOption(
                     icon: Icons.delete_forever,
-                    title: 'Xóa khỏi thiết bị',
+                    title: tr().musicMenu_deleteOnDevice,
                     iconColor: Colors.red,
                     onTap: () {
-                      ToastService.show(
-                        message: 'Chưa làm tính năng xóa này : <',
-                      );
+                      ToastService.show(message: 'Comming soon! : <');
                     },
                   ),
                 ],

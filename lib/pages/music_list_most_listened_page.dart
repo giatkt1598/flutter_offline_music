@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/music_list_item.dart';
 import 'package:flutter_offline_music/components/music_list_simple_info.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 
@@ -27,7 +28,7 @@ class _MusicListMostListenedPageState extends State<MusicListMostListenedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Lượt nghe nhiều nhất')),
+      appBar: AppBar(title: Text(tr().dashboard_mostListening)),
       body: FutureBuilder(
         future: getMusics(),
         builder: (context, snapshot) {

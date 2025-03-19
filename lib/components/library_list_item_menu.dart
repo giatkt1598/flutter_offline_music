@@ -93,7 +93,7 @@ class LibraryListItemMenu extends StatelessWidget {
               addMusicToLibrary();
             },
             leading: Icon(Icons.playlist_add),
-            title: Text(tr().libraryMenu_addItem),
+            title: Text(tr().libraryMenu_addItems),
           ),
           ListTile(
             enabled: true,

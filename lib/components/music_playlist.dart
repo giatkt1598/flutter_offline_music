@@ -7,6 +7,7 @@ import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
 import 'package:flutter_offline_music/components/simple_tab.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
@@ -107,7 +108,7 @@ class _MusicPlaylistState extends State<MusicPlaylist>
               onPressed: () async {
                 await audioHandler.setShuffle(true);
                 setState(() {});
-                ToastService.showSuccess('Đã trộn danh sách');
+                ToastService.showSuccess(tr().playlist_shuffleSuccess);
               },
               icon: Icon(Icons.shuffle),
             ),
@@ -115,7 +116,7 @@ class _MusicPlaylistState extends State<MusicPlaylist>
               onPressed: () {
                 showConfirmDialog(
                   context: context,
-                  message: 'Xóa tất cả bài hát khỏi danh sách phát?',
+                  message: tr().playlist_removeAllItemsConfirmMessage,
                 ).then((isConfirm) {
                   if (isConfirm == true) {
                     Navigator.of(context).pop(true);

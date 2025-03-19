@@ -25,22 +25,38 @@
     "about_version": "Version",
     "about_contact": "Info & Support",
     "setting_deleteDataPermanently": "Delete data",
+    "setting_deleteDataPermanentlyConfirmMessage": "Are you sure to delete all data?. After deletion, you need to restart the app.",
+    "setting_deleteDataPermanentlySuccess": "All data is deleted, please restart the application...",
     "dashboard_playingRecently": "Recently Played",
-    "dashboard_viewMore": "More >",
+    "dashboard_viewMore": "View More >",
     "dashboard_newFiles": "Recently Added",
     "dashboard_mostListening": "Most Listened",
     "dashboard_noSongsToPlay": "No songs to play",
+    "musicMenu_play": "Play",
     "musicMenu_playNext": "Play Next",
-    "musicMenu_addToFavorite": "Add to Favorites",
-    "musicMenu_removeFromFavorite": "Remove from Favorites",
-    "musicMenu_addToLibrary": "Add to Library",
-    "musicMenu_removeFromLibrary": "Remove from Library",
+    "musicMenu_addToFavorite": "Add to favorites",
+    "musicMenu_addToFavoriteSuccess": "Add to favorites is success",
+    "musicMenu_removeFromFavorite": "Remove from favorites",
+    "musicMenu_removeFromFavoriteSuccess": "Remove from favorites is success",
+    "musicMenu_addToLibrary": "Add to library",
+    "musicMenu_removeFromLibrary": "Remove from library",
+    "musicMenu_removeFromLibrarySuccess": "\"{musicTitle}\" is removed",
     "musicMenu_setStopTime": "Sleep Timer",
-    "musicMenu_changeThumbnail": "Change Thumbnail",
-    "musicMenu_removeThumbnail": "Remove Thumbnail",
+    "musicMenu_changeThumbnail": "Change thumbnail",
+    "musicMenu_removeThumbnail": "Remove thumbnail",
+    "musicMenu_removeThumbnailSuccess": "Remove thumbnail for \"{name}\" is success",
+    "musicMenu_changePlayerTheme": "Change player theme",
+    "musicMenu_musicShown": "\"{name}\" is displayed",
+    "musicMenu_musicHidden": "\"{name}\" is hidden",
+    "musicMenu_show": "Display",
     "musicMenu_hide": "Hide",
     "musicMenu_deleteOnDevice": "Delete from Device",
-    "libraryMenu_addItem": "Add Song to Library",
+    "musicMenu_playNextMessage": "Next, the song \"{musicTitle}\" wil be play",
+    "musicMenu_error": "Error",
+    "musicMenu_removeFromPlaylist": "Remove from playlist",
+    "musicMenu_removeFromPlaylistSuccess": "\"{musicTitle}\" is removed",
+    "musicMenu_notFoundLibrary": "Library is not found",
+    "libraryMenu_addItems": "Add songs to library",
     "libraryMenu_edit": "Edit Information",
     "libraryMenu_sortItems": "Sort Songs",
     "libraryMenu_downloadItemThumbnails": "Download Thumbnails for All Songs",
@@ -49,6 +65,7 @@
     "libraryName": "Library Name",
     "error_requiredName": "Name cannot be empty",
     "error_checkAgain": "Please check the information again",
+    "error_existedName": "Name is exists",
     "searchPlaceholder": "Search",
     "searchNoResults": "No Results",
     "noData": "No Data",
@@ -63,6 +80,9 @@
     "detail_size": "Size",
     "detail_filePath": "Location",
     "detail_creationDate": "Creation Date",
+    "detail_lastModificationDate": "Last Modify",
+    "detail_empty": "<empty>",
+    "folderName": "Folder name",
     "sortByTitle": "Sort By",
     "sortField_musicName": "Song Name",
     "sortField_artist": "Artist Name",
@@ -77,8 +97,9 @@
     "favorites": "Favorites",
     "songTitle": "Song",
     "setStopTimeTitle": "Sleep Timer",
+    "remainingTitle": "Remaining",
     "playlistTitle": "Playlist",
-    "nHours": "{hour, plural, =0{0 hour} =1{1 hour} other{{hour} hours}}",
+    "nHours": "{hour, plural, =0{zero hour} =1{1 hour} other{{hour} hours}}",
     "@nHours": {
         "placeholders": {
             "hour": {
@@ -87,10 +108,19 @@
             }
         }
     },
-    "nMinutes": "{minute, plural, =0{0 minute} =1{1 minute} other{{minute} minutes}}",
+    "nMinutes": "{minute, plural, =0{zero minute} =1{1 minute} other{{minute} minutes}}",
     "@nMinutes": {
         "placeholders": {
             "minute": {
+                "type": "num",
+                "format": "compact"
+            }
+        }
+    },
+    "nSeconds": "{seconds, plural, =0{zero seconds} =1{1 second} other{{seconds} seconds}}",
+    "@nSeconds": {
+        "placeholders": {
+            "seconds": {
                 "type": "num",
                 "format": "compact"
             }
@@ -121,6 +151,7 @@
     "status_saving": "Saving...",
     "status_completed": "Completed!",
     "status_waiting": "Please wait...",
+    "status_loading": "Loading...",
     "downloadThumbnail_progress": "Progress: {percent}%",
     "downloadThumbnail_totalCount": "Total: {total}",
     "downloadThumbnail_existsCount": "Already have (no download): {total}",
@@ -200,5 +231,51 @@
     "viewHiddenFiles": "Show hidden files",
     "hideHiddenFiles": "Not show hidden files",
     "music_hidden": "Hidden",
-    "music_unknownArtist": "<Unknown>"
+    "music_unknownArtist": "<Unknown>",
+    "nLibraries": "{count, plural, other{{count} libraries} zero{no libraries} one{1 library}}",
+    "@nLibraries": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "noLibraries": "No libraries!",
+    "createNew": "Create new",
+    "removeAllFromFavorite": "Remove all songs",
+    "removeAllFromFavoriteSuccess": "All songs are removed from Favorites",
+    "emptyList": "Empty list!",
+    "addSongsToLibrary": "Add songs",
+    "nLastDays": "{count, plural, other{Last {count} days} one{Last one day}}",
+    "@nLastDays": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "libraryTitle": "Library",
+    "folderTitle": "Folder",
+    "allSongs": "All songs",
+    "doneTitle": "Done",
+    "selectAll": "Select all",
+    "selected": "Selected",
+    "displayedAllResult": "All results are shown!",
+    "pictureProvidedByYoutube": "Pictures are provided by Youtube",
+    "errorTryAgain": "Error has occurred, please try again later!",
+    "changeMusicThumbnailSuccess": "Thumbnail for \"${title}\" is updated",
+    "themeIsUsed": "Used",
+    "themeApply": "Apply",
+    "auto": "Auto",
+    "picture": "Picture",
+    "blur": "Blur",
+    "optionsTitle": "Options",
+    "stopAfter": "Stop after",
+    "createLibrary": "Create a library",
+    "updateLibrary": "Update a library",
+    "off": "Off",
+    "playlist_shuffleSuccess": "List is shuffled",
+    "playlist_removeAllItemsConfirmMessage": "Delete all songs from playlist?",
+    "confirmDialog_defaultTitle": "Confirm",
+    "confirmDialog_defaultMessage": "Are you sure?"
 }

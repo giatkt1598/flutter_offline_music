@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
@@ -18,21 +19,21 @@ class MusicInfo extends StatelessWidget {
     return Table(
       columnWidths: {0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
       children: [
-        createRow(label: 'Tiêu đề', value: music.title),
-        createRow(label: 'Album', value: ''),
-        createRow(label: 'Nghệ sĩ', value: music.artist),
-        createRow(label: 'Thể loại', value: music.genre),
+        createRow(label: tr().detail_title, value: music.title),
+        createRow(label: tr().detail_album, value: ''),
+        createRow(label: tr().detail_artist, value: music.artist),
+        createRow(label: tr().detail_genre, value: music.genre),
         createRow(
-          label: 'Thời lượng',
+          label: tr().detail_length,
           value: fDurationHHMMSS(music.duration, short: true),
         ),
         createRow(
-          label: 'Kích thước',
+          label: tr().detail_size,
           value: '${double.parse(size.toStringAsFixed(2))} MB',
         ),
-        createRow(label: 'Vị trí', value: music.path),
+        createRow(label: tr().detail_filePath, value: music.path),
         createRow(
-          label: 'Ngày tạo',
+          label: tr().detail_creationDate,
           widgetValue: Opacity(
             opacity: 0.6,
             child: Column(
@@ -73,7 +74,7 @@ class MusicInfo extends StatelessWidget {
                 Opacity(
                   opacity: 0.6,
                   child: Text(
-                    value?.isNotEmpty == true ? value! : '<trống>',
+                    value?.isNotEmpty == true ? value! : tr().detail_empty,
                     style: TextStyle(
                       fontStyle:
                           value?.isNotEmpty != true ? FontStyle.italic : null,

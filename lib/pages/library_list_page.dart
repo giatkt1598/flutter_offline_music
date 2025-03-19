@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/create_edit_library_dialog.dart';
 import 'package:flutter_offline_music/components/library_list_item.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/providers/tab_provider.dart';
 import 'package:flutter_offline_music/services/library_service.dart';
@@ -57,7 +58,7 @@ class _LibraryListPageState extends State<LibraryListPage>
                 Padding(
                   padding: const EdgeInsets.only(left: 12),
                   child: Text(
-                    '${libraries.length} thư viện',
+                    tr().nLibraries(libraries.length),
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -95,9 +96,12 @@ class _LibraryListPageState extends State<LibraryListPage>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(height: 28),
-                      NoData(title: 'Chưa có thư viện nào!'),
+                      NoData(title: tr().noLibraries),
                       SizedBox(height: 12),
-                      OutlinedButton(onPressed: newLib, child: Text('Tạo mới')),
+                      OutlinedButton(
+                        onPressed: newLib,
+                        child: Text(tr().createNew),
+                      ),
                     ],
                   ),
                 ),
