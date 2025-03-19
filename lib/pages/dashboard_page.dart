@@ -7,6 +7,7 @@ import 'package:flutter_offline_music/components/music_list_empty.dart';
 import 'package:flutter_offline_music/components/music_list_item.dart';
 import 'package:flutter_offline_music/components/music_list_item_card.dart';
 import 'package:flutter_offline_music/components/music_list_item_rrect.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/pages/music_list_favorite_page.dart';
 import 'package:flutter_offline_music/pages/music_list_latest_page.dart';
@@ -104,7 +105,7 @@ class _DashboardPageState extends State<DashboardPage>
       }
 
       if (musics.isEmpty) {
-        ToastService.showError('Không có bài hát nào để phát');
+        ToastService.showError(tr().dashboard_noSongsToPlay);
         return;
       }
 
@@ -143,7 +144,7 @@ class _DashboardPageState extends State<DashboardPage>
                           .then((_) => fetchData());
                     },
                     child: Text(
-                      'Yêu thích',
+                      tr().favorites,
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -155,7 +156,7 @@ class _DashboardPageState extends State<DashboardPage>
                     backgroundImage: AssetImage("assets/bg_music_blue.png"),
                     onPressed: playNow,
                     child: Text(
-                      'Phát nhạc',
+                      tr().playMusic,
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -169,7 +170,7 @@ class _DashboardPageState extends State<DashboardPage>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _GroupTitle(
-                title: 'Đã phát gần đây',
+                title: tr().dashboard_playingRecently,
                 onViewMore:
                     _recentMusics.isEmpty
                         ? null
@@ -195,7 +196,7 @@ class _DashboardPageState extends State<DashboardPage>
             ],
           ),
           _GroupTitle(
-            title: 'Đã thêm gần đây',
+            title: tr().dashboard_newFiles,
             onViewMore:
                 _newestMusics.isEmpty
                     ? null
@@ -224,7 +225,7 @@ class _DashboardPageState extends State<DashboardPage>
                     ),
           ),
           _GroupTitle(
-            title: 'Lượt nghe nhiều nhất',
+            title: tr().dashboard_mostListening,
             onViewMore:
                 _topPlayedCountMusics.isEmpty
                     ? null
@@ -291,7 +292,7 @@ class _GroupTitle extends StatelessWidget {
             GestureDetector(
               onTap: () => onViewMore!(),
               child: Text(
-                'Xem thêm >',
+                tr().dashboard_viewMore,
                 style: TextStyle(
                   color: Theme.of(context).buttonTheme.colorScheme?.primary,
                 ),

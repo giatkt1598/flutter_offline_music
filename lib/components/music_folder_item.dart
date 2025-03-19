@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/highlighted_text.dart';
 import 'package:flutter_offline_music/components/music_folder_item_menu.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/pages/music_in_folder_page.dart';
 
@@ -77,12 +78,12 @@ class MusicFolderItem extends StatelessWidget {
                         : Text(folder.name),
                     if (folder.isHidden)
                       Text(
-                        ' (Thư mục ẩn)',
+                        ' (${tr().hiddenFolder})',
                         style: TextStyle(color: Colors.red),
                       ),
                     if (showHiddenInfo && totalHiddenFileInfolder > 0)
                       Text(
-                        ' ($totalHiddenFileInfolder tệp ẩn)',
+                        ' (${tr().nHiddenFiles(totalHiddenFileInfolder)})',
                         style: TextStyle(color: Colors.red),
                       ),
                   ],
@@ -90,7 +91,7 @@ class MusicFolderItem extends StatelessWidget {
                 Opacity(
                   opacity: 0.5,
                   child: Text(
-                    '$totalFile bài hát ・ ${folder.path}',
+                    '${tr().nSongs(totalFile)} ・ ${folder.path}',
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),

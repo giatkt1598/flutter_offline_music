@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_offline_music/components/app_button.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
@@ -88,7 +89,7 @@ class _DownloadAllMusicThumbnailFromYoutubeState
 
   Future<void> handleSave() async {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
-    EasyLoading.show(status: 'Đang lưu...', dismissOnTap: false);
+    EasyLoading.show(status: tr().status_saving, dismissOnTap: false);
     for (var m in musics) {
       await musicService.updateMusicAsync(m);
 
@@ -103,7 +104,7 @@ class _DownloadAllMusicThumbnailFromYoutubeState
     playerProvider.notifyChanges();
 
     EasyLoading.dismiss();
-    ToastService.showSuccess('Hoàn thành!');
+    ToastService.showSuccess(tr().status_completed);
     Navigator.of(context).pop();
   }
 
@@ -111,7 +112,7 @@ class _DownloadAllMusicThumbnailFromYoutubeState
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        'Tải ảnh bìa từ Youtube',
+        tr().libraryMenu_downloadItemThumbnails,
         style: Theme.of(context).textTheme.titleMedium,
       ),
       content: SizedBox(
@@ -121,7 +122,7 @@ class _DownloadAllMusicThumbnailFromYoutubeState
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 8,
           children: [
-            Text('Tiến độ: ${(progress * 100).round()}%'),
+            Text(tr().downloadThumbnail_progress((progress * 100).round())),
             LinearProgressIndicator(value: progress),
             if (currentMusic != null)
               Row(
@@ -146,7 +147,7 @@ class _DownloadAllMusicThumbnailFromYoutubeState
                       children: [
                         Icon(Icons.check_circle, color: Colors.green),
                         Text(
-                          'Hoàn thành!',
+                          tr().status_completed,
                           style: TextStyle(
                             color: Colors.green,
                             fontWeight: FontWeight.bold,
@@ -164,10 +165,14 @@ class _DownloadAllMusicThumbnailFromYoutubeState
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Tổng: ${musics.length}'),
-                          Text('Đã có (không tải nữa): $numHasThumbnail'),
-                          Text('Tải thành công: $numSuccess'),
-                          Text('Tải thất bại: $numFailed'),
+                          Text(
+                            tr().downloadThumbnail_totalCount(musics.length),
+                          ),
+                          Text(
+                            tr().downloadThumbnail_existsCount(numHasThumbnail),
+                          ),
+                          Text(tr().downloadThumbnail_successCount(numSuccess)),
+                          Text(tr().downloadThumbnail_failedCount(numFailed)),
                         ],
                       ),
                     ),
@@ -179,13 +184,13 @@ class _DownloadAllMusicThumbnailFromYoutubeState
       ),
       actions: [
         AppButton(
-          child: Text('Hủy bỏ'),
+          child: Text(tr().cancel),
           onPressed: () => Navigator.of(context).pop(),
         ),
         AppButton(
           type: AppButtonType.primary,
           onPressed: progress < 1 || numSuccess == 0 ? null : handleSave,
-          child: Text('Lưu'),
+          child: Text(tr().save),
         ),
       ],
     );

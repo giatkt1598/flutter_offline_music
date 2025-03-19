@@ -158,7 +158,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
           spacing: 4,
-          children: [Text(tabTitle, overflow: TextOverflow.ellipsis)],
+          children: [
+            Text(tr().home_tab(tabTitle), overflow: TextOverflow.ellipsis),
+          ],
         ),
       ),
     );

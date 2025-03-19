@@ -2,6 +2,7 @@ import 'package:darq/darq.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/music_list.dart';
 import 'package:flutter_offline_music/components/music_list_simple_info.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 
@@ -27,7 +28,7 @@ class _MusicListRecentPlayingPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Đã phát gần đây')),
+      appBar: AppBar(title: Text(tr().dashboard_playingRecently)),
       body: FutureBuilder(
         future: getMusics(),
         builder: (context, snapshot) {

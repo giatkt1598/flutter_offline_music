@@ -24,5 +24,181 @@
     "about_intro": "Introduction",
     "about_version": "Version",
     "about_contact": "Info & Support",
-    "setting_deleteDataPermanently": "Delete All Data Permanently"
+    "setting_deleteDataPermanently": "Delete data",
+    "dashboard_playingRecently": "Recently Played",
+    "dashboard_viewMore": "More >",
+    "dashboard_newFiles": "Recently Added",
+    "dashboard_mostListening": "Most Listened",
+    "dashboard_noSongsToPlay": "No songs to play",
+    "musicMenu_playNext": "Play Next",
+    "musicMenu_addToFavorite": "Add to Favorites",
+    "musicMenu_removeFromFavorite": "Remove from Favorites",
+    "musicMenu_addToLibrary": "Add to Library",
+    "musicMenu_removeFromLibrary": "Remove from Library",
+    "musicMenu_setStopTime": "Sleep Timer",
+    "musicMenu_changeThumbnail": "Change Thumbnail",
+    "musicMenu_removeThumbnail": "Remove Thumbnail",
+    "musicMenu_hide": "Hide",
+    "musicMenu_deleteOnDevice": "Delete from Device",
+    "libraryMenu_addItem": "Add Song to Library",
+    "libraryMenu_edit": "Edit Information",
+    "libraryMenu_sortItems": "Sort Songs",
+    "libraryMenu_downloadItemThumbnails": "Download Thumbnails for All Songs",
+    "libraryMenu_deleteLibrary": "Delete Library",
+    "createLibraryTitle": "Create Library",
+    "libraryName": "Library Name",
+    "error_requiredName": "Name cannot be empty",
+    "error_checkAgain": "Please check the information again",
+    "searchPlaceholder": "Search",
+    "searchNoResults": "No Results",
+    "noData": "No Data",
+    "formAction_confirm": "Confirm",
+    "formAction_cancel": "Cancel",
+    "detailTitle": "Details",
+    "detail_title": "Title",
+    "detail_album": "Album",
+    "detail_artist": "Artist",
+    "detail_genre": "Genre",
+    "detail_length": "Duration",
+    "detail_size": "Size",
+    "detail_filePath": "Location",
+    "detail_creationDate": "Creation Date",
+    "sortByTitle": "Sort By",
+    "sortField_musicName": "Song Name",
+    "sortField_artist": "Artist Name",
+    "sortField_length": "Duration",
+    "sortField_newest": "Newest",
+    "sortField_oldest": "Oldest",
+    "sortDirectionTitle": "Sort Order",
+    "sortDirection_ascending": "Ascending (A ⇀ Z)",
+    "sortDirection_descending": "Descending (Z ⇀ A)",
+    "playMusic": "Play",
+    "playMusicRandom": "Shuffle",
+    "favorites": "Favorites",
+    "songTitle": "Song",
+    "setStopTimeTitle": "Sleep Timer",
+    "playlistTitle": "Playlist",
+    "nHours": "{hour, plural, =0{0 hour} =1{1 hour} other{{hour} hours}}",
+    "@nHours": {
+        "placeholders": {
+            "hour": {
+                "type": "num",
+                "format": "compact"
+            }
+        }
+    },
+    "nMinutes": "{minute, plural, =0{0 minute} =1{1 minute} other{{minute} minutes}}",
+    "@nMinutes": {
+        "placeholders": {
+            "minute": {
+                "type": "num",
+                "format": "compact"
+            }
+        }
+    },
+    "changePlayerThemeTitle": "Player theme",
+    "nSongs": "{count, plural, =0{no songs} =1{1 song} other{{count} songs}}",
+    "@nSongs": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "home_tab": "{id, select, recommended{For you} songs{Songs} libraries{Libraries} folders{Folders} other{}}",
+    "@home_tab": {
+        "placeholders": {
+            "id": {
+                "type": "String"
+            }
+        }
+    },
+    "message_addMusicToLibrarySuccess": "This song is added to library",
+    "library_musicExists": " (this song is existed)",
+    "deleteLibraryPopupTitle": "Delete library",
+    "deleteLibraryPopUpMessage": "Are you sure to delete \"{libraryTitle}\"?",
+    "deleteLibrarySuccess": "\"{title}\" is deleted",
+    "status_saving": "Saving...",
+    "status_completed": "Completed!",
+    "status_waiting": "Please wait...",
+    "downloadThumbnail_progress": "Progress: {percent}%",
+    "downloadThumbnail_totalCount": "Total: {total}",
+    "downloadThumbnail_existsCount": "Already have (no download): {total}",
+    "downloadThumbnail_successCount": "Success: {total}",
+    "downloadThumbnail_failedCount": "Failure: {total}",
+    "cancel": "Cancel",
+    "save": "Save",
+    "folderMenu_createLibraryDuplicatedMessage": "The library already exists. Do you want to add all songs from this folder to the library with the same name?",
+    "folderMenu_createLibrarySuccess": "\"{name}\" library is created",
+    "folderMenu_displayFolder": "Display folder",
+    "folderMenu_hideFolder": "Hide folder",
+    "folderMenu_displayAllFiles": "Display all files ({totalHiddenFile, plural, other{{totalHiddenFile} files} zero{no files} one{1 file}})",
+    "@folderMenu_displayAllFiles": {
+        "placeholders": {
+            "totalHiddenFile": {
+                "type": "int"
+            }
+        }
+    },
+    "folderMenu_hideAllFiles": "Hide all files",
+    "scanMusic": "Scan files",
+    "scanMusic_scaning": "Scanning for music files...",
+    "scanMusic_scanCompleted": "Completed",
+    "scanMusic_noNewFile": "no new files is founded",
+    "scanMusic_nNewFiles": "{count, plural, other{{count} songs are} one{one song is}} added",
+    "@scanMusic_nNewFiles": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "scanMusic_newDeletedFiles": "{count, plural, other{{count} songs are} one{1 song is}} removed because not found in device storage",
+    "@scanMusic_newDeletedFiles": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "scanMusic_noPermission": "No storage access permission to scan music. Please grant \"Manage all files\" permission.",
+    "hiddenFolder": "Hidden folder",
+    "nHiddenFiles": "{count, plural, other{{count} hidden files} one{1 hidden files}}",
+    "@nHiddenFiles": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "nFolders": "{count, plural, other{{count} folders} one{1 folder}}",
+    "@nFolders": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "nFiles": "{count, plural, other{{count} files} one{1 file}}",
+    "@nFiles": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "and": "and",
+    "nBeHidden": "{count, plural, other{are hidden} one{is hidden}}",
+    "@nBeHidden": {
+        "description": "nBeHidden",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "viewHiddenFiles": "Show hidden files",
+    "hideHiddenFiles": "Not show hidden files",
+    "music_hidden": "Hidden",
+    "music_unknownArtist": "<Unknown>"
 }

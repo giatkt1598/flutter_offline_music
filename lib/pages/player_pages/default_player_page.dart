@@ -4,6 +4,7 @@ import 'package:flutter_offline_music/components/player_header.dart';
 import 'package:flutter_offline_music/components/music_playlist.dart';
 import 'package:flutter_offline_music/components/simple_tab.dart';
 import 'package:flutter_offline_music/constants/constant.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
@@ -249,7 +250,7 @@ class _DefaultPlayerState extends BasePlayerWidgetState {
                             Opacity(
                               opacity: 0.5,
                               child: Text(
-                                music.artist ?? '<Không rõ tác giả>',
+                                music.artist ?? tr().music_unknownArtist,
                                 style: TextStyle(fontSize: 14),
                               ),
                             ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 
 class MusicItemSelect extends StatelessWidget {
@@ -71,7 +72,7 @@ class MusicItemSelect extends StatelessWidget {
                 Opacity(
                   opacity: 0.4,
                   child: Text(
-                    music.artist ?? '<Không rõ tác giả>',
+                    music.artist ?? tr().music_unknownArtist,
                     style: TextStyle(fontSize: 12),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

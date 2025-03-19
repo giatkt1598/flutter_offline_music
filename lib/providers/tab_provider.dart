@@ -18,10 +18,10 @@ class TabProvider extends ChangeNotifier {
   TabController? _tabController;
   PageController? _pageController;
   final List<TabData> tabDataList = [
-    TabData(title: 'Đề xuất', widget: DashboardPage()),
-    TabData(title: 'Bài hát', widget: FullMusicListPage()),
-    TabData(title: 'Thư viện', widget: LibraryListPage()),
-    TabData(title: 'Thư mục', widget: LoadMusicPage()),
+    TabData(title: 'recommended', widget: DashboardPage()),
+    TabData(title: 'songs', widget: FullMusicListPage()),
+    TabData(title: 'libraries', widget: LibraryListPage()),
+    TabData(title: 'folders', widget: LoadMusicPage()),
   ];
   TabProvider();
   PageController get pageController => _pageController!;

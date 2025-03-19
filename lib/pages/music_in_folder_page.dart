@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/hidden_music_folder_info.dart';
 import 'package:flutter_offline_music/components/music_folder_item_menu.dart';
 import 'package:flutter_offline_music/components/music_list.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/providers/music_folder_provider.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +38,7 @@ class _MusicInFolderPageState extends State<MusicInFolderPage> {
                 Opacity(
                   opacity: 0.4,
                   child: Text(
-                    '(${currentMusics.length} bài hát)',
+                    '(${tr().nSongs(currentMusics.length)})',
                     style: TextStyle(fontSize: 12),
                   ),
                 ),
@@ -45,7 +46,7 @@ class _MusicInFolderPageState extends State<MusicInFolderPage> {
                   Text(' | ', style: TextStyle(fontSize: 12)),
                 if (widget.musicFolder.isHidden)
                   Text(
-                    'Thư mục ẩn',
+                    tr().hiddenFolder,
                     style: TextStyle(fontSize: 12, color: Colors.red),
                   ),
               ],

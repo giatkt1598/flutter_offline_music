@@ -3,6 +3,7 @@ import 'package:flutter_offline_music/components/auto_scroll_text.dart';
 import 'package:flutter_offline_music/components/highlighted_text.dart';
 import 'package:flutter_offline_music/components/music_item_menu.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +49,7 @@ class MusicListItem extends StatelessWidget {
     final audioHandler = playerProvider.audioHandler;
 
     final isCurrent = audioHandler.currentMediaItem?.id == music.path;
-    final artist = music.artist ?? '<Không rõ tác giả>';
+    final artist = music.artist ?? tr().music_unknownArtist;
     final TextStyle artistTextStyle = TextStyle(
       fontSize: 12,
       color: musicArtistColor,
@@ -150,7 +151,7 @@ class MusicListItem extends StatelessWidget {
                 children: [
                   if (music.isHidden)
                     Text(
-                      '(Bị ẩn) ',
+                      '(${tr().music_hidden}) ',
                       style: TextStyle(color: Colors.red, fontSize: 12),
                     ),
                   Expanded(

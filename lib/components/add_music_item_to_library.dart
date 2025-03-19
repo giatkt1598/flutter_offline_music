@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/library_thumbnail.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/services/library_service.dart';
@@ -42,7 +43,7 @@ class _AddMusicItemToLibraryState extends State<AddMusicItemToLibrary> {
       libraryId: library.id,
     );
 
-    ToastService.showSuccess('Đã thêm bài hát vào thư viện');
+    ToastService.showSuccess(tr().message_addMusicToLibrarySuccess);
     Navigator.of(context).pop();
   }
 
@@ -58,7 +59,7 @@ class _AddMusicItemToLibraryState extends State<AddMusicItemToLibrary> {
             child: Row(
               children: [
                 Text(
-                  'Thêm bài hát vào thư viện',
+                  tr().libraryMenu_addItem,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],
@@ -93,7 +94,7 @@ class _AddMusicItemToLibraryState extends State<AddMusicItemToLibrary> {
                               Opacity(
                                 opacity: 0.4,
                                 child: Text(
-                                  '${library.musics.length} bài hát',
+                                tr().nSongs(library.musics.length),
                                   style: TextStyle(fontSize: 12),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -103,7 +104,7 @@ class _AddMusicItemToLibraryState extends State<AddMusicItemToLibrary> {
                                 (x) => x.id == widget.music.id,
                               ))
                                 Text(
-                                  ' (đã có bài hát này)',
+                                  tr().library_musicExists,
                                   style: TextStyle(
                                     color: Colors.red,
                                     fontSize: 12,

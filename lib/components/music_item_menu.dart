@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/add_music_item_to_library.dart';
 import 'package:flutter_offline_music/components/music_info.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/pages/music_thumbnail_select_from_youtube_page.dart';
 import 'package:flutter_offline_music/pages/select_player_theme_page.dart';
@@ -55,7 +56,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Chi tiết',
+                  tr().detailTitle,
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 Opacity(opacity: 0.3, child: Divider()),
@@ -152,7 +153,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                     Opacity(
                       opacity: 0.4,
                       child: Text(
-                        widget.music.artist ?? '<Không rõ tác giả>',
+                        widget.music.artist ?? tr().music_unknownArtist,
                         style: TextStyle(fontSize: 12),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -178,7 +179,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                       widget.type == MusicMenuType.inPlaylist))
                     ListMenuOption(
                       icon: Icons.post_add_sharp,
-                      title: 'Phát tiếp theo',
+                      title: tr().musicMenu_playNext,
                       enabled: !isCurrent,
                       onTap: () async {
                         final nextIndex =

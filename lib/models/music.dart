@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 
 class Music {
   int id;
@@ -91,7 +92,7 @@ class Music {
     return MediaItem(
       id: path,
       title: title,
-      artist: artist ?? '<Không rõ tác giả>',
+      artist: artist ?? tr().music_unknownArtist,
       album: 'Tất cả',
       duration: duration,
       genre: genre,

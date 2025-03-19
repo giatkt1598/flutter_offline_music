@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/highlighted_text.dart';
 import 'package:flutter_offline_music/components/library_list_item_menu_button.dart';
 import 'package:flutter_offline_music/components/library_thumbnail.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/pages/music_list_in_library_page.dart';
 import 'package:flutter_offline_music/services/library_service.dart';
@@ -54,7 +55,7 @@ class LibraryListItem extends StatelessWidget {
           Opacity(
             opacity: 0.4,
             child: Text(
-              '${library.musics.length} bài hát',
+              tr().nSongs(library.musics.length),
               style: TextStyle(fontSize: 12),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

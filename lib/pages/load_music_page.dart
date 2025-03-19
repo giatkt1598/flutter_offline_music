@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_offline_music/components/music_folder_item.dart';
 import 'package:flutter_offline_music/components/hidden_music_folder_info.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/providers/music_folder_provider.dart';
 import 'package:flutter_offline_music/providers/tab_provider.dart';
@@ -64,19 +65,19 @@ class _LoadMusicPageState extends State<LoadMusicPage>
       if (await _permissionService.requestStoragePermissionAsync(context)) {
         EasyLoading.show(
           maskType: EasyLoadingMaskType.black,
-          status: 'Đang quét nhạc...',
+          status: tr().scanMusic_scaning,
           dismissOnTap: false,
         );
         var list = await _musicService.scanMusicAsync(
           onCompleted: (totalNewFile, totalDeletedFile) {
             ToastService.showSuccess(
               [
-                'Quét thành công',
+                tr().scanMusic_scanCompleted,
                 totalNewFile == 0
-                    ? 'không có tệp mới'
-                    : 'đã thêm $totalNewFile bài hát',
+                    ? tr().scanMusic_noNewFile
+                    : tr().scanMusic_nNewFiles(totalNewFile),
                 totalDeletedFile > 0
-                    ? 'gỡ bỏ $totalDeletedFile bài hát vì không tìm thấy tệp trên thiết bị'
+                    ? tr().scanMusic_newDeletedFiles(totalDeletedFile)
                     : null,
               ].where((x) => x != null).join(', '),
               duration: Duration(seconds: 5),
@@ -88,9 +89,7 @@ class _LoadMusicPageState extends State<LoadMusicPage>
           _musicFolders = list;
         });
       } else {
-        ToastService.showError(
-          'Không có quyền truy cập bộ nhớ để quét nhạc. Vui lòng cấp quyền "Quản lý tất cả tệp"',
-        );
+        ToastService.showError(tr().scanMusic_noPermission);
       }
       EasyLoading.dismiss();
     }
@@ -104,7 +103,7 @@ class _LoadMusicPageState extends State<LoadMusicPage>
             width: MediaQuery.of(context).size.width * 0.8,
             child: OutlinedButton(
               onPressed: scanMusic,
-              child: Text('Quét nhạc'),
+              child: Text(tr().scanMusic),
             ),
           ),
           if (totalHiddenFolder == 0 && _musicFolders.isEmpty)

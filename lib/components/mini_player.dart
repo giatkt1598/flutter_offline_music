@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/auto_scroll_text.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/components/rotating_disc.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:provider/provider.dart';
@@ -165,7 +166,8 @@ class _MiniPlayerState extends State<MiniPlayer> {
                                 opacity: 0.4,
                                 child: AutoScrollText(
                                   text:
-                                      mediaItem.artist ?? '<Không rõ tác giả>',
+                                      mediaItem.artist ??
+                                      tr().music_unknownArtist,
                                   style: TextStyle(fontSize: 12),
                                   containerWidth:
                                       MediaQuery.of(context).size.width - 100,

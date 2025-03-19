@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_offline_music/components/menu_popover.dart';
 import 'package:flutter_offline_music/components/music_folder_info.dart';
 import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
@@ -62,7 +63,7 @@ class _MusicFolderItemMenuState extends State<MusicFolderItemMenu> {
       addMusicToLibrary(int libraryId) async {
         EasyLoading.show(
           maskType: EasyLoadingMaskType.black,
-          status: 'Vui lòng chờ chút...',
+          status: tr().status_waiting,
           dismissOnTap: false,
         );
         for (var music in widget.musicFolder.musics.where((x) => !x.isHidden)) {
@@ -77,13 +78,12 @@ class _MusicFolderItemMenuState extends State<MusicFolderItemMenu> {
       if (existedLibrary != null) {
         bool? isAddMusicToExistedLibrary = await showConfirmDialog(
           context: context,
-          message:
-              'Thư viện đã tồn tại, bạn có muốn thêm tất cả bài hát trong thư mục này vào thư viện cùng tên hay không?',
+          message: tr().folderMenu_createLibraryDuplicatedMessage,
         );
 
         if (isAddMusicToExistedLibrary == true) {
           await addMusicToLibrary(existedLibrary.id);
-          ToastService.showSuccess('Đã hoàn thành');
+          ToastService.showSuccess(tr().status_completed);
         }
       } else {
         int newLibId = await _libraryService.insertAsync(
@@ -98,7 +98,7 @@ class _MusicFolderItemMenuState extends State<MusicFolderItemMenu> {
         );
         await addMusicToLibrary(newLibId);
         ToastService.showSuccess(
-          'Đã tạo thư viện "${widget.musicFolder.name}"',
+          tr().folderMenu_createLibrarySuccess(widget.musicFolder.name),
         );
       }
     }
@@ -124,7 +124,7 @@ class _MusicFolderItemMenuState extends State<MusicFolderItemMenu> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Chi tiết',
+                    tr().detailTitle,
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   Opacity(opacity: 0.3, child: Divider()),
@@ -155,14 +155,14 @@ class _MusicFolderItemMenuState extends State<MusicFolderItemMenu> {
           value: 'create_library',
           child: ListTile(
             leading: Icon(Icons.playlist_add),
-            title: Text('Tạo thư viện'),
+            title: Text(tr().createLibraryTitle),
           ),
         ),
         PopupMenuItem(
           value: 'info',
           child: ListTile(
             leading: Icon(Icons.info_outline_rounded),
-            title: Text('Chi tiết'),
+            title: Text(tr().detailTitle),
           ),
         ),
         PopupMenuItem(
@@ -173,7 +173,9 @@ class _MusicFolderItemMenuState extends State<MusicFolderItemMenu> {
                     ? Icon(Icons.folder)
                     : Icon(Icons.folder_off_outlined),
             title: Text(
-              widget.musicFolder.isHidden ? 'Hiển thị thư mục' : 'Ẩn thư mục',
+              widget.musicFolder.isHidden
+                  ? tr().folderMenu_displayFolder
+                  : tr().folderMenu_hideFolder,
             ),
           ),
         ),
@@ -184,11 +186,13 @@ class _MusicFolderItemMenuState extends State<MusicFolderItemMenu> {
                 hasHiddenFile
                     ? ListTile(
                       leading: Icon(Icons.music_note_outlined),
-                      title: Text('Hiển thị tất cả tệp ($totalHiddenFile tệp)'),
+                      title: Text(
+                        tr().folderMenu_displayAllFiles(totalHiddenFile),
+                      ),
                     )
                     : ListTile(
                       leading: Icon(Icons.music_off_outlined),
-                      title: Text('Ẩn tất cả tệp'),
+                      title: Text(tr().folderMenu_hideAllFiles),
                     ),
           ),
       ],

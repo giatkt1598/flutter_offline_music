@@ -24,5 +24,181 @@
     "about_intro": "Giới thiệu",
     "about_version": "Phiên bản",
     "about_contact": "Thông tin & hỗ trợ",
-    "setting_deleteDataPermanently": "Xóa dữ liệu"
+    "setting_deleteDataPermanently": "Xóa dữ liệu",
+    "dashboard_playingRecently": "Đã phát gần đây",
+    "dashboard_viewMore": "Xem thêm >",
+    "dashboard_newFiles": "Đã thêm gần đây",
+    "dashboard_mostListening": "Lượt nghe nhiều nhất",
+    "dashboard_noSongsToPlay": "Không có bài hát nào để phát",
+    "musicMenu_playNext": "Phát tiếp theo",
+    "musicMenu_addToFavorite": "Thêm vào Yêu thích",
+    "musicMenu_removeFromFavorite": "Xóa khỏi Yêu thích",
+    "musicMenu_addToLibrary": "Thêm vào thư viện",
+    "musicMenu_removeFromLibrary": "Xóa khỏi thư viện",
+    "musicMenu_setStopTime": "Hẹn giờ ngủ",
+    "musicMenu_changeThumbnail": "Đổi ảnh bìa",
+    "musicMenu_removeThumbnail": "Xóa ảnh bìa",
+    "musicMenu_hide": "Ẩn",
+    "musicMenu_deleteOnDevice": "Xóa khỏi thiết bị",
+    "libraryMenu_addItem": "Thêm bài hát vào thư viện",
+    "libraryMenu_edit": "Sửa thông tin",
+    "libraryMenu_sortItems": "Sắp xếp bài hát",
+    "libraryMenu_downloadItemThumbnails": "Tải ảnh bìa cho tất cả bài hát",
+    "libraryMenu_deleteLibrary": "Xóa thư viện",
+    "createLibraryTitle": "Tạo thư viện",
+    "libraryName": "Tên thư viện",
+    "error_requiredName": "Tên không được để trống",
+    "error_checkAgain": "Vui lòng kiểm tra lại thông tin",
+    "searchPlaceholder": "Tìm kiếm",
+    "searchNoResults": "Không có kết quả",
+    "noData": "Không có dữ liệu",
+    "formAction_confirm": "Xác nhận",
+    "formAction_cancel": "Hủy",
+    "detailTitle": "Chi tiết",
+    "detail_title": "Tiêu đề",
+    "detail_album": "Album",
+    "detail_artist": "Nghệ sĩ",
+    "detail_genre": "Thể loại",
+    "detail_length": "Thời lượng",
+    "detail_size": "Kích thước",
+    "detail_filePath": "Vị trí",
+    "detail_creationDate": "Ngày tạo",
+    "sortByTitle": "Sắp xếp theo",
+    "sortField_musicName": "Tên bài hát",
+    "sortField_artist": "Tên nghệ sĩ",
+    "sortField_length": "Độ dài",
+    "sortField_newest": "Mới nhất",
+    "sortField_oldest": "Cũ nhất",
+    "sortDirectionTitle": "Theo thứ tự",
+    "sortDirection_ascending": "Tăng dần (A ⇀ Z)",
+    "sortDirection_descending": "Giảm dần (Z ⇀ A)",
+    "playMusic": "Phát nhạc",
+    "playMusicRandom": "Ngẫu nhiên",
+    "favorites": "Yêu thích",
+    "songTitle": "Bài hát",
+    "setStopTimeTitle": "Hẹn giờ ngủ",
+    "playlistTitle": "Danh sách phát",
+    "nHours": "{hour, plural, other{{hour} giờ}}",
+    "@nHours": {
+        "placeholders": {
+            "hour": {
+                "type": "num",
+                "format": "compact"
+            }
+        }
+    },
+    "nMinutes": "{minute, plural, other{{minute} phút}}",
+    "@nMinutes": {
+        "placeholders": {
+            "minute": {
+                "type": "num",
+                "format": "compact"
+            }
+        }
+    },
+    "changePlayerThemeTitle": "Đổi giao diện",
+    "nSongs": "{count} bài hát",
+    "@nSongs": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "home_tab": "{id, select, recommended{Đề xuất} songs{Bài hát} libraries{Thư viện} folders{Thư mục} other{}}",
+    "@home_tab": {
+        "placeholders": {
+            "id": {
+                "type": "String"
+            }
+        }
+    },
+    "message_addMusicToLibrarySuccess": "Đã thêm bài hát vào thư viện",
+    "library_musicExists": " (đã có bài hát này)",
+    "deleteLibraryPopupTitle": "Xóa thư viện",
+    "deleteLibraryPopUpMessage": "Bạn chắc chắn muốn xóa thư viện \"{libraryTitle}\"?",
+    "deleteLibrarySuccess": "Đã xóa thư viện \"{title}\"",
+    "status_saving": "Đang lưu...",
+    "status_completed": "Hoàn thành!",
+    "status_waiting": "Vui lòng chờ chút",
+    "downloadThumbnail_progress": "Tiến độ: {percent}%",
+    "downloadThumbnail_totalCount": "Tổng: {total}",
+    "downloadThumbnail_existsCount": "Đã có (không tải nữa): {total}",
+    "downloadThumbnail_successCount": "Tải thành công: {total}",
+    "downloadThumbnail_failedCount": "Tải thất bại: {total}",
+    "cancel": "Hủy bỏ",
+    "save": "Lưu",
+    "folderMenu_createLibraryDuplicatedMessage": "Thư viện đã tồn tại, bạn có muốn thêm tất cả bài hát trong thư mục này vào thư viện cùng tên hay không?",
+    "folderMenu_createLibrarySuccess": "Đã tạo thư viện \"{name}\"",
+    "folderMenu_displayFolder": "Hiển thị thư mục",
+    "folderMenu_hideFolder": "Ẩn thư mục",
+    "folderMenu_displayAllFiles": "Hiển thị tất cả tệp ({totalHiddenFile} tệp)",
+    "@folderMenu_displayAllFiles": {
+        "placeholders": {
+            "totalHiddenFile": {
+                "type": "int"
+            }
+        }
+    },
+    "folderMenu_hideAllFiles": "Ẩn tất cả tệp",
+    "scanMusic": "Quét nhạc",
+    "scanMusic_scaning": "Đang quét nhạc...",
+    "scanMusic_scanCompleted": "Quét thành công",
+    "scanMusic_noNewFile": "không có tệp mới",
+    "scanMusic_nNewFiles": "đã thêm {count, plural, other{{count} bài hát}}",
+    "@scanMusic_nNewFiles": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "scanMusic_newDeletedFiles": "gỡ bỏ {count, plural, other{{count} bài hát}} vì không tìm thấy tệp trên thiết bị",
+    "@scanMusic_newDeletedFiles": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "scanMusic_noPermission": "Không có quyền truy cập bộ nhớ để quét nhạc. Vui lòng cấp quyền \"Quản lý tất cả tệp\"",
+    "hiddenFolder": "Thư mục ẩn",
+    "nHiddenFiles": "{count} tệp ẩn",
+    "@nHiddenFiles": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "nFolders": "{count, plural, other{{count} folders} one{1 folder}}",
+    "@nFolders": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "nFiles": "{count, plural, other{{count} files} one{1 file}}",
+    "@nFiles": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "and": "và",
+    "nBeHidden": "{count, plural, other{bị ẩn}}",
+    "@nBeHidden": {
+        "description": "nBeHidden",
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "viewHiddenFiles": "Xem tệp bị ẩn",
+    "hideHiddenFiles": "Không hiển thị tệp ẩn",
+    "music_hidden": "Bị ẩn",
+    "music_unknownArtist": "<Không rõ tác giả>"
 }

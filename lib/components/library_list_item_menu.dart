@@ -4,6 +4,7 @@ import 'package:flutter_offline_music/components/download_all_music_thumbnail_fr
 import 'package:flutter_offline_music/components/library_thumbnail.dart';
 import 'package:flutter_offline_music/components/music_list_simple_info.dart';
 import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/library.dart';
 import 'package:flutter_offline_music/pages/music_select_to_library_page.dart';
 import 'package:flutter_offline_music/services/library_service.dart';
@@ -37,13 +38,13 @@ class LibraryListItemMenu extends StatelessWidget {
     deleteLibrary(BuildContext context) async {
       var isConfirm = await showConfirmDialog(
         context: context,
-        title: 'Xóa thư viện',
-        message: 'Bạn chắc chắn muốn xóa thư viện ${library.title}?',
+        title: tr().deleteLibraryPopupTitle,
+        message: tr().deleteLibraryPopUpMessage(library.title),
       );
       if (isConfirm != true) return;
 
       await libraryService.deleteAsync(library.id);
-      ToastService.showSuccess('Đã xóa thư viện "${library.title}"');
+      ToastService.showSuccess(tr().deleteLibrarySuccess(library.title));
       Navigator.of(context).pop();
       onRefresh();
     }
@@ -92,7 +93,7 @@ class LibraryListItemMenu extends StatelessWidget {
               addMusicToLibrary();
             },
             leading: Icon(Icons.playlist_add),
-            title: Text('Thêm bài hát vào thư viện'),
+            title: Text(tr().libraryMenu_addItem),
           ),
           ListTile(
             enabled: true,
@@ -105,23 +106,26 @@ class LibraryListItemMenu extends StatelessWidget {
               );
             },
             leading: Icon(Icons.edit),
-            title: Text('Sửa thông tin'),
+            title: Text(tr().libraryMenu_edit),
           ),
           ListTile(
             enabled: false,
             onTap: null,
             leading: Icon(Icons.sort_rounded),
-            title: Text('Sắp xếp bài hát'),
+            title: Text(tr().libraryMenu_sortItems),
           ),
           ListTile(
             onTap: () => getThumbnails(context),
             leading: Icon(Icons.image),
-            title: Text('Tải ảnh bìa cho tất cả bài hát'),
+            title: Text(tr().libraryMenu_downloadItemThumbnails),
           ),
           ListTile(
             onTap: () => deleteLibrary(context),
             leading: Icon(Icons.delete, color: Colors.red),
-            title: Text('Xóa thư viện', style: TextStyle(color: Colors.red)),
+            title: Text(
+              tr().libraryMenu_deleteLibrary,
+              style: TextStyle(color: Colors.red),
+            ),
           ),
         ],
       ),
