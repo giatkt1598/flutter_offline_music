@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/mini_player.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/pages/search_page.dart';
 import 'package:flutter_offline_music/pages/setting_page.dart';
 import 'package:flutter_offline_music/providers/tab_provider.dart';
@@ -34,7 +35,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     SharedData.fullHeight = MediaQuery.of(context).size.height;
     SharedData.fullWidth = MediaQuery.of(context).size.width;
     SharedData.statusBarHeight = MediaQuery.of(context).padding.top;
-    SharedData.rootContext = context;
     if (!initMiniPlayer) {
       setState(() {
         initMiniPlayer = true;
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   pinned: true, // Luôn hiển thị AppBar khi cuộn
                   floating: true, // Không tự động hiện khi cuộn lên
                   expandedHeight: 90, // Chiều cao mở rộng
-                  title: Text('Trình phát nhạc'),
+                  title: Text(tr().applicationName),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(8),

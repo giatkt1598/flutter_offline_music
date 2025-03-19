@@ -8,10 +8,12 @@ import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/providers/tab_provider.dart';
 import 'package:flutter_offline_music/services/audio_handler.dart';
+import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:toastification/toastification.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,7 +50,15 @@ class MyApp extends StatelessWidget {
         GoogleFonts.beVietnamProTextTheme().bodyMedium?.fontFamily;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Trình phát nhạc',
+      navigatorKey: GlobalContext.navigatorKey,
+      locale:
+          appSetting.languageCode == 'auto'
+              ? null
+              : Locale(appSetting.languageCode),
+      onGenerateTitle:
+          (context) => AppLocalizations.of(context)!.applicationName,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         fontFamily: fontFamily,

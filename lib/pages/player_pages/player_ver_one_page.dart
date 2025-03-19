@@ -183,7 +183,7 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                                   fontSize: 14,
                                 ),
                                 overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                                maxLines: 2,
                               ),
                               Opacity(
                                 opacity: 0.4,

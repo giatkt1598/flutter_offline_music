@@ -5,8 +5,10 @@
     "darq",
     "giatk",
     "LTWH",
+    "toastification",
     "webp"
   ],
   "cSpell.language": "en,vi",
-  "cSpell.allowCompoundWords": true
+  "cSpell.allowCompoundWords": true,
+  "arb-editor.suppressedWarnings": "all"
 }

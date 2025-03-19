@@ -6,5 +6,13 @@ class SharedData {
   static double fullWidth = 0;
   static double fullHeight = 0;
   static double statusBarHeight = 0;
-  static late BuildContext rootContext;
+}
+
+class GlobalContext {
+  GlobalContext._();
+
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
+
+  static BuildContext get context => navigatorKey.currentContext!;
 }

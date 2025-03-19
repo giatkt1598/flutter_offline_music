@@ -9,6 +9,13 @@ import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
+import 'package:provider/provider.dart';
+
+extension PlayerProviderExtension on BuildContext {
+  PlayerProvider getSettingProvider() {
+    return Provider.of<PlayerProvider>(this);
+  }
+}
 
 class PlayerProvider extends ChangeNotifier {
   bool isShowMiniPlayer = true;

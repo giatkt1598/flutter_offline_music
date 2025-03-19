@@ -1,0 +1,28 @@
+{
+    "@@locale": "en",
+    "applicationName": "Music Player",
+    "languageTitle": "Language",
+    "langOptionDisplayName": "{languageCode, select, vi{Tiếng Việt} en{English} other{System}}",
+    "@langOptionDisplayName": {
+        "placeholders": {
+            "languageCode": {
+                "type": "String"
+            }
+        }
+    },
+    "settingTitle": "Settings",
+    "setting_playerTitle": "Music Player",
+    "setting_themeTitle": "Theme",
+    "theme_lightMode": "Light",
+    "theme_darkMode": "Dark",
+    "theme_auto": "System",
+    "settingPlayer_skipSilence": "Skip silence",
+    "settingPlayer_autoVolume": "Fade in/out when playing/pausing or switching tracks",
+    "settingPlayer_autoScan": "Auto scan files",
+    "settingPlayer_background": "Background",
+    "setting_aboutTitle": "App Information",
+    "about_intro": "Introduction",
+    "about_version": "Version",
+    "about_contact": "Info & Support",
+    "setting_deleteDataPermanently": "Delete All Data Permanently"
+}

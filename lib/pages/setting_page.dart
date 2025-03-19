@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/pages/language_list_page.dart';
 import 'package:flutter_offline_music/pages/setting_player_background_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
@@ -70,14 +71,14 @@ class _SettingPageState extends State<SettingPage> {
           'Hình ${SettingPlayerBackgroundPage.images.indexOf(appSetting.playerBackgroundImage) + 1}';
     }
     return Scaffold(
-      appBar: AppBar(title: Text("Cài đặt"), actions: []),
+      appBar: AppBar(title: Text(tr().settingTitle), actions: []),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SettingGroup(title: 'Giao diện chủ đề'),
+              SettingGroup(title: tr().setting_themeTitle),
               SizedBox(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -128,9 +129,9 @@ class _SettingPageState extends State<SettingPage> {
                         SizedBox(height: 8),
                         Text(
                           {
-                            ThemeMode.system: "Hệ thống",
-                            ThemeMode.dark: "Tối",
-                            ThemeMode.light: "Sáng",
+                            ThemeMode.system: tr().theme_auto,
+                            ThemeMode.dark: tr().theme_darkMode,
+                            ThemeMode.light: tr().theme_lightMode,
                           }[mode]!,
                         ),
                         Transform.translate(
@@ -148,13 +149,15 @@ class _SettingPageState extends State<SettingPage> {
                 ],
               ),
               SettingItemSelect(
-                settingName: 'Ngôn ngữ',
-                settingValue: 'Tiếng Việt',
+                settingName: tr().languageTitle,
+                settingValue: tr().langOptionDisplayName(
+                  appSetting.languageCode,
+                ),
                 settingPage: LanguageListPage(),
               ),
               Divider(),
               SizedBox(height: 8),
-              SettingGroup(title: 'Trình phát nhạc'),
+              SettingGroup(title: tr().setting_playerTitle),
               SettingItemSwitch(
                 value: appSetting.skipSilent,
                 onChanged: (enable) {
@@ -163,41 +166,41 @@ class _SettingPageState extends State<SettingPage> {
                     enable,
                   );
                 },
-                title: "Bỏ qua khoảng lặng",
+                title: tr().settingPlayer_skipSilence,
               ),
               SettingItemSwitch(
                 value: appSetting.autoVolumnPausePlay,
                 onChanged: (val) {
                   settingProvider.setting(autoVolumnPausePlay: val);
                 },
-                title: "To/nhỏ dần khi phát/tạm dừng, chuyển bài",
+                title: tr().settingPlayer_autoVolume,
               ),
               SettingItemSwitch(
                 value: appSetting.autoScanFiles,
                 onChanged: (val) {
                   settingProvider.setting(autoScanFiles: val);
                 },
-                title: "Tự động quét nhạc",
+                title: tr().settingPlayer_autoScan,
               ),
               SettingItemSelect(
-                settingName: 'Hình nền',
+                settingName: tr().settingPlayer_background,
                 settingPage: SettingPlayerBackgroundPage(),
                 settingValue: backgroundName,
               ),
               Divider(),
               SizedBox(height: 8),
-              SettingGroup(title: 'Thông tin ứng dụng'),
+              SettingGroup(title: tr().setting_aboutTitle),
               ListTile(
                 contentPadding: EdgeInsets.symmetric(horizontal: 0),
                 onTap: () {},
-                title: Text('Giới thiệu'),
+                title: Text(tr().about_intro),
               ),
               ListTile(
                 contentPadding: EdgeInsets.symmetric(horizontal: 0),
                 onTap: () {},
                 title: Row(
                   children: [
-                    Expanded(child: Text('Phiên bản')),
+                    Expanded(child: Text(tr().about_intro)),
                     Opacity(opacity: 0.4, child: Text(appVersion)),
                   ],
                 ),
@@ -205,12 +208,15 @@ class _SettingPageState extends State<SettingPage> {
               ListTile(
                 contentPadding: EdgeInsets.symmetric(horizontal: 0),
                 onTap: () {},
-                title: Text('Liên hệ & hỗ trợ'),
+                title: Text(tr().about_contact),
               ),
               ListTile(
                 contentPadding: EdgeInsets.symmetric(horizontal: 0),
                 onTap: () => handleDeleteData(context),
-                title: Text('Xóa dữ liệu', style: TextStyle(color: Colors.red)),
+                title: Text(
+                  tr().setting_deleteDataPermanently,
+                  style: TextStyle(color: Colors.red),
+                ),
               ),
 
               SizedBox(height: 100),

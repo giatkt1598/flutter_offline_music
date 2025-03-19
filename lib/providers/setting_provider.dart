@@ -2,7 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/models/app_setting.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+extension SettingProviderExtension on BuildContext {
+  SettingProvider getSettingProvider() {
+    return Provider.of<SettingProvider>(this);
+  }
+}
 
 class SettingProvider extends ChangeNotifier {
   static AppSetting _appSetting = AppSetting();

@@ -22,7 +22,7 @@ class ToastService {
     Duration? duration,
     ToastificationType? type,
   }) {
-    final context = SharedData.rootContext;
+    final context = GlobalContext.context;
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     toastification.showCustom(
       context: context, // optional if you use ToastificationWrapper

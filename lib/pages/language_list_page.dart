@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
+import 'package:flutter_offline_music/providers/setting_provider.dart';
 
 class LanguageListPage extends StatefulWidget {
   const LanguageListPage({super.key});
@@ -8,25 +10,40 @@ class LanguageListPage extends StatefulWidget {
 }
 
 class _LanguageListPageState extends State<LanguageListPage> {
-  final List<String> languages = ['Tiếng Việt', 'English', '日本語'];
+  List<String> languageCodes = ['auto', 'vi', 'en'];
   @override
   Widget build(BuildContext context) {
+    final settingProvider = context.getSettingProvider();
+
     return Scaffold(
-      appBar: AppBar(title: Text('Ngôn ngữ')),
+      appBar: AppBar(
+        title: Text(
+          tr().languageTitle + settingProvider.appSetting.languageCode,
+        ),
+      ),
       body: SingleChildScrollView(
         child: ListView(
           shrinkWrap: true,
           children:
-              languages
-                  .map(
-                    (e) => ListTile(
-                      title: Text(e),
-                      onTap: () {
-                        Navigator.pop(context, e);
-                      },
-                    ),
-                  )
-                  .toList(),
+              languageCodes.map((langCode) {
+                bool isSelected =
+                    settingProvider.appSetting.languageCode == langCode;
+                return ListTile(
+                  tileColor:
+                      !isSelected
+                          ? null
+                          : Theme.of(context).colorScheme.surfaceContainer,
+                  title: Text(tr().langOptionDisplayName(langCode)),
+                  onTap: () {
+                    settingProvider.setting(languageCode: langCode);
+                    Navigator.pop(context, langCode);
+                  },
+                  trailing:
+                      isSelected
+                          ? Icon(Icons.check, color: Colors.green)
+                          : null,
+                );
+              }).toList(),
         ),
       ),
     );

@@ -1,0 +1,28 @@
+{
+    "@@locale": "vi",
+    "applicationName": "Trình phát nhạc",
+    "languageTitle": "Ngôn ngữ",
+    "langOptionDisplayName": "{languageCode, select, vi{Tiếng Việt} en{English} other{Hệ Thống}}",
+    "@langOptionDisplayName": {
+        "placeholders": {
+            "languageCode": {
+                "type": "String"
+            }
+        }
+    },
+    "settingTitle": "Cài đặt",
+    "setting_playerTitle": "Trình phát nhạc",
+    "setting_themeTitle": "Giao diện chủ đề",
+    "theme_lightMode": "Sáng",
+    "theme_darkMode": "Tối",
+    "theme_auto": "Hệ thống",
+    "settingPlayer_skipSilence": "Bỏ qua khoảng lặng",
+    "settingPlayer_autoVolume": "To/nhỏ dần khi phát/tạm dừng, chuyển bài",
+    "settingPlayer_autoScan": "Tự động quét nhạc",
+    "settingPlayer_background": "Hình nền",
+    "setting_aboutTitle": "Thông tin ứng dụng",
+    "about_intro": "Giới thiệu",
+    "about_version": "Phiên bản",
+    "about_contact": "Thông tin & hỗ trợ",
+    "setting_deleteDataPermanently": "Xóa dữ liệu"
+}
