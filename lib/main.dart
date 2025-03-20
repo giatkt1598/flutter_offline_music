@@ -59,8 +59,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         fontFamily: fontFamily,
+        appBarTheme: ThemeData.light().appBarTheme.copyWith(
+          shadowColor: Colors.black26,
+          backgroundColor: ThemeData.light().scaffoldBackgroundColor,
+          surfaceTintColor: ThemeData.light().scaffoldBackgroundColor,
+        ),
       ),
       darkTheme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Colors.black,
+        appBarTheme: ThemeData.dark().appBarTheme.copyWith(
+          backgroundColor: Colors.black,
+          surfaceTintColor: Colors.black,
+          shadowColor: Colors.white24,
+        ),
         textTheme: ThemeData.dark().textTheme.copyWith(
           bodyMedium: ThemeData.dark().textTheme.bodyMedium?.copyWith(
             fontFamily: fontFamily,

@@ -8,7 +8,6 @@ import 'package:flutter_offline_music/providers/tab_provider.dart';
 import 'package:flutter_offline_music/services/permission_service.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:flutter_offline_music/utilities/app_background_helper.dart';
-import 'package:flutter_offline_music/utilities/theme_helper.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -68,10 +67,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       bottomRight: Radius.circular(8),
                     ),
                   ),
-                  shadowColor: isDarkMode() ? Colors.white12 : Colors.black26,
                   // forceMaterialTransparency: true,
-                  backgroundColor: Theme.of(context).colorScheme.surface,
-                  surfaceTintColor: Theme.of(context).colorScheme.surface,
                   elevation: 0,
                   actions: [
                     IconButton(
