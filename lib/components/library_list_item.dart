@@ -35,7 +35,7 @@ class LibraryListItem extends StatelessWidget {
     return ListTile(
       onTap: openMusicList,
       contentPadding: EdgeInsets.only(left: 16, right: 4),
-      leading: LibraryThumbnail(library: library),
+      leading: LibraryThumbnail(library: library, size: 60),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

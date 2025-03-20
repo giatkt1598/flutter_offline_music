@@ -297,8 +297,9 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                             IconButton(
                               onPressed: () {
                                 var newPos = position - Duration(seconds: 10);
-                                if (newPos < Duration.zero)
+                                if (newPos < Duration.zero) {
                                   newPos = Duration.zero;
+                                }
                                 seek(newPos);
                               },
                               icon: Icon(Icons.replay_10_rounded),
