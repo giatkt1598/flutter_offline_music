@@ -224,7 +224,7 @@ abstract class AppLocalizations {
   /// No description provided for @dashboard_viewMore.
   ///
   /// In en, this message translates to:
-  /// **'View More >'**
+  /// **'View more >'**
   String get dashboard_viewMore;
 
   /// No description provided for @dashboard_newFiles.

@@ -82,7 +82,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dashboard_playingRecently => 'Recently Played';
 
   @override
-  String get dashboard_viewMore => 'View More >';
+  String get dashboard_viewMore => 'View more >';
 
   @override
   String get dashboard_newFiles => 'Recently Added';
