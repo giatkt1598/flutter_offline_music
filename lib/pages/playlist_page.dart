@@ -5,7 +5,6 @@ import 'package:flutter_offline_music/components/music_playlist.dart';
 import 'package:flutter_offline_music/components/player_header.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
-import 'package:flutter_offline_music/utilities/theme_helper.dart';
 import 'package:provider/provider.dart';
 
 class PlaylistPage extends StatefulWidget {
