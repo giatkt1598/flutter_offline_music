@@ -103,6 +103,7 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
         context: context,
         isScrollControlled: true,
         shape: RoundedRectangleBorder(),
+        backgroundColor: Colors.transparent,
         builder: (context) {
           return SizedBox(height: SharedData.fullHeight, child: PlaylistPage());
         },

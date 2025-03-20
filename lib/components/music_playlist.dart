@@ -15,8 +15,9 @@ import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:provider/provider.dart';
 
 class MusicPlaylist extends StatefulWidget {
-  const MusicPlaylist({super.key});
+  const MusicPlaylist({super.key, this.onCurrentItemPressed});
 
+  final Function? onCurrentItemPressed;
   @override
   State<MusicPlaylist> createState() => _MusicPlaylistState();
 }
@@ -166,9 +167,13 @@ class _MusicPlaylistState extends State<MusicPlaylist>
                   music: music,
                   onTap: () {
                     if (isCurrent) {
-                      var simpleTab =
-                          context.findAncestorStateOfType<SimpleTabState>();
-                      simpleTab?.activeTab(1);
+                      if (widget.onCurrentItemPressed != null) {
+                        widget.onCurrentItemPressed!();
+                      } else {
+                        var simpleTab =
+                            context.findAncestorStateOfType<SimpleTabState>();
+                        simpleTab?.activeTab(1);
+                      }
                     } else {
                       audioHandler.playMusic(music);
                     }
@@ -177,6 +182,7 @@ class _MusicPlaylistState extends State<MusicPlaylist>
                   musicTitleColor: Colors.white,
                   activeMusicTitleColor:
                       Theme.of(context).colorScheme.inversePrimary,
+                  tileColor: Colors.white24,
                   musicArtistColor: Colors.white,
                   menuType: MusicMenuType.inPlaylist,
                   leading: ReorderableDragStartListener(
