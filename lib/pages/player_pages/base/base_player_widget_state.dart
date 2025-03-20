@@ -163,5 +163,11 @@ abstract class BasePlayerWidgetState extends State<BasePlayerWidget>
   });
 
   @override
+  void didChangeDependencies() {
+    context.watch<SettingProvider>().appSetting.languageCode;
+    super.didChangeDependencies();
+  }
+
+  @override
   bool get wantKeepAlive => true;
 }

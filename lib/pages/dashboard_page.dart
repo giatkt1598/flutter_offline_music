@@ -14,6 +14,7 @@ import 'package:flutter_offline_music/pages/music_list_latest_page.dart';
 import 'package:flutter_offline_music/pages/music_list_most_listened_page.dart';
 import 'package:flutter_offline_music/pages/music_list_recent_playing_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
+import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/providers/tab_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
@@ -269,6 +270,12 @@ class _DashboardPageState extends State<DashboardPage>
       playerProvider.setMusics(_allMusics);
       fetchData();
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    context.watch<SettingProvider>().appSetting.languageCode;
+    super.didChangeDependencies();
   }
 
   @override

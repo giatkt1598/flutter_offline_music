@@ -4,8 +4,10 @@ import 'package:flutter_offline_music/components/library_list_item.dart';
 import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/library.dart';
+import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/providers/tab_provider.dart';
 import 'package:flutter_offline_music/services/library_service.dart';
+import 'package:provider/provider.dart';
 
 class LibraryListPage extends StatefulWidget {
   const LibraryListPage({super.key});
@@ -115,6 +117,12 @@ class _LibraryListPageState extends State<LibraryListPage>
   @override
   void onTabActive() {
     fetchData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    context.watch<SettingProvider>().appSetting.languageCode;
+    super.didChangeDependencies();
   }
 
   @override

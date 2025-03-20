@@ -6,6 +6,7 @@ import 'package:flutter_offline_music/components/no_data.dart';
 import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/providers/music_folder_provider.dart';
+import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/providers/tab_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/permission_service.dart';
@@ -150,6 +151,12 @@ class _LoadMusicPageState extends State<LoadMusicPage>
   @override
   void onTabActive() {
     fetchData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    context.watch<SettingProvider>().appSetting.languageCode;
+    super.didChangeDependencies();
   }
 
   @override
