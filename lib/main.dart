@@ -18,10 +18,7 @@ import 'package:toastification/toastification.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   var initialThemeMode = (await SettingProvider().loadSetting()).themeMode;
-  timeago.setLocaleMessages(
-    'vi',
-    CustomViMessages(),
-  ); //TODO: add listener when language change
+  timeago.setLocaleMessages('vi', CustomViMessages());
   await AppAudioHandler.createInstance();
   runApp(
     MultiProvider(

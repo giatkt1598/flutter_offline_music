@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class AppSetting {
-  ThemeMode themeMode = ThemeMode.system;
-  bool skipSilent = false;
-  bool autoVolumnPausePlay = true;
-  bool autoScanFiles = false;
-  String languageCode = 'vi';
-  String playerBackgroundImage = '';
+  ThemeMode themeMode;
+  bool skipSilent;
+  bool autoVolumnPausePlay;
+  bool autoScanFiles;
+  String languageCode;
+  String playerBackgroundImage;
   double backgroundBlurValue; // Value from 0 -> 1.0
   String playerTheme;
 
@@ -15,7 +15,7 @@ class AppSetting {
     this.skipSilent = false,
     this.autoVolumnPausePlay = true,
     this.autoScanFiles = false,
-    this.languageCode = 'vi',
+    this.languageCode = 'auto',
     this.playerBackgroundImage = '',
     this.backgroundBlurValue = 1.0,
     this.playerTheme = 'default',
