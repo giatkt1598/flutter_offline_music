@@ -17,7 +17,7 @@ class RotatingCircleImage extends StatefulWidget {
 }
 
 class _RotatingCircleImageState extends State<RotatingCircleImage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -46,6 +46,11 @@ class _RotatingCircleImageState extends State<RotatingCircleImage>
 
   @override
   void didUpdateWidget(covariant RotatingCircleImage oldWidget) {
+    if (oldWidget.bgImage != widget.bgImage && !widget.isRotate) {
+      _controller.reset();
+      updatePlaying();
+    }
+
     if (oldWidget.isRotate != widget.isRotate) {
       updatePlaying();
     }
@@ -56,24 +61,34 @@ class _RotatingCircleImageState extends State<RotatingCircleImage>
   Widget build(BuildContext context) {
     return RotationTransition(
       turns: _controller,
-      child: SizedBox(
-        width: MediaQuery.sizeOf(context).width * 0.5,
-        height: MediaQuery.sizeOf(context).width * 0.5,
-        child: Container(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(width: 2, color: Colors.white30),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black87,
-                blurRadius: 10,
-                spreadRadius: -2,
-                offset: Offset(2, 2),
-              ),
-            ],
-          ),
-          child: ClipOval(
-            child: Image.file(File(widget.bgImage), fit: BoxFit.cover),
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 300),
+        transitionBuilder: (child, animation) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        child: SizedBox(
+          key: ValueKey(widget.bgImage),
+          width: MediaQuery.sizeOf(context).width * 0.5,
+          height: MediaQuery.sizeOf(context).width * 0.5,
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(width: 2, color: Colors.white30),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black87,
+                  blurRadius: 10,
+                  spreadRadius: -2,
+                  offset: Offset(2, 2),
+                ),
+              ],
+            ),
+            child: ClipOval(
+              child:
+                  widget.bgImage.startsWith('assets')
+                      ? Image.asset(widget.bgImage, fit: BoxFit.cover)
+                      : Image.file(File(widget.bgImage), fit: BoxFit.cover),
+            ),
           ),
         ),
       ),

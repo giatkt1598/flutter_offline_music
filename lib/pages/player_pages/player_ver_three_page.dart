@@ -99,29 +99,53 @@ class _PlayerVerThreePageState extends BasePlayerWidgetState {
                   child: Stack(
                     children: [
                       Positioned.fill(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Theme.of(context).cardColor,
-                            image:
-                                bgImage == null
-                                    ? null
-                                    : DecorationImage(
-                                      image: FileImage(File(bgImage)),
-                                      fit: BoxFit.cover,
-                                    ),
+                        child: AnimatedSwitcher(
+                          duration: Duration(milliseconds: 300),
+                          transitionBuilder: (child, animation) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                          child: Container(
+                            key: ValueKey(bgImage),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Theme.of(context).cardColor,
+                              image:
+                                  bgImage == null
+                                      ? null
+                                      : DecorationImage(
+                                        image: FileImage(File(bgImage)),
+                                        fit: BoxFit.cover,
+                                      ),
+                            ),
                           ),
                         ),
                       ),
-                      Positioned.fill(
-                        child: Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Colors.black.withValues(alpha: 0.4),
-                          ),
-                        ),
+                      AnimatedSwitcher(
+                        duration: Duration(milliseconds: 300),
+                        transitionBuilder: (child, animation) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        child:
+                            bgImage != null
+                                ? Positioned.fill(
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      color: Colors.black.withValues(
+                                        alpha: 0.4,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                : null,
                       ),
                       Container(
                         padding: EdgeInsets.only(top: 16),
@@ -137,15 +161,15 @@ class _PlayerVerThreePageState extends BasePlayerWidgetState {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                if (bgImage != null)
-                                  Expanded(
-                                    child: Center(
-                                      child: RotatingCircleImage(
-                                        bgImage: bgImage,
-                                        isRotate: isPlaying,
-                                      ),
+                                Expanded(
+                                  child: Center(
+                                    child: RotatingCircleImage(
+                                      bgImage: bgImage ?? 'assets/icon.png',
+                                      isRotate:
+                                          bgImage != null ? isPlaying : false,
                                     ),
                                   ),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(

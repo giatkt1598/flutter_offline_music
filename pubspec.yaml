@@ -52,6 +52,7 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
+    - assets/icon.png
     - assets/audio-waves.png
     - assets/access_external_storage.jpg
     - assets/player_notification.png
