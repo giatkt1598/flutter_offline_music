@@ -51,31 +51,26 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
         actions: [
           LibraryListItemMenuButton(library: library, onRefresh: loadLibrary),
         ],
-        backgroundColor: Theme.of(context).cardColor,
-        surfaceTintColor: Colors.transparent,
       ),
       body: Column(
         children: [
-          Container(
-            decoration: BoxDecoration(color: Theme.of(context).cardColor),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 12.0),
-                      child: MusicListSimpleInfo(musics: musics),
-                    ),
-                    IconButton(
-                      onPressed: addMusicToLibrary,
-                      icon: Icon(Icons.library_add),
-                    ),
-                  ],
-                ),
-                MusicListControllerGroup(),
-              ],
-            ),
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12.0),
+                    child: MusicListSimpleInfo(musics: musics),
+                  ),
+                  IconButton(
+                    onPressed: addMusicToLibrary,
+                    icon: Icon(Icons.library_add),
+                  ),
+                ],
+              ),
+              MusicListControllerGroup(),
+            ],
           ),
           SizedBox(height: 8),
           if (musics.isEmpty)
