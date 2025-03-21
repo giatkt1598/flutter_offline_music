@@ -277,5 +277,6 @@
     "playlist_shuffleSuccess": "Đã trộn danh sách",
     "playlist_removeAllItemsConfirmMessage": "Xóa tất cả bài hát khỏi danh sách phát?",
     "confirmDialog_defaultTitle": "Xác nhận",
-    "confirmDialog_defaultMessage": "Bạn chắc chắn?"
+    "confirmDialog_defaultMessage": "Bạn chắc chắn?",
+    "nowPlayingTitle": "Đang Phát"
 }

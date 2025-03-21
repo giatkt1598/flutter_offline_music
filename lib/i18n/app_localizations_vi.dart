@@ -662,4 +662,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get confirmDialog_defaultMessage => 'Bạn chắc chắn?';
+
+  @override
+  String get nowPlayingTitle => 'Đang Phát';
 }

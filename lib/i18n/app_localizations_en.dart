@@ -694,4 +694,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get confirmDialog_defaultMessage => 'Are you sure?';
+
+  @override
+  String get nowPlayingTitle => 'Now Playing';
 }

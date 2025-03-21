@@ -32,7 +32,7 @@ class MusicItemMenu extends StatefulWidget {
   final Function? afterToggleFavorite;
   final bool showMiniPlayer;
   final MusicMenuType type;
-  final IconData? icon;
+  final Widget? icon;
   @override
   State<MusicItemMenu> createState() => _MusicItemMenuState();
 }
@@ -436,7 +436,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: showMenu,
-      icon: Icon(widget.icon ?? Icons.more_vert),
+      icon: widget.icon ?? Icon(Icons.more_vert),
     );
   }
 }

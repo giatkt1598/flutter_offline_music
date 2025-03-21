@@ -114,7 +114,7 @@ class _PlayerVerTwoPageState extends BasePlayerWidgetState {
                 music: music,
                 type: MusicMenuType.inPlayer,
                 showMiniPlayer: false,
-                icon: Icons.more_horiz_sharp,
+                icon: Icon(Icons.more_horiz_sharp),
               ),
             ],
           ),

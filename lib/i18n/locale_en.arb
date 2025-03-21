@@ -277,5 +277,6 @@
     "playlist_shuffleSuccess": "List is shuffled",
     "playlist_removeAllItemsConfirmMessage": "Delete all songs from playlist?",
     "confirmDialog_defaultTitle": "Confirm",
-    "confirmDialog_defaultMessage": "Are you sure?"
+    "confirmDialog_defaultMessage": "Are you sure?",
+    "nowPlayingTitle": "Now Playing"
 }

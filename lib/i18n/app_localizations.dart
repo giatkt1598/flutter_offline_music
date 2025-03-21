@@ -1108,6 +1108,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure?'**
   String get confirmDialog_defaultMessage;
+
+  /// No description provided for @nowPlayingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Now Playing'**
+  String get nowPlayingTitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

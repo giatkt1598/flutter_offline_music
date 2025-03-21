@@ -5,6 +5,7 @@ import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/pages/player_pages/base/base_player_widget.dart';
 import 'package:flutter_offline_music/pages/player_pages/default_player_page.dart';
 import 'package:flutter_offline_music/pages/player_pages/player_ver_one_page.dart';
+import 'package:flutter_offline_music/pages/player_pages/player_ver_three_page.dart';
 import 'package:flutter_offline_music/pages/player_pages/player_ver_two_page.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,7 @@ class SelectPlayerThemePage extends StatefulWidget {
 class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
   late PageController _pageController;
   late double _currentPage;
-  final List<String> themeIds = ['default', 'one', 'two'];
+  final List<String> themeIds = ['default', 'one', 'two', 'three'];
 
   @override
   void initState() {
@@ -54,6 +55,7 @@ class _SelectPlayerThemePageState extends State<SelectPlayerThemePage> {
       themeIds[0]: DefaultPlayerPage(),
       themeIds[1]: PlayerVerOnePage(),
       themeIds[2]: PlayerVerTwoPage(),
+      themeIds[3]: PlayerVerThreePage(),
     };
 
     final isApplied =

@@ -12,6 +12,7 @@ import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
+import 'package:flutter_offline_music/utilities/theme_helper.dart';
 import 'package:provider/provider.dart';
 
 class MusicPlaylist extends StatefulWidget {
@@ -181,7 +182,9 @@ class _MusicPlaylistState extends State<MusicPlaylist>
                   showMiniPlayer: false,
                   musicTitleColor: Colors.white,
                   activeMusicTitleColor:
-                      Theme.of(context).colorScheme.inversePrimary,
+                      isDarkMode()
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.inversePrimary,
                   tileColor: Colors.white24,
                   musicArtistColor: Colors.white,
                   menuType: MusicMenuType.inPlaylist,
