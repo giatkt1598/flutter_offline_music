@@ -116,7 +116,10 @@ class _PlayerVerThreePageState extends BasePlayerWidgetState {
                                   bgImage == null
                                       ? null
                                       : DecorationImage(
-                                        image: FileImage(File(bgImage)),
+                                        image:
+                                            bgImage.startsWith('assets')
+                                                ? AssetImage(bgImage)
+                                                : FileImage(File(bgImage)),
                                         fit: BoxFit.cover,
                                       ),
                             ),
