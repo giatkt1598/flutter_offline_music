@@ -35,7 +35,7 @@ class _PlayerHeaderState extends State<PlayerHeader> {
           child: Text(
             key: ValueKey(widget.playerTab),
             {
-              PlayerTab.audio: tr().songTitle,
+              PlayerTab.audio: tr().nowPlayingTitle,
               PlayerTab.playlist: tr().playlistTitle,
             }[widget.playerTab]!,
           ),

@@ -664,5 +664,5 @@ class AppLocalizationsVi extends AppLocalizations {
   String get confirmDialog_defaultMessage => 'Bạn chắc chắn?';
 
   @override
-  String get nowPlayingTitle => 'Đang Phát';
+  String get nowPlayingTitle => 'Đang phát';
 }
