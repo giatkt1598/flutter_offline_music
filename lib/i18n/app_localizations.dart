@@ -389,6 +389,18 @@ abstract class AppLocalizations {
   /// **'Library is not found'**
   String get musicMenu_notFoundLibrary;
 
+  /// No description provided for @musicMenu_musicPauseAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn off playing after {time}'**
+  String musicMenu_musicPauseAfter(Object time);
+
+  /// No description provided for @musicMenu_turnOffSetStopTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Timer off'**
+  String get musicMenu_turnOffSetStopTime;
+
   /// No description provided for @libraryMenu_addItems.
   ///
   /// In en, this message translates to:
@@ -1114,6 +1126,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Now Playing'**
   String get nowPlayingTitle;
+
+  /// No description provided for @okTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get okTitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

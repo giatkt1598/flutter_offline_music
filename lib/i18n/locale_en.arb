@@ -56,6 +56,8 @@
     "musicMenu_removeFromPlaylist": "Remove from playlist",
     "musicMenu_removeFromPlaylistSuccess": "\"{musicTitle}\" is removed",
     "musicMenu_notFoundLibrary": "Library is not found",
+    "musicMenu_musicPauseAfter": "Turn off playing after {time}",
+    "musicMenu_turnOffSetStopTime": "Timer off",
     "libraryMenu_addItems": "Add songs to library",
     "libraryMenu_edit": "Edit Information",
     "libraryMenu_sortItems": "Sort Songs",
@@ -278,5 +280,6 @@
     "playlist_removeAllItemsConfirmMessage": "Delete all songs from playlist?",
     "confirmDialog_defaultTitle": "Confirm",
     "confirmDialog_defaultMessage": "Are you sure?",
-    "nowPlayingTitle": "Now Playing"
+    "nowPlayingTitle": "Now Playing",
+    "okTitle": "OK"
 }

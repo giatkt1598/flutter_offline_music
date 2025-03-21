@@ -5,7 +5,8 @@ String fDurationLong(Duration duration) {
   if (minutes < 60) return tr().nMinutes(minutes);
   int hours = minutes ~/ 60;
   minutes = minutes % 60;
-  return '${tr().nHours(hours)} ${tr().nMinutes(minutes)}';
+  return '${hours > 0 ? tr().nHours(hours) : ''} ${minutes > 0 ? tr().nMinutes(minutes) : ''}'
+      .trim();
 }
 
 String fDurationHHMMSS(Duration duration, {bool? short = false}) {

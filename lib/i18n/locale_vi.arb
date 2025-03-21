@@ -56,6 +56,8 @@
     "musicMenu_removeFromPlaylist": "Xóa khỏi danh sách phát",
     "musicMenu_removeFromPlaylistSuccess": "Đã xóa \"{musicTitle}\" khỏi danh sách phát",
     "musicMenu_notFoundLibrary": "Không tìm thấy thư viện",
+    "musicMenu_musicPauseAfter": "Tắt nhạc sau {time}",
+    "musicMenu_turnOffSetStopTime": "Đã tắt hẹn giờ ngủ",
     "libraryMenu_addItems": "Thêm bài hát vào thư viện",
     "libraryMenu_edit": "Sửa thông tin",
     "libraryMenu_sortItems": "Sắp xếp bài hát",
@@ -278,5 +280,6 @@
     "playlist_removeAllItemsConfirmMessage": "Xóa tất cả bài hát khỏi danh sách phát?",
     "confirmDialog_defaultTitle": "Xác nhận",
     "confirmDialog_defaultMessage": "Bạn chắc chắn?",
-    "nowPlayingTitle": "Đang phát"
+    "nowPlayingTitle": "Đang phát",
+    "okTitle": "OK"
 }

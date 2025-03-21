@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/i18n/i18n.dart';
 
 class DurationPicker extends StatefulWidget {
-  const DurationPicker({super.key, this.value, this.onChanged});
+  const DurationPicker({
+    super.key,
+    this.value,
+    this.onChanged,
+    this.quickOptionPressed,
+  });
 
   final Duration? value;
   final ValueChanged<Duration>? onChanged;
+  final ValueChanged<Duration>? quickOptionPressed;
   @override
   State<DurationPicker> createState() => _DurationPickerState();
 }
@@ -38,8 +44,9 @@ class _DurationPickerState extends State<DurationPicker> {
     Map<String, Duration> quickOptions = {
       "15m": Duration(minutes: 15),
       "30m": Duration(minutes: 30),
-      "45m": Duration(minutes: 45),
       "60m": Duration(hours: 1),
+      "2h": Duration(hours: 2),
+      "3h": Duration(hours: 3),
       tr().off: Duration.zero,
     };
 
@@ -93,10 +100,14 @@ class _DurationPickerState extends State<DurationPicker> {
                       onPressed: () {
                         int newHour = quickOptions[opt]!.inMinutes ~/ 60;
                         int newMinute = quickOptions[opt]!.inMinutes % 60;
-                        _hourWheelKey.currentState!.scrollToIndex(newHour);
-                        _minuteWheelKey.currentState!.scrollToIndex(newMinute);
+                        _hourWheelKey.currentState!.jumpToIndex(newHour);
+                        _minuteWheelKey.currentState!.jumpToIndex(newMinute);
                         if (widget.onChanged != null) {
                           widget.onChanged!(quickOptions[opt]!);
+                        }
+
+                        if (widget.quickOptionPressed != null) {
+                          widget.quickOptionPressed!(quickOptions[opt]!);
                         }
                       },
                       child: Text(
@@ -157,6 +168,13 @@ class NumberWheelState extends State<NumberWheel> {
             widget.onChanged!(index);
           }
         });
+  }
+
+  jumpToIndex(int index) {
+    _controller.jumpToItem(index);
+    if (widget.onChanged != null) {
+      widget.onChanged!(index);
+    }
   }
 
   @override

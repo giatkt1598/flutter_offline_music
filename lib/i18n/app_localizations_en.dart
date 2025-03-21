@@ -178,6 +178,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get musicMenu_notFoundLibrary => 'Library is not found';
 
   @override
+  String musicMenu_musicPauseAfter(Object time) {
+    return 'Turn off playing after $time';
+  }
+
+  @override
+  String get musicMenu_turnOffSetStopTime => 'Timer off';
+
+  @override
   String get libraryMenu_addItems => 'Add songs to library';
 
   @override
@@ -697,4 +705,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nowPlayingTitle => 'Now Playing';
+
+  @override
+  String get okTitle => 'OK';
 }

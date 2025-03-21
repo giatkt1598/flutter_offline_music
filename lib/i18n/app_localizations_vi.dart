@@ -178,6 +178,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get musicMenu_notFoundLibrary => 'Không tìm thấy thư viện';
 
   @override
+  String musicMenu_musicPauseAfter(Object time) {
+    return 'Tắt nhạc sau $time';
+  }
+
+  @override
+  String get musicMenu_turnOffSetStopTime => 'Đã tắt hẹn giờ ngủ';
+
+  @override
   String get libraryMenu_addItems => 'Thêm bài hát vào thư viện';
 
   @override
@@ -665,4 +673,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get nowPlayingTitle => 'Đang phát';
+
+  @override
+  String get okTitle => 'OK';
 }

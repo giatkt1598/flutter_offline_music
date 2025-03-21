@@ -78,6 +78,20 @@ class PlayerProvider extends ChangeNotifier {
           DateTime.now(),
         );
 
+        handleConfirm() {
+          audioHandler.setStopTime(duration: newDuration);
+          String message = '';
+          if (newDuration != null && newDuration! > Duration.zero) {
+            message = tr().musicMenu_musicPauseAfter(
+              fDurationLong(newDuration!),
+            );
+          } else {
+            message = tr().musicMenu_turnOffSetStopTime;
+          }
+          ToastService.showSuccess(message);
+          Navigator.pop(context);
+        }
+
         return SizedBox(
           height: 400,
           child: Column(
@@ -93,6 +107,9 @@ class PlayerProvider extends ChangeNotifier {
                 value: newDuration,
                 onChanged: (du) {
                   newDuration = du == Duration.zero ? null : du;
+                },
+                quickOptionPressed: (value) {
+                  handleConfirm();
                 },
               ),
               Padding(
@@ -112,7 +129,7 @@ class PlayerProvider extends ChangeNotifier {
                         Navigator.pop(context);
                       },
                       child: Text(
-                        'Hủy',
+                        tr().formAction_cancel,
                         style: TextStyle(
                           color: Theme.of(context).textTheme.titleMedium?.color,
                         ),
@@ -123,20 +140,8 @@ class PlayerProvider extends ChangeNotifier {
                     width: 120,
                     child: AppButton(
                       type: AppButtonType.primary,
-                      onPressed: () {
-                        audioHandler.setStopTime(duration: newDuration);
-                        String message = '';
-                        if (newDuration != null &&
-                            newDuration! > Duration.zero) {
-                          message =
-                              'Tắt nhạc sau ${fDurationLong(newDuration!)}';
-                        } else {
-                          message = "Đã tắt hẹn giờ";
-                        }
-                        ToastService.showSuccess(message);
-                        Navigator.pop(context);
-                      },
-                      child: Text('OK'),
+                      onPressed: handleConfirm,
+                      child: Text(tr().okTitle),
                     ),
                   ),
                 ],
