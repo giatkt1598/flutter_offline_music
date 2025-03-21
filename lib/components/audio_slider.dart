@@ -3,10 +3,14 @@ import 'package:flutter_offline_music/utilities/time_helper.dart';
 
 class AudioSlider extends StatefulWidget {
   final double value;
-
   final ValueChanged<double>? onChanged;
   final double min;
   final double max;
+
+  final Color? activeTrackColor;
+  final Color? thumbColor;
+  final SliderComponentShape? Function(bool isDragging)? thumbShape;
+  final Color? inactiveTrackColor;
 
   const AudioSlider({
     super.key,
@@ -14,6 +18,10 @@ class AudioSlider extends StatefulWidget {
     this.onChanged,
     this.min = 0.0,
     this.max = 1.0,
+    this.activeTrackColor,
+    this.thumbColor,
+    this.inactiveTrackColor,
+    this.thumbShape,
   });
 
   @override
@@ -38,12 +46,20 @@ class _AudioSliderState extends State<AudioSlider> {
   Widget build(BuildContext context) {
     return SliderTheme(
       data: SliderThemeData(
-        inactiveTrackColor: Theme.of(
-          context,
-        ).colorScheme.secondaryContainer.withValues(alpha: 0.3),
-        thumbShape:
-            _isDragging ? null : RoundSliderThumbShape(enabledThumbRadius: 6),
+        inactiveTrackColor:
+            widget.inactiveTrackColor ??
+            Theme.of(
+              context,
+            ).colorScheme.secondaryContainer.withValues(alpha: 0.3),
         padding: EdgeInsets.all(0),
+        activeTrackColor: widget.activeTrackColor,
+        thumbColor: widget.thumbColor,
+        thumbShape:
+            widget.thumbShape != null
+                ? widget.thumbShape!(_isDragging)
+                : (_isDragging
+                    ? null
+                    : RoundSliderThumbShape(enabledThumbRadius: 6)),
       ),
       child: SizedBox(
         height: 30,

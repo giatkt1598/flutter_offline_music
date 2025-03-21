@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/pages/player_pages/default_player_page.dart';
 import 'package:flutter_offline_music/pages/player_pages/player_ver_one_page.dart';
+import 'package:flutter_offline_music/pages/player_pages/player_ver_two_page.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +36,8 @@ class _PlayerPageState extends State<PlayerPage> {
           return DefaultPlayerPage();
         case 'one':
           return PlayerVerOnePage();
+        case 'two':
+          return PlayerVerTwoPage();
         default:
           return Container();
       }

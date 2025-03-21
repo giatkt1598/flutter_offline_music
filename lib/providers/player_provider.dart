@@ -13,7 +13,7 @@ import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:provider/provider.dart';
 
 extension PlayerProviderExtension on BuildContext {
-  PlayerProvider getSettingProvider() {
+  PlayerProvider getPlayerProvider() {
     return Provider.of<PlayerProvider>(this);
   }
 }
