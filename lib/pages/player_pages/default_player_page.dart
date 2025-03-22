@@ -9,6 +9,7 @@ import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
+import 'package:flutter_offline_music/utilities/string_extensions.dart';
 import 'package:provider/provider.dart';
 import 'dart:math';
 
@@ -62,9 +63,10 @@ class _DefaultPlayerPageState extends BasePlayerWidgetState
     required Future<void> Function() changeLoopMode,
   }) {
     final appSetting = Provider.of<SettingProvider>(context).appSetting;
-    final backgroundImage = music.thumbnail ?? appSetting.playerBackgroundImage;
+    final backgroundImage =
+        music.thumbnail ?? appSetting.playerBackgroundImage.toNullIfEmpty();
     bool isDarkBottom =
-        backgroundImage.isNotEmpty ||
+        backgroundImage != null ||
         Theme.of(context).brightness == Brightness.light;
 
     return DefaultTextStyle(
@@ -73,7 +75,7 @@ class _DefaultPlayerPageState extends BasePlayerWidgetState
         data: IconThemeData(color: Colors.white),
         child: Stack(
           children: [
-            if (backgroundImage.isNotEmpty)
+            if (backgroundImage != null)
               BlurImageWidget(
                 imagePath: backgroundImage,
                 size: Size(SharedData.fullWidth, SharedData.fullHeight),
@@ -119,26 +121,32 @@ class _DefaultPlayerPageState extends BasePlayerWidgetState
                       : null,
             ),
 
-            Column(
-              children: [
-                SizedBox(height: SharedData.statusBarHeight),
-                PlayerHeader(
-                  music: music,
-                  playerTab:
-                      tabIndex == 0 ? PlayerTab.playlist : PlayerTab.audio,
-                ),
-                Expanded(
-                  child: SimpleTab(
-                    initialIndex: tabIndex,
-                    tabViews: [MusicPlaylist(), _DefaultPlayer()],
-                    onTabChanged: (value) {
-                      setState(() {
-                        tabIndex = value;
-                      });
-                    },
+            Container(
+              color:
+                  backgroundImage != null
+                      ? Colors.transparent
+                      : Theme.of(context).scaffoldBackgroundColor,
+              child: Column(
+                children: [
+                  SizedBox(height: SharedData.statusBarHeight),
+                  PlayerHeader(
+                    music: music,
+                    playerTab:
+                        tabIndex == 0 ? PlayerTab.playlist : PlayerTab.audio,
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: SimpleTab(
+                      initialIndex: tabIndex,
+                      tabViews: [MusicPlaylist(), _DefaultPlayer()],
+                      onTabChanged: (value) {
+                        setState(() {
+                          tabIndex = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

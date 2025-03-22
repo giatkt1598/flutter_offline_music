@@ -171,20 +171,41 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                                 ],
                                 color: Theme.of(context).cardColor,
                               ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child:
-                                    thumbnail != null
-                                        ? Image.file(
-                                          File(thumbnail),
-                                          fit: BoxFit.cover,
-                                        )
-                                        : Image.asset(
-                                          'assets/music_note_2.png',
-                                          width: 100,
-                                          height: 100,
-                                          fit: BoxFit.none,
-                                        ),
+                              child: Stack(
+                                children: [
+                                  Positioned.fill(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child:
+                                          thumbnail != null
+                                              ? Image.file(
+                                                File(thumbnail),
+                                                fit: BoxFit.cover,
+                                              )
+                                              : Image.asset(
+                                                'assets/music_note_2.png',
+                                                width: 100,
+                                                height: 100,
+                                                fit: BoxFit.none,
+                                              ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 4,
+                                    right: 4,
+                                    child: Container(
+                                      padding: EdgeInsets.all(4),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        color: Colors.black12,
+                                      ),
+                                      child: Text(
+                                        '${audioHandler.currentIndex + 1}/${playlist.length}',
+                                        style: TextStyle(fontSize: 6),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           );
@@ -329,7 +350,7 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                       ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
-                        color: Theme.of(context).cardColor,
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         boxShadow: [
                           BoxShadow(
                             color:

@@ -10,8 +10,10 @@ import 'package:flutter_offline_music/components/simple_tab.dart';
 import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
+import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
+import 'package:flutter_offline_music/utilities/string_extensions.dart';
 import 'package:flutter_offline_music/utilities/theme_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -75,6 +77,7 @@ class _MusicPlaylistState extends State<MusicPlaylist>
 
     final playerProvider = Provider.of<PlayerProvider>(context);
     final audioHandler = playerProvider.audioHandler;
+    final settingProvider = context.getSettingProvider();
 
     if (audioHandler.playlist.isEmpty || musics.isEmpty) {
       return NoData();
@@ -86,51 +89,61 @@ class _MusicPlaylistState extends State<MusicPlaylist>
           .toList(),
     );
 
+    String? bgImage =
+        audioHandler.currentMusic?.thumbnail ??
+        settingProvider.appSetting.playerBackgroundImage.toNullIfEmpty();
+
     return Column(
       children: [
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 8),
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text:
-                          '${audioHandler.currentIndex + 1}/${audioHandler.playlist.length}',
-                    ),
-                    TextSpan(text: ' ・ '),
-                    TextSpan(text: totalDuration),
-                  ],
+        Container(
+          color:
+              bgImage != null
+                  ? Colors.transparent
+                  : Theme.of(context).scaffoldBackgroundColor,
+          child: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 8),
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text:
+                            '${audioHandler.currentIndex + 1}/${audioHandler.playlist.length}',
+                      ),
+                      TextSpan(text: ' ・ '),
+                      TextSpan(text: totalDuration),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Spacer(),
-            IconButton(
-              onPressed: () async {
-                await audioHandler.setShuffle(true);
-                setState(() {});
-                ToastService.showSuccess(tr().playlist_shuffleSuccess);
-              },
-              icon: Icon(Icons.shuffle),
-            ),
-            IconButton(
-              onPressed: () {
-                showConfirmDialog(
-                  context: context,
-                  message: tr().playlist_removeAllItemsConfirmMessage,
-                ).then((isConfirm) {
-                  if (isConfirm == true) {
-                    Navigator.of(context).pop(true);
-                    audioHandler.stop().then((_) {
-                      audioHandler.setPlaylistFromMusics([]);
-                    });
-                  }
-                });
-              },
-              icon: Icon(Icons.delete),
-            ),
-          ],
+              Spacer(),
+              IconButton(
+                onPressed: () async {
+                  await audioHandler.setShuffle(true);
+                  setState(() {});
+                  ToastService.showSuccess(tr().playlist_shuffleSuccess);
+                },
+                icon: Icon(Icons.shuffle),
+              ),
+              IconButton(
+                onPressed: () {
+                  showConfirmDialog(
+                    context: context,
+                    message: tr().playlist_removeAllItemsConfirmMessage,
+                  ).then((isConfirm) {
+                    if (isConfirm == true) {
+                      Navigator.of(context).pop(true);
+                      audioHandler.stop().then((_) {
+                        audioHandler.setPlaylistFromMusics([]);
+                      });
+                    }
+                  });
+                },
+                icon: Icon(Icons.delete),
+              ),
+            ],
+          ),
         ),
         Expanded(
           child: ReorderableListView.builder(
@@ -185,7 +198,6 @@ class _MusicPlaylistState extends State<MusicPlaylist>
                       isDarkMode()
                           ? Theme.of(context).colorScheme.primary
                           : Theme.of(context).colorScheme.inversePrimary,
-                  tileColor: Colors.white24,
                   musicArtistColor: Colors.white,
                   menuType: MusicMenuType.inPlaylist,
                   leading: ReorderableDragStartListener(
