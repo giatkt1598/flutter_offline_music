@@ -167,16 +167,16 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
               Opacity(opacity: .3, child: Divider()),
               Column(
                 children: [
-                  if (widget.type == MusicMenuType.inPlaylist)
-                    ListMenuOption(
-                      title: tr().musicMenu_play,
-                      icon: Icons.play_arrow_rounded,
-                      enabled: !isCurrent,
-                      onTap: () {
-                        audioHandler.playMusic(widget.music);
-                        Navigator.of(context).pop();
-                      },
-                    ),
+                  // if (widget.type == MusicMenuType.inPlaylist)
+                  ListMenuOption(
+                    title: tr().musicMenu_play,
+                    icon: Icons.play_arrow_rounded,
+                    enabled: !isCurrent,
+                    onTap: () {
+                      audioHandler.playMusic(widget.music);
+                      Navigator.of(context).pop();
+                    },
+                  ),
                   if ((widget.type == MusicMenuType.inMusicList ||
                       widget.type == MusicMenuType.inPlaylist))
                     ListMenuOption(

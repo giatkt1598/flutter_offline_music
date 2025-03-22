@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_offline_music/components/auto_scroll_text.dart';
 import 'package:flutter_offline_music/components/music_thumbnail.dart';
 import 'package:flutter_offline_music/components/rotating_disc.dart';
@@ -34,12 +35,14 @@ class _MiniPlayerState extends State<MiniPlayer> {
   late StreamSubscription<Duration?> durationSubscription;
   late StreamSubscription<Duration?> positionSubscription;
   final GlobalKey _sliderParentKey = GlobalKey();
+  final PageController _pageController = PageController();
+  late PlayerProvider _playerProvider;
   double? sliderMaxWidth;
   double? sliderWidth;
   @override
   void initState() {
-    final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
-    final audioHandler = playerProvider.audioHandler;
+    _playerProvider = Provider.of<PlayerProvider>(context, listen: false);
+    final audioHandler = _playerProvider.audioHandler;
     setState(() {
       durationSubscription = audioHandler.player.durationStream.listen((d) {
         setState(() {
@@ -68,13 +71,39 @@ class _MiniPlayerState extends State<MiniPlayer> {
         });
       });
     });
+
+    _pageController.addListener(() {
+      if (_pageController.page?.toInt() == _pageController.page &&
+          _playerProvider.audioHandler.currentIndex != _pageController.page &&
+          _pageController.page != null &&
+          _pageController.page!.toInt() < audioHandler.playlist.length - 1 &&
+          _pageController.position.userScrollDirection !=
+              ScrollDirection.idle) {
+        audioHandler.playMediaItem(
+          audioHandler.playlist[_pageController.page!.toInt()],
+        );
+      }
+    });
+    _playerProvider.addListener(moveToPage);
     super.initState();
+  }
+
+  void moveToPage() {
+    if (!_pageController.hasClients) {
+      return;
+    }
+    final newIndex = _playerProvider.audioHandler.currentIndex;
+    if (_pageController.page?.round() != newIndex && newIndex > -1) {
+      _pageController.jumpToPage(newIndex);
+    }
   }
 
   @override
   void dispose() {
     durationSubscription.cancel();
     positionSubscription.cancel();
+    _pageController.dispose();
+    _playerProvider.removeListener(moveToPage);
     super.dispose();
   }
 
@@ -82,145 +111,168 @@ class _MiniPlayerState extends State<MiniPlayer> {
   Widget build(BuildContext context) {
     final playerProvider = Provider.of<PlayerProvider>(context);
     final audioHandler = playerProvider.audioHandler;
+    final playlist = audioHandler.playlist;
 
-    if (!playerProvider.isShowMiniPlayer ||
-        audioHandler.currentMediaItem == null) {
-      return Container();
-    }
-
-    final mediaItem = audioHandler.currentMediaItem!;
-
+    bool isVisible =
+        playerProvider.isShowMiniPlayer && audioHandler.currentIndex > -1;
     openPlayerPage() async {
-      var music = await musicService.getMusicAsync(path: mediaItem.id);
-      playerProvider.openAudioPlayerPage(context, music: music);
+      await playerProvider.openAudioPlayerPage(
+        context,
+        music: audioHandler.currentMusic!,
+      );
     }
 
-    bool hasThumbnail = audioHandler.currentMediaItem?.artUri != null;
-    return Container(
-      width: MediaQuery.of(context).size.width - 12,
-      height: 80,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-        color: Theme.of(context).cardColor,
-        boxShadow: [
-          BoxShadow(
-            color:
-                Theme.of(context).brightness == Brightness.dark
-                    ? Colors.white.withValues(alpha: 0.2)
-                    : Colors.black.withValues(alpha: 0.2),
-            blurRadius: 10,
-            spreadRadius: 2,
-            offset: Offset.zero,
-          ),
-        ],
-      ),
+    return Offstage(
+      offstage: !isVisible,
+      child: Container(
+        width: MediaQuery.of(context).size.width - 12,
+        height: 80,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+          color: Theme.of(context).cardColor,
+          boxShadow: [
+            BoxShadow(
+              color:
+                  Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white.withValues(alpha: 0.2)
+                      : Colors.black.withValues(alpha: 0.2),
+              blurRadius: 10,
+              spreadRadius: 2,
+              offset: Offset.zero,
+            ),
+          ],
+        ),
 
-      child: ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-        child: Column(
-          key: _sliderParentKey,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  spacing: 4,
-                  children: [
-                    GestureDetector(
-                      onLongPress: () {
-                        playerProvider.hideMiniPlayer();
-                      },
-                      onTap: openPlayerPage,
-                      child:
-                          hasThumbnail
-                              ? MusicThumbnail(
-                                thumbnailPath: mediaItem.artUri?.toFilePath(),
-                                size: 50,
-                                boxShape: BoxShape.rectangle,
-                              )
-                              : SizedBox(
-                                height: 60,
-                                width: 60,
-                                child: RotatingDisc(),
-                              ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onLongPress: () {
-                          playerProvider.hideMiniPlayer();
-                        },
-                        onTap: openPlayerPage,
-                        child: Container(
-                          height: 50,
-                          color: Colors.transparent,
-                          child: Column(
-                            children: [
-                              AutoScrollText(
-                                text: mediaItem.title,
-                                containerWidth:
-                                    MediaQuery.of(context).size.width - 100,
-                              ),
-                              Opacity(
-                                opacity: 0.4,
-                                child: AutoScrollText(
-                                  text:
-                                      mediaItem.artist ??
-                                      tr().music_unknownArtist,
-                                  style: TextStyle(fontSize: 12),
-                                  containerWidth:
-                                      MediaQuery.of(context).size.width - 100,
+        child: ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+          child: Column(
+            key: _sliderParentKey,
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    spacing: 4,
+                    children: [
+                      Expanded(
+                        child: PageView.builder(
+                          itemCount: playlist.length,
+                          controller: _pageController,
+                          itemBuilder: (context, index) {
+                            final item = playlist[index];
+                            return Row(
+                              spacing: 4,
+                              children: [
+                                GestureDetector(
+                                  onLongPress: () {
+                                    playerProvider.hideMiniPlayer();
+                                  },
+                                  onTap: openPlayerPage,
+                                  child:
+                                      item.artUri != null
+                                          ? MusicThumbnail(
+                                            thumbnailPath:
+                                                item.artUri!.toFilePath(),
+                                            size: 50,
+                                            boxShape: BoxShape.rectangle,
+                                          )
+                                          : SizedBox(
+                                            height: 60,
+                                            width: 60,
+                                            child: RotatingDisc(),
+                                          ),
                                 ),
-                              ),
-                            ],
+                                Expanded(
+                                  child: GestureDetector(
+                                    onLongPress: () {
+                                      playerProvider.hideMiniPlayer();
+                                    },
+                                    onTap: openPlayerPage,
+                                    child: Container(
+                                      height: 50,
+                                      color: Colors.transparent,
+                                      child: Column(
+                                        children: [
+                                          AutoScrollText(
+                                            text: item.title,
+                                            containerWidth:
+                                                MediaQuery.of(
+                                                  context,
+                                                ).size.width -
+                                                100,
+                                          ),
+                                          Opacity(
+                                            opacity: 0.4,
+                                            child: AutoScrollText(
+                                              text:
+                                                  item.artist ??
+                                                  tr().music_unknownArtist,
+                                              style: TextStyle(fontSize: 12),
+                                              containerWidth:
+                                                  MediaQuery.of(
+                                                    context,
+                                                  ).size.width -
+                                                  100,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 240, 240, 240),
+                            width: 2,
+                          ),
+                        ),
+                        child: IconButton(
+                          onPressed: () {
+                            if (audioHandler.playing) {
+                              audioHandler.pause();
+                            } else {
+                              audioHandler.play();
+                            }
+                          },
+                          icon: Icon(
+                            audioHandler.playing
+                                ? Icons.pause
+                                : Icons.play_arrow,
+                            size: 40,
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: const Color.fromARGB(255, 240, 240, 240),
-                          width: 2,
-                        ), // 👈 Viền đen
-                      ),
-                      child: IconButton(
-                        onPressed: () {
-                          if (audioHandler.playing) {
-                            audioHandler.pause();
-                          } else {
-                            audioHandler.play();
-                          }
-                        },
-                        icon: Icon(
-                          audioHandler.playing ? Icons.pause : Icons.play_arrow,
-                          size: 40,
-                        ),
-                      ),
-                    ),
 
-                    // IconButton(
-                    //   onPressed: () {},
-                    //   icon: Icon(Icons.skip_next_rounded, size: 40),
-                    // ),
-                  ],
-                ),
-              ),
-            ),
-            Row(
-              children: [
-                Container(
-                  width: sliderWidth,
-                  height: 2,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
+                      // IconButton(
+                      //   onPressed: () {},
+                      //   icon: Icon(Icons.skip_next_rounded, size: 40),
+                      // ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+              Row(
+                children: [
+                  Container(
+                    width: sliderWidth,
+                    height: 2,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

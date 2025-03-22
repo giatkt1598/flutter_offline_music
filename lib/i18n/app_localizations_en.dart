@@ -708,4 +708,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get okTitle => 'OK';
+
+  @override
+  String notFoundFileName(Object name) {
+    return 'File \"$name\" is not found';
+  }
 }

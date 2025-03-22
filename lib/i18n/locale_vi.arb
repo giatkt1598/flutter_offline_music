@@ -281,5 +281,6 @@
     "confirmDialog_defaultTitle": "Xác nhận",
     "confirmDialog_defaultMessage": "Bạn chắc chắn?",
     "nowPlayingTitle": "Đang phát",
-    "okTitle": "OK"
+    "okTitle": "OK",
+    "notFoundFileName": "Khoong tìm thấy tệp \"{name}\""
 }

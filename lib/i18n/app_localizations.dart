@@ -1132,6 +1132,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'OK'**
   String get okTitle;
+
+  /// No description provided for @notFoundFileName.
+  ///
+  /// In en, this message translates to:
+  /// **'File \"{name}\" is not found'**
+  String notFoundFileName(Object name);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

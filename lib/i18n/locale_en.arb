@@ -281,5 +281,6 @@
     "confirmDialog_defaultTitle": "Confirm",
     "confirmDialog_defaultMessage": "Are you sure?",
     "nowPlayingTitle": "Now Playing",
-    "okTitle": "OK"
+    "okTitle": "OK",
+    "notFoundFileName": "File \"{name}\" is not found"
 }

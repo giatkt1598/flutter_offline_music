@@ -676,4 +676,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get okTitle => 'OK';
+
+  @override
+  String notFoundFileName(Object name) {
+    return 'Khoong tìm thấy tệp \"$name\"';
+  }
 }

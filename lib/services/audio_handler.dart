@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
@@ -192,7 +193,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
     if (playingMediaItemId != mediaItem.id || _player.duration == null) {
       if (!File(mediaItem.id).existsSync()) {
-        ToastService.showError('Không tìm thấy tệp "${mediaItem.id}"');
+        ToastService.showError(tr().notFoundFileName(mediaItem.id));
         final mediaIndex = _playlist.indexWhere((x) => x.id == mediaItem.id);
         await _setPlaylist(
           _playlist.where((x) => x.id != mediaItem.id).toList(),
