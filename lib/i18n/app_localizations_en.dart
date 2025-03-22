@@ -126,18 +126,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get musicMenu_setStopTime => 'Sleep Timer';
 
   @override
-  String get musicMenu_changeThumbnail => 'Change thumbnail';
+  String get musicMenu_changeThumbnail => 'Change cover image';
 
   @override
-  String get musicMenu_removeThumbnail => 'Remove thumbnail';
+  String get musicMenu_removeThumbnail => 'Remove cover image';
 
   @override
   String musicMenu_removeThumbnailSuccess(Object name) {
-    return 'Remove thumbnail for \"$name\" is success';
+    return 'Remove cover for \"$name\" is success';
   }
 
   @override
-  String get musicMenu_changePlayerTheme => 'Change player theme';
+  String get musicMenu_changePlayerTheme => 'Change theme';
 
   @override
   String musicMenu_musicShown(Object name) {
@@ -195,7 +195,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get libraryMenu_sortItems => 'Sort Songs';
 
   @override
-  String get libraryMenu_downloadItemThumbnails => 'Download Thumbnails for All Songs';
+  String get libraryMenu_downloadItemThumbnails => 'Download cover images for all Songs';
 
   @override
   String get libraryMenu_deleteLibrary => 'Delete Library';
@@ -658,7 +658,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String changeMusicThumbnailSuccess(Object title) {
-    return 'Thumbnail for \"\$$title\" is updated';
+    return 'Cover image for \"\$$title\" is updated';
   }
 
   @override

@@ -308,25 +308,25 @@ abstract class AppLocalizations {
   /// No description provided for @musicMenu_changeThumbnail.
   ///
   /// In en, this message translates to:
-  /// **'Change thumbnail'**
+  /// **'Change cover image'**
   String get musicMenu_changeThumbnail;
 
   /// No description provided for @musicMenu_removeThumbnail.
   ///
   /// In en, this message translates to:
-  /// **'Remove thumbnail'**
+  /// **'Remove cover image'**
   String get musicMenu_removeThumbnail;
 
   /// No description provided for @musicMenu_removeThumbnailSuccess.
   ///
   /// In en, this message translates to:
-  /// **'Remove thumbnail for \"{name}\" is success'**
+  /// **'Remove cover for \"{name}\" is success'**
   String musicMenu_removeThumbnailSuccess(Object name);
 
   /// No description provided for @musicMenu_changePlayerTheme.
   ///
   /// In en, this message translates to:
-  /// **'Change player theme'**
+  /// **'Change theme'**
   String get musicMenu_changePlayerTheme;
 
   /// No description provided for @musicMenu_musicShown.
@@ -422,7 +422,7 @@ abstract class AppLocalizations {
   /// No description provided for @libraryMenu_downloadItemThumbnails.
   ///
   /// In en, this message translates to:
-  /// **'Download Thumbnails for All Songs'**
+  /// **'Download cover images for all Songs'**
   String get libraryMenu_downloadItemThumbnails;
 
   /// No description provided for @libraryMenu_deleteLibrary.
@@ -1034,7 +1034,7 @@ abstract class AppLocalizations {
   /// No description provided for @changeMusicThumbnailSuccess.
   ///
   /// In en, this message translates to:
-  /// **'Thumbnail for \"\${title}\" is updated'**
+  /// **'Cover image for \"\${title}\" is updated'**
   String changeMusicThumbnailSuccess(Object title);
 
   /// No description provided for @themeIsUsed.
