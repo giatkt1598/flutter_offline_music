@@ -68,6 +68,7 @@
     "error_requiredName": "Tên không được để trống",
     "error_existedName": "Tên đã tồn tại",
     "error_checkAgain": "Vui lòng kiểm tra lại thông tin",
+    "error_cannotDeletePlayingMusic": "Bài hát đang phát, không thể xóa",
     "searchPlaceholder": "Tìm kiếm",
     "searchNoResults": "Không có kết quả",
     "noData": "Không có dữ liệu",
@@ -282,5 +283,7 @@
     "confirmDialog_defaultMessage": "Bạn chắc chắn?",
     "nowPlayingTitle": "Đang phát",
     "okTitle": "OK",
-    "notFoundFileName": "Khoong tìm thấy tệp \"{name}\""
+    "notFoundFileName": "Không tìm thấy tệp \"{name}\"",
+    "deleteMusicSuccess": "Đã xóa \"{name}\n",
+    "deleteMusicConfirmMessage": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi thiết bị?"
 }

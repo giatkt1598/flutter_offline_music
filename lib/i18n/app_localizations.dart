@@ -356,7 +356,7 @@ abstract class AppLocalizations {
   /// No description provided for @musicMenu_deleteOnDevice.
   ///
   /// In en, this message translates to:
-  /// **'Delete from Device'**
+  /// **'Delete in device'**
   String get musicMenu_deleteOnDevice;
 
   /// No description provided for @musicMenu_playNextMessage.
@@ -460,6 +460,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Name is exists'**
   String get error_existedName;
+
+  /// No description provided for @error_cannotDeletePlayingMusic.
+  ///
+  /// In en, this message translates to:
+  /// **'This file is playing now, cannot delete!'**
+  String get error_cannotDeletePlayingMusic;
 
   /// No description provided for @searchPlaceholder.
   ///
@@ -1138,6 +1144,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'File \"{name}\" is not found'**
   String notFoundFileName(Object name);
+
+  /// No description provided for @deleteMusicSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'\"{name}\" is deleted'**
+  String deleteMusicSuccess(Object name);
+
+  /// No description provided for @deleteMusicConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure to delete \"{title}\" from device?'**
+  String deleteMusicConfirmMessage(Object title);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

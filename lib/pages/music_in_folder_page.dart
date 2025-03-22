@@ -5,6 +5,7 @@ import 'package:flutter_offline_music/components/music_list.dart';
 import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
 import 'package:flutter_offline_music/providers/music_folder_provider.dart';
+import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:provider/provider.dart';
 
 class MusicInFolderPage extends StatefulWidget {
@@ -17,22 +18,37 @@ class MusicInFolderPage extends StatefulWidget {
 }
 
 class _MusicInFolderPageState extends State<MusicInFolderPage> {
-  int get totalHiddenFile =>
-      widget.musicFolder.musics.where((x) => x.isHidden).length;
+  late MusicFolder musicFolder;
+  final service = MusicService();
+
+  @override
+  void initState() {
+    musicFolder = widget.musicFolder;
+    super.initState();
+  }
+
+  Future<void> fetchData() async {
+    final list = await service.getMusicFolderListAsync(isHidden: null);
+    setState(() {
+      musicFolder = list.firstWhere((x) => x.id == musicFolder.id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final musicFolderProvider = Provider.of<MusicFolderProvider>(context);
-    final currentMusics =
+    var currentMusics =
         musicFolderProvider.isShowAllMusicFolder
-            ? widget.musicFolder.musics
-            : widget.musicFolder.musics.where((x) => !x.isHidden).toList();
+            ? musicFolder.musics
+            : musicFolder.musics.where((x) => !x.isHidden).toList();
+    int totalHiddenFile = musicFolder.musics.where((x) => x.isHidden).length;
 
     return Scaffold(
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(widget.musicFolder.name),
+            Text(musicFolder.name),
             Row(
               children: [
                 Opacity(
@@ -42,9 +58,9 @@ class _MusicInFolderPageState extends State<MusicInFolderPage> {
                     style: TextStyle(fontSize: 12),
                   ),
                 ),
-                if (widget.musicFolder.isHidden)
+                if (musicFolder.isHidden)
                   Text(' | ', style: TextStyle(fontSize: 12)),
-                if (widget.musicFolder.isHidden)
+                if (musicFolder.isHidden)
                   Text(
                     tr().hiddenFolder,
                     style: TextStyle(fontSize: 12, color: Colors.red),
@@ -55,8 +71,8 @@ class _MusicInFolderPageState extends State<MusicInFolderPage> {
         ),
         actions: [
           MusicFolderItemMenu(
-            musicFolder: widget.musicFolder,
-            onRefresh: () => setState(() {}),
+            musicFolder: musicFolder,
+            onRefresh: fetchData,
             afterHideFolder: () => Navigator.of(context).pop(),
           ),
         ],
@@ -64,7 +80,7 @@ class _MusicInFolderPageState extends State<MusicInFolderPage> {
       body: MusicList(
         removeInvisibleItem: !musicFolderProvider.isShowAllMusicFolder,
         musics: currentMusics,
-        onChanged: (value) => setState(() {}),
+        onChanged: (value) => fetchData(),
         trailingItem:
             totalHiddenFile < 1
                 ? null

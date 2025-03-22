@@ -105,6 +105,7 @@ class _MusicListFavoritePageState extends State<MusicListFavoritePage> {
                               child: MusicListItem(
                                 music: music,
                                 afterHideItem: () => setState(() {}),
+                                onDeletedItem: () => setState(() {}),
                               ),
                             ),
                           ],

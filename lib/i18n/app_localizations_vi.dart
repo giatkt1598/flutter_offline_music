@@ -216,6 +216,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get error_existedName => 'Tên đã tồn tại';
 
   @override
+  String get error_cannotDeletePlayingMusic => 'Bài hát đang phát, không thể xóa';
+
+  @override
   String get searchPlaceholder => 'Tìm kiếm';
 
   @override
@@ -679,6 +682,16 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String notFoundFileName(Object name) {
-    return 'Khoong tìm thấy tệp \"$name\"';
+    return 'Không tìm thấy tệp \"$name\"';
+  }
+
+  @override
+  String deleteMusicSuccess(Object name) {
+    return 'Đã xóa \"$name\n';
+  }
+
+  @override
+  String deleteMusicConfirmMessage(Object title) {
+    return 'Bạn có chắc chắn muốn xóa \"$title\" khỏi thiết bị?';
   }
 }

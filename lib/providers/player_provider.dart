@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/app_button.dart';
 import 'package:flutter_offline_music/components/duration_picker.dart';
+import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
 import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/pages/player_pages/player_page.dart';
@@ -12,30 +15,20 @@ import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
 import 'package:provider/provider.dart';
 
-extension PlayerProviderExtension on BuildContext {
-  PlayerProvider getPlayerProvider() {
-    return Provider.of<PlayerProvider>(this);
-  }
-}
-
 class PlayerProvider extends ChangeNotifier {
   bool isShowMiniPlayer = true;
-  AppAudioHandler get audioHandler => AppAudioHandler.instance;
   List<Music> musics = [];
   int? currentLibraryId;
+  PlayerProvider() {
+    audioHandler.addListener(notifyListeners);
+
+    _init();
+  }
+
+  AppAudioHandler get audioHandler => AppAudioHandler.instance;
 
   void hideMiniPlayer() {
     isShowMiniPlayer = false;
-    notifyListeners();
-  }
-
-  void showMiniPlayer() {
-    isShowMiniPlayer = true;
-    notifyListeners();
-  }
-
-  Future<void> setMusics(List<Music> musics) async {
-    this.musics = musics;
     notifyListeners();
   }
 
@@ -68,6 +61,11 @@ class PlayerProvider extends ChangeNotifier {
         return SizedBox(height: SharedData.fullHeight, child: PlayerPage());
       },
     );
+  }
+
+  Future<void> setMusics(List<Music> musics) async {
+    this.musics = musics;
+    notifyListeners();
   }
 
   Future<void> setStopTime(BuildContext context) async {
@@ -153,10 +151,36 @@ class PlayerProvider extends ChangeNotifier {
     );
   }
 
-  PlayerProvider() {
-    audioHandler.addListener(notifyListeners);
+  void showMiniPlayer() {
+    isShowMiniPlayer = true;
+    notifyListeners();
+  }
 
-    _init();
+  Future<bool> deleteMusicFile(BuildContext context, Music music) async {
+    bool? isConfirm = await showConfirmDialog(
+      context: context,
+      title: tr().musicMenu_deleteOnDevice,
+      message: tr().deleteMusicConfirmMessage(music.title),
+    );
+
+    if (isConfirm != true) return false;
+
+    if (audioHandler.currentMediaItem?.id == music.path) {
+      ToastService.showError(tr().error_cannotDeletePlayingMusic);
+      return false;
+    }
+
+    final file = File(music.path);
+    if (await file.exists()) {
+      await file.delete();
+    }
+    final musicService = MusicService();
+    await musicService.deleteMusicAsync(music.id);
+    setMusics(musics.where((x) => x.id != music.id).toList());
+    if (audioHandler.playlist.any((x) => x.id == music.path)) {
+      await audioHandler.removeItemInPlaylist(music.path);
+    }
+    return true;
   }
 
   Future<void> _init() async {
@@ -182,5 +206,11 @@ class PlayerProvider extends ChangeNotifier {
     // if (isSkipSilent) {
     //   await musicService.fetchSkipSilentDurations();
     // }
+  }
+}
+
+extension PlayerProviderExtension on BuildContext {
+  PlayerProvider getPlayerProvider() {
+    return Provider.of<PlayerProvider>(this);
   }
 }

@@ -60,6 +60,7 @@ class _SearchPageState extends State<SearchPage> {
               MusicListItem(
                 music: music,
                 keywordSearch: keyword,
+                onDeletedItem: () => handleSearch(keyword!),
                 afterHideItem: () {
                   handleSearch(keyword!);
                 },

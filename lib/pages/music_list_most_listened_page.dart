@@ -56,6 +56,7 @@ class _MusicListMostListenedPageState extends State<MusicListMostListenedPage> {
                             Expanded(
                               child: MusicListItem(
                                 music: music,
+                                onDeletedItem: () => setState(() {}),
                                 afterHideItem: () => setState(() {}),
                                 leading: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,

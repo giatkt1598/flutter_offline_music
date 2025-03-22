@@ -156,7 +156,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get musicMenu_hide => 'Hide';
 
   @override
-  String get musicMenu_deleteOnDevice => 'Delete from Device';
+  String get musicMenu_deleteOnDevice => 'Delete in device';
 
   @override
   String musicMenu_playNextMessage(Object musicTitle) {
@@ -214,6 +214,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get error_existedName => 'Name is exists';
+
+  @override
+  String get error_cannotDeletePlayingMusic => 'This file is playing now, cannot delete!';
 
   @override
   String get searchPlaceholder => 'Search';
@@ -712,5 +715,15 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String notFoundFileName(Object name) {
     return 'File \"$name\" is not found';
+  }
+
+  @override
+  String deleteMusicSuccess(Object name) {
+    return '\"$name\" is deleted';
+  }
+
+  @override
+  String deleteMusicConfirmMessage(Object title) {
+    return 'Are you sure to delete \"$title\" from device?';
   }
 }

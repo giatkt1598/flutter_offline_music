@@ -69,6 +69,10 @@ class _MusicListState extends State<MusicList> {
             }
             if (widget.onChanged != null) widget.onChanged!(musics);
           },
+          onDeletedItem: () {
+            musics.remove(item);
+            if (widget.onChanged != null) widget.onChanged!(musics);
+          },
         );
       },
     );

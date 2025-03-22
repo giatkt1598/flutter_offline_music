@@ -22,6 +22,7 @@ class MusicItemMenu extends StatefulWidget {
     required this.music,
     this.afterToggleHide,
     this.afterToggleFavorite,
+    this.onDeleted,
     this.showMiniPlayer = true,
     this.type = MusicMenuType.inMusicList,
     this.icon,
@@ -30,6 +31,7 @@ class MusicItemMenu extends StatefulWidget {
   final Music music;
   final Function? afterToggleHide;
   final Function? afterToggleFavorite;
+  final Function? onDeleted;
   final bool showMiniPlayer;
   final MusicMenuType type;
   final Widget? icon;
@@ -167,16 +169,16 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
               Opacity(opacity: .3, child: Divider()),
               Column(
                 children: [
-                  // if (widget.type == MusicMenuType.inPlaylist)
-                  ListMenuOption(
-                    title: tr().musicMenu_play,
-                    icon: Icons.play_arrow_rounded,
-                    enabled: !isCurrent,
-                    onTap: () {
-                      audioHandler.playMusic(widget.music);
-                      Navigator.of(context).pop();
-                    },
-                  ),
+                  if (widget.type != MusicMenuType.inPlayer && !isCurrent)
+                    ListMenuOption(
+                      title: tr().musicMenu_play,
+                      icon: Icons.play_arrow_rounded,
+                      enabled: !isCurrent,
+                      onTap: () {
+                        audioHandler.playMusic(widget.music);
+                        Navigator.of(context).pop();
+                      },
+                    ),
                   if ((widget.type == MusicMenuType.inMusicList ||
                       widget.type == MusicMenuType.inPlaylist))
                     ListMenuOption(
@@ -323,29 +325,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                     title: tr().musicMenu_changeThumbnail,
                     icon: Icons.image,
                     onTap: () async {
-                      // EasyLoading.show(
-                      //   maskType: EasyLoadingMaskType.black,
-                      //   status: 'Đang xử lý...',
-                      //   dismissOnTap: false,
-                      // );
-                      // var thumbUrl = await youtubeService
-                      //     .getVideoThumbnailAsync(widget.music.title);
-                      // if (thumbUrl != null) {
-                      //   widget.music.thumbnail = thumbUrl;
-                      //   await musicService.updateMusicAsync(widget.music);
-                      //   ToastService.showSuccess(
-                      //     'Đã cập nhật thumbnail cho bài hát từ youtube',
-                      //   );
-                      //   audioHandler.updateThumbnailToPlaylistItems();
-                      //   playerProvider.notifyChanges();
-                      // } else {
-                      //   ToastService.showError(
-                      //     'Xảy ra lỗi hoặc không tìm thấy thumbnail phù hợp',
-                      //   );
-                      // }
-                      // EasyLoading.dismiss();
                       Navigator.pop(context);
-
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder:
@@ -409,14 +389,30 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                       Navigator.pop(context, true);
                     },
                   ),
-                  ListMenuOption(
-                    icon: Icons.delete_forever,
-                    title: tr().musicMenu_deleteOnDevice,
-                    iconColor: Colors.red,
-                    onTap: () {
-                      ToastService.show(message: 'Comming soon! : <');
-                    },
-                  ),
+                  if (widget.type != MusicMenuType.inPlayer && !isCurrent)
+                    ListMenuOption(
+                      icon: Icons.delete_forever,
+                      title: tr().musicMenu_deleteOnDevice,
+                      iconColor: Colors.red,
+                      enabled: !isCurrent,
+                      onTap: () async {
+                        Navigator.of(context).pop();
+                        bool success = await playerProvider.deleteMusicFile(
+                          context,
+                          widget.music,
+                        );
+
+                        if (success) {
+                          ToastService.showSuccess(
+                            tr().deleteMusicSuccess(widget.music.title),
+                          );
+
+                          if (widget.onDeleted != null) {
+                            widget.onDeleted!();
+                          }
+                        }
+                      },
+                    ),
                 ],
               ),
               SizedBox(height: 16),

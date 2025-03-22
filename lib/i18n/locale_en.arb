@@ -50,7 +50,7 @@
     "musicMenu_musicHidden": "\"{name}\" is hidden",
     "musicMenu_show": "Display",
     "musicMenu_hide": "Hide",
-    "musicMenu_deleteOnDevice": "Delete from Device",
+    "musicMenu_deleteOnDevice": "Delete in device",
     "musicMenu_playNextMessage": "Next, the song \"{musicTitle}\" wil be play",
     "musicMenu_error": "Error",
     "musicMenu_removeFromPlaylist": "Remove from playlist",
@@ -68,6 +68,7 @@
     "error_requiredName": "Name cannot be empty",
     "error_checkAgain": "Please check the information again",
     "error_existedName": "Name is exists",
+    "error_cannotDeletePlayingMusic": "This file is playing now, cannot delete!",
     "searchPlaceholder": "Search",
     "searchNoResults": "No Results",
     "noData": "No Data",
@@ -282,5 +283,7 @@
     "confirmDialog_defaultMessage": "Are you sure?",
     "nowPlayingTitle": "Now Playing",
     "okTitle": "OK",
-    "notFoundFileName": "File \"{name}\" is not found"
+    "notFoundFileName": "File \"{name}\" is not found",
+    "deleteMusicSuccess": "\"{name}\" is deleted",
+    "deleteMusicConfirmMessage": "Are you sure to delete \"{title}\" from device?"
 }

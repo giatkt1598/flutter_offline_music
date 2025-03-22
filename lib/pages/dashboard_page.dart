@@ -190,6 +190,7 @@ class _DashboardPageState extends State<DashboardPage>
                 MusicListItem(
                   music: music,
                   afterHideItem: () => fetchData(),
+                  onDeletedItem: () => fetchData(),
                   afterToggleFavorite: () => fetchData(),
                   onPop: () => fetchData(),
                 ),

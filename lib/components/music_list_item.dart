@@ -26,11 +26,13 @@ class MusicListItem extends StatelessWidget {
     this.showMiniPlayer = true,
     this.afterToggleFavorite,
     this.onPop,
+    this.onDeletedItem,
   });
 
   final Music music;
   final Function? afterHideItem;
   final Function? afterToggleFavorite;
+  final Function? onDeletedItem;
   final String? keywordSearch;
   final void Function()? onTap;
   final Widget? trailing;
@@ -103,6 +105,7 @@ class MusicListItem extends StatelessWidget {
               type: menuType,
               showMiniPlayer: showMiniPlayer,
               afterToggleFavorite: afterToggleFavorite,
+              onDeleted: onDeletedItem,
             ),
         title: Padding(
           padding: const EdgeInsets.only(left: 8),

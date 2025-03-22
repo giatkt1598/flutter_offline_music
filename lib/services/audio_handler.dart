@@ -81,6 +81,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     int index = _playlist.indexWhere((x) => x.id == musicPath);
     _playlist.removeAt(index);
     _originPlaylist.removeWhere((x) => x.id == musicPath);
+    _musics.removeWhere((x) => x.path == musicPath);
     await _audioSource?.removeAt(index);
     notifyListeners();
   }
