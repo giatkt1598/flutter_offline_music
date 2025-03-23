@@ -127,7 +127,7 @@ class _ReorderableMusicListPageState extends State<ReorderableMusicListPage> {
                         spacing: 4,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.drag_handle_rounded, color: Colors.white),
+                          Icon(Icons.drag_handle_rounded),
                           MusicThumbnail(thumbnailPath: music.thumbnail),
                         ],
                       ),
