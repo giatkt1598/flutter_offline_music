@@ -131,6 +131,7 @@ class MusicListItem extends StatelessWidget {
                                   MediaQuery.of(context).size.width - 120,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
+                                fontSize: 14,
                                 color:
                                     activeMusicTitleColor ??
                                     Theme.of(context).colorScheme.primary,
@@ -140,12 +141,19 @@ class MusicListItem extends StatelessWidget {
                             ? HighlightedText(
                               fullText: music.title,
                               highlightedText: keywordSearch!,
+                              style: TextStyle(
+                                color: musicTitleColor,
+                                fontSize: 14,
+                              ),
                             )
                             : Text(
                               music.title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: musicTitleColor),
+                              style: TextStyle(
+                                color: musicTitleColor,
+                                fontSize: 14,
+                              ),
                             ),
                   ),
                 ],
