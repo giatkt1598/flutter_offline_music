@@ -137,6 +137,8 @@ abstract class BasePlayerWidgetState extends State<BasePlayerWidget>
       seek: seek,
       toggleShuffle: toggleShuffle,
       changeLoopMode: changeLoopMode,
+      stopTime: audioHandler.stopTime,
+      setStopTimer: () => playerProvider.setStopTime(context),
     );
   }
 
@@ -160,6 +162,8 @@ abstract class BasePlayerWidgetState extends State<BasePlayerWidget>
     required Future<void> Function() playPause,
     required Future<void> Function(Duration position) seek,
     required Future<void> Function() changeLoopMode,
+    required DateTime? stopTime,
+    required Future<void> Function() setStopTimer,
   });
 
   @override

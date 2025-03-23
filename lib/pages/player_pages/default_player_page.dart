@@ -61,6 +61,8 @@ class _DefaultPlayerPageState extends BasePlayerWidgetState
     required Future<void> Function() playPause,
     required Future<void> Function(Duration position) seek,
     required Future<void> Function() changeLoopMode,
+    required DateTime? stopTime,
+    required Future<void> Function() setStopTimer,
   }) {
     final appSetting = Provider.of<SettingProvider>(context).appSetting;
     final backgroundImage =
@@ -96,9 +98,7 @@ class _DefaultPlayerPageState extends BasePlayerWidgetState
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.transparent,
-                      Colors.black.withValues(
-                        alpha: 0.7,
-                      ), // ✅ Bóng mờ màu đen ở dưới
+                      Colors.black.withValues(alpha: 0.7),
                     ],
                   ),
                 ),
@@ -184,6 +184,8 @@ class _DefaultPlayerState extends BasePlayerWidgetState {
     required Future<void> Function() playPause,
     required Future<void> Function(Duration position) seek,
     required Future<void> Function() changeLoopMode,
+    required DateTime? stopTime,
+    required Future<void> Function() setStopTimer,
   }) {
     return DefaultTextStyle(
       style: TextStyle(color: Colors.white),
@@ -209,38 +211,7 @@ class _DefaultPlayerState extends BasePlayerWidgetState {
                       ),
                     ),
                   ),
-                Expanded(
-                  child: GestureDetector(
-                    onDoubleTap: toggleFavorite,
-                    child: Container(
-                      color: Colors.transparent,
-                      child: Stack(
-                        children: [
-                          Center(child: MusicDiscIllustrator(music: music)),
-                          if (music.isFavorite)
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.favorite,
-                                    size: 12,
-                                    color: const Color.fromARGB(
-                                      255,
-                                      255,
-                                      100,
-                                      151,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                Expanded(child: MusicDiscIllustrator(music: music)),
                 Column(
                   children: [
                     Column(

@@ -97,6 +97,8 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
     required Future<void> Function() playPause,
     required Future<void> Function(Duration position) seek,
     required Future<void> Function() changeLoopMode,
+    required DateTime? stopTime,
+    required Future<void> Function() setStopTimer,
   }) {
     openPlaylistPage() {
       showModalBottomSheet(
@@ -201,7 +203,7 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                                       ),
                                       child: Text(
                                         '${audioHandler.currentIndex + 1}/${playlist.length}',
-                                        style: TextStyle(fontSize: 6),
+                                        style: TextStyle(fontSize: 8),
                                       ),
                                     ),
                                   ),
@@ -243,9 +245,8 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                             ),
                           ),
                           IconButton(
-                            onPressed:
-                                () => playerProvider.setStopTime(context),
-                            icon: CountDownIcon(endTime: audioHandler.stopTime),
+                            onPressed: setStopTimer,
+                            icon: CountDownIcon(endTime: stopTime),
                           ),
                         ],
                       ),

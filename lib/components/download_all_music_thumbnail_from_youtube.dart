@@ -38,7 +38,7 @@ class _DownloadAllMusicThumbnailFromYoutubeState
 
   Future downloadThumbnails() async {
     musics.clear();
-    var debounceDuration = Duration(seconds: 1);
+    var debounceDuration = Duration(seconds: 2);
     final allMusics = await musicService.getListMusicAsync();
     for (var m in widget.musics) {
       musics.add(allMusics.firstWhere((x) => x.id == m.id));

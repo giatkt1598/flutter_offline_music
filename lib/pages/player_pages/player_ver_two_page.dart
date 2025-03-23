@@ -50,6 +50,8 @@ class _PlayerVerTwoPageState extends BasePlayerWidgetState {
     required Future<void> Function() playPause,
     required Future<void> Function(Duration position) seek,
     required Future<void> Function() changeLoopMode,
+    required DateTime? stopTime,
+    required Future<void> Function() setStopTimer,
   }) {
     final bg =
         music.thumbnail ??

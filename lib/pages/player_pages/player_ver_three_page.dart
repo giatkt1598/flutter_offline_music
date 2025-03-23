@@ -51,6 +51,8 @@ class _PlayerVerThreePageState extends BasePlayerWidgetState {
     required Future<void> Function() playPause,
     required Future<void> Function(Duration position) seek,
     required Future<void> Function() changeLoopMode,
+    required DateTime? stopTime,
+    required Future<void> Function() setStopTimer,
   }) {
     final bgImage =
         music.thumbnail ??
@@ -70,31 +72,39 @@ class _PlayerVerThreePageState extends BasePlayerWidgetState {
             child: Column(
               spacing: 16,
               children: [
-                SizedBox(height: SharedData.statusBarHeight),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Column(
                   children: [
-                    Container(
-                      width: 36,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(999),
-                        color: isDarkMode() ? Colors.white30 : Colors.black26,
+                    SizedBox(height: SharedData.statusBarHeight),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 36,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(999),
+                            color:
+                                isDarkMode() ? Colors.white30 : Colors.black26,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 4),
+                    AnimatedSwitcher(
+                      duration: Duration(milliseconds: 300),
+                      transitionBuilder: (child, animation) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
+                      child: Text(
+                        key: ValueKey(tabIndex),
+                        tabIndex == 0
+                            ? tr().playlistTitle
+                            : tr().nowPlayingTitle,
                       ),
                     ),
                   ],
                 ),
 
-                AnimatedSwitcher(
-                  duration: Duration(milliseconds: 300),
-                  transitionBuilder: (child, animation) {
-                    return FadeTransition(opacity: animation, child: child);
-                  },
-                  child: Text(
-                    key: ValueKey(tabIndex),
-                    tabIndex == 0 ? tr().playlistTitle : tr().nowPlayingTitle,
-                  ),
-                ),
                 Expanded(
                   child: Stack(
                     children: [
