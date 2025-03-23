@@ -67,9 +67,6 @@ class _DefaultPlayerPageState extends BasePlayerWidgetState
     final appSetting = Provider.of<SettingProvider>(context).appSetting;
     final backgroundImage =
         music.thumbnail ?? appSetting.playerBackgroundImage.toNullIfEmpty();
-    bool isDarkBottom =
-        backgroundImage != null ||
-        Theme.of(context).brightness == Brightness.light;
 
     return DefaultTextStyle(
       style: TextStyle(color: Colors.white),
@@ -88,21 +85,40 @@ class _DefaultPlayerPageState extends BasePlayerWidgetState
                     appSetting.backgroundBlurValue *
                     Constants.backgroundBlurSigmaMaxValue,
               ),
-            if (isDarkBottom)
-              Container(
-                width: double.infinity,
-                height: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.center,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black.withValues(alpha: 0.7),
-                    ],
+            Positioned.fill(
+              child: Column(
+                children: [
+                  Flexible(
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.center,
+                          colors: [Colors.black38, Colors.transparent],
+                        ),
+                      ),
+                    ),
                   ),
+                  Spacer(flex: 2),
+                ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.center,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withValues(alpha: 0.7),
+                  ],
                 ),
               ),
+            ),
             AnimatedSwitcher(
               duration: Duration(milliseconds: 300),
               transitionBuilder: (child, animation) {

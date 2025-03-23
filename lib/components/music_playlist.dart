@@ -10,10 +10,8 @@ import 'package:flutter_offline_music/components/simple_tab.dart';
 import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/providers/player_provider.dart';
-import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
-import 'package:flutter_offline_music/utilities/string_extensions.dart';
 import 'package:flutter_offline_music/utilities/theme_helper.dart';
 import 'package:provider/provider.dart';
 
@@ -77,7 +75,6 @@ class _MusicPlaylistState extends State<MusicPlaylist>
 
     final playerProvider = Provider.of<PlayerProvider>(context);
     final audioHandler = playerProvider.audioHandler;
-    final settingProvider = context.getSettingProvider();
 
     if (audioHandler.playlist.isEmpty || musics.isEmpty) {
       return NoData();
@@ -89,17 +86,10 @@ class _MusicPlaylistState extends State<MusicPlaylist>
           .toList(),
     );
 
-    String? bgImage =
-        audioHandler.currentMusic?.thumbnail ??
-        settingProvider.appSetting.playerBackgroundImage.toNullIfEmpty();
-
     return Column(
       children: [
         Container(
-          color:
-              bgImage != null
-                  ? Colors.transparent
-                  : Theme.of(context).scaffoldBackgroundColor,
+          color: Colors.transparent,
           child: Row(
             children: [
               Padding(

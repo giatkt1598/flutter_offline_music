@@ -145,7 +145,7 @@ class _PlayerVerThreePageState extends BasePlayerWidgetState {
                           );
                         },
                         child:
-                            bgImage != null
+                            bgImage != null || !isDarkMode() && tabIndex == 0
                                 ? Container(
                                   width: double.infinity,
                                   height: double.infinity,

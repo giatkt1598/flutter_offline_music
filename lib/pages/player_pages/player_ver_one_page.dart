@@ -203,7 +203,10 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                                       ),
                                       child: Text(
                                         '${audioHandler.currentIndex + 1}/${playlist.length}',
-                                        style: TextStyle(fontSize: 8),
+                                        style: TextStyle(
+                                          fontSize: 8,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ),

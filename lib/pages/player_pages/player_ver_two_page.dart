@@ -248,26 +248,6 @@ class _PlayerVerTwoPageState extends BasePlayerWidgetState {
                       )
                       : Image.file(File(bg), fit: BoxFit.cover),
             ),
-            Positioned.fill(
-              child: Column(
-                children: [
-                  Flexible(
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.center,
-                          colors: [Colors.black38, Colors.transparent],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Spacer(flex: 2),
-                ],
-              ),
-            ),
 
             AnimatedSwitcher(
               duration: Duration(milliseconds: 300),
