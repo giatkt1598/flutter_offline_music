@@ -108,7 +108,7 @@ class _MusicThumbnailSelectFromYoutubePageState
       ToastService.showError(tr().errorTryAgain);
     }
     EasyLoading.dismiss();
-    Navigator.of(context).pop();
+    Navigator.of(context).pop(widget.music.thumbnail);
   }
 
   @override

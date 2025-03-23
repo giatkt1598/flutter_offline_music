@@ -183,6 +183,24 @@ class PlayerProvider extends ChangeNotifier {
     return true;
   }
 
+  Future<void> toggleFavorite(Music music) async {
+    music.isFavorite = !music.isFavorite;
+    await MusicService().updateMusicAsync(music);
+
+    final musicInList = musics.where((x) => x.id == music.id).firstOrNull;
+
+    if (musicInList != null) {
+      musicInList.isFavorite = music.isFavorite;
+    }
+
+    final musicInPlaylist =
+        audioHandler.musics.where((x) => x.id == music.id).firstOrNull;
+    if (musicInPlaylist != null) {
+      musicInPlaylist.isFavorite = music.isFavorite;
+      notifyChanges();
+    }
+  }
+
   Future<void> _init() async {
     final musicService = MusicService();
     final bool isExecSyncData = SettingProvider.staticAppSetting.autoScanFiles;

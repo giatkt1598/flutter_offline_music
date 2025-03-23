@@ -233,33 +233,14 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                         widget.music.isFavorite
                             ? tr().musicMenu_removeFromFavorite
                             : tr().musicMenu_addToFavorite,
-                    onTap: () {
-                      widget.music.isFavorite = !widget.music.isFavorite;
-                      musicService.updateMusicAsync(widget.music);
+                    onTap: () async {
+                      bool isFavorite = widget.music.isFavorite;
+                      await playerProvider.toggleFavorite(widget.music);
                       ToastService.showSuccess(
-                        widget.music.isFavorite
-                            ? tr().musicMenu_addToFavoriteSuccess
-                            : tr().musicMenu_removeFromFavoriteSuccess,
+                        isFavorite
+                            ? tr().musicMenu_removeFromFavoriteSuccess
+                            : tr().musicMenu_addToFavoriteSuccess,
                       );
-                      //TODO: refactor
-
-                      final musicInList =
-                          playerProvider.musics
-                              .where((x) => x.id == widget.music.id)
-                              .firstOrNull;
-
-                      if (musicInList != null) {
-                        musicInList.isFavorite = widget.music.isFavorite;
-                      }
-
-                      final musicInPlaylist =
-                          playerProvider.audioHandler.musics
-                              .where((x) => x.id == widget.music.id)
-                              .firstOrNull;
-                      if (musicInPlaylist != null) {
-                        musicInPlaylist.isFavorite = widget.music.isFavorite;
-                        playerProvider.notifyChanges();
-                      }
 
                       if (widget.afterToggleFavorite != null) {
                         widget.afterToggleFavorite!();
@@ -325,8 +306,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                     title: tr().musicMenu_changeThumbnail,
                     icon: Icons.image,
                     onTap: () async {
-                      Navigator.pop(context);
-                      Navigator.of(context).push(
+                      String? img = await Navigator.of(context).push<String>(
                         MaterialPageRoute(
                           builder:
                               (context) => MusicThumbnailSelectFromYoutubePage(
@@ -334,6 +314,10 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
                               ),
                         ),
                       );
+                      if (img != null) {
+                        widget.music.thumbnail = img;
+                      }
+                      Navigator.pop(context);
                     },
                   ),
                   if (widget.type == MusicMenuType.inPlayer)

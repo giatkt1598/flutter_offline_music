@@ -66,25 +66,7 @@ abstract class BasePlayerWidgetState extends State<BasePlayerWidget>
     LoopMode loopMode = audioHandler.player.loopMode;
 
     Future<void> toggleFavorite() async {
-      music.isFavorite = !music.isFavorite;
-      await musicService.updateMusicAsync(music);
-
-      //TODO: refactor
-      final musicInList =
-          playerProvider.musics.where((x) => x.id == music.id).firstOrNull;
-
-      if (musicInList != null) {
-        musicInList.isFavorite = music.isFavorite;
-      }
-
-      final musicInPlaylist =
-          playerProvider.audioHandler.musics
-              .where((x) => x.id == music.id)
-              .firstOrNull;
-      if (musicInPlaylist != null) {
-        musicInPlaylist.isFavorite = music.isFavorite;
-        playerProvider.notifyChanges();
-      }
+      await playerProvider.toggleFavorite(music);
     }
 
     toggleShuffle() => audioHandler.setShuffle(!audioHandler.isShuffle);
