@@ -221,7 +221,7 @@ class _SettingPageState extends State<SettingPage> {
                 onTap: () {},
                 title: Row(
                   children: [
-                    Expanded(child: Text(tr().about_intro)),
+                    Expanded(child: Text(tr().about_version)),
                     Opacity(opacity: 0.4, child: Text(appVersion)),
                   ],
                 ),

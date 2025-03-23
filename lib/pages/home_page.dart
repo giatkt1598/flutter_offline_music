@@ -9,6 +9,7 @@ import 'package:flutter_offline_music/services/permission_service.dart';
 import 'package:flutter_offline_music/shared/shared_data.dart';
 import 'package:flutter_offline_music/utilities/app_background_helper.dart';
 import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,6 +28,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
     final tabProvider = Provider.of<TabProvider>(context, listen: false);
     tabProvider.initTabController(vsync: this);
+  }
+
+  void setLocaleForTimeAgo() {
+    String langCode = Localizations.localeOf(context).languageCode;
+    timeago.setDefaultLocale(langCode);
+  }
+
+  @override
+  void didChangeDependencies() {
+    setLocaleForTimeAgo();
+    super.didChangeDependencies();
   }
 
   @override

@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music_folder.dart';
-import 'package:flutter_offline_music/providers/setting_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class MusicFolderInfo extends StatelessWidget {
@@ -14,7 +12,6 @@ class MusicFolderInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var creationTime = File(folder.path).statSync().changed;
-    final setting = Provider.of<SettingProvider>(context).appSetting;
     return Table(
       columnWidths: {0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
       children: [
@@ -33,9 +30,7 @@ class MusicFolderInfo extends StatelessWidget {
                     creationTime.toString().lastIndexOf('.'),
                   ),
                 ),
-                Text(
-                  '(${timeago.format(creationTime, locale: setting.languageCode)})',
-                ),
+                Text('(${timeago.format(creationTime)})'),
               ],
             ),
           ),

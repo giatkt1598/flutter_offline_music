@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/music.dart';
-import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:flutter_offline_music/utilities/time_helper.dart';
-import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class MusicInfo extends StatelessWidget {
@@ -15,7 +13,6 @@ class MusicInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double size = File(music.path).lengthSync() / 1024 / 1024;
-    final setting = Provider.of<SettingProvider>(context).appSetting;
     return Table(
       columnWidths: {0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
       children: [
@@ -45,9 +42,7 @@ class MusicInfo extends StatelessWidget {
                     music.creationTime.toString().lastIndexOf('.'),
                   ),
                 ),
-                Text(
-                  '(${timeago.format(music.creationTime, locale: setting.languageCode)})',
-                ),
+                Text('(${timeago.format(music.creationTime)})'),
               ],
             ),
           ),
