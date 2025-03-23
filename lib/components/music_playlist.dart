@@ -206,7 +206,7 @@ class _MusicPlaylistState extends State<MusicPlaylist>
                       spacing: 4,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.sort, color: Colors.white),
+                        Icon(Icons.drag_handle_rounded, color: Colors.white),
                         MusicThumbnail(thumbnailPath: music.thumbnail),
                       ],
                     ),

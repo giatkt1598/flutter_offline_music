@@ -121,4 +121,25 @@ class LibraryService {
 
     return filteredItems;
   }
+
+  Future<void> reorderMusicsInLibrary({
+    required int libraryId,
+    required List<int> musicIds,
+  }) async {
+    var db = await _db;
+    var batch = db.batch();
+    batch.delete(
+      DbTable.musicLibrary,
+      where: 'libraryId = ?',
+      whereArgs: [libraryId],
+    );
+    for (var i = 0; i < musicIds.length; i++) {
+      batch.insert(
+        DbTable.musicLibrary,
+        MusicLibrary(musicId: musicIds[i], libraryId: libraryId).toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    }
+    await batch.commit(noResult: true);
+  }
 }

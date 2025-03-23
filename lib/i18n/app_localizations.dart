@@ -1156,6 +1156,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure to delete \"{title}\" from device?'**
   String deleteMusicConfirmMessage(Object title);
+
+  /// No description provided for @customTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get customTitle;
+
+  /// No description provided for @defaultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get defaultTitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

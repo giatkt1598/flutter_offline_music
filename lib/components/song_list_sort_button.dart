@@ -198,7 +198,7 @@ class _SongListSortButtonState extends State<SongListSortButton> {
       onPressed: showModal,
       child: Row(
         children: [
-          Text(label ?? ''),
+          Text(label ?? tr().defaultTitle),
           Icon(
             sortDirection == 'asc'
                 ? Icons.arrow_upward_rounded

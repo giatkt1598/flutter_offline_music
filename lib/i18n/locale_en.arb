@@ -285,5 +285,7 @@
     "okTitle": "OK",
     "notFoundFileName": "File \"{name}\" is not found",
     "deleteMusicSuccess": "\"{name}\" is deleted",
-    "deleteMusicConfirmMessage": "Are you sure to delete \"{title}\" from device?"
+    "deleteMusicConfirmMessage": "Are you sure to delete \"{title}\" from device?",
+    "customTitle": "Custom",
+    "defaultTitle": "Default"
 }

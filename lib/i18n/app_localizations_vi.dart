@@ -694,4 +694,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String deleteMusicConfirmMessage(Object title) {
     return 'Bạn có chắc chắn muốn xóa \"$title\" khỏi thiết bị?';
   }
+
+  @override
+  String get customTitle => 'Tùy chỉnh';
+
+  @override
+  String get defaultTitle => 'Mặc định';
 }

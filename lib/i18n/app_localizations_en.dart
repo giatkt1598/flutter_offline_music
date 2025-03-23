@@ -726,4 +726,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String deleteMusicConfirmMessage(Object title) {
     return 'Are you sure to delete \"$title\" from device?';
   }
+
+  @override
+  String get customTitle => 'Custom';
+
+  @override
+  String get defaultTitle => 'Default';
 }

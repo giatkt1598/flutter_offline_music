@@ -6,7 +6,9 @@ import 'package:flutter_offline_music/components/music_list_simple_info.dart';
 import 'package:flutter_offline_music/components/show_confirm_dialog.dart';
 import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:flutter_offline_music/models/library.dart';
+import 'package:flutter_offline_music/models/music.dart';
 import 'package:flutter_offline_music/pages/music_select_to_library_page.dart';
+import 'package:flutter_offline_music/pages/reorderable_music_list_page.dart';
 import 'package:flutter_offline_music/services/library_service.dart';
 import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
@@ -109,12 +111,31 @@ class LibraryListItemMenu extends StatelessWidget {
             title: Text(tr().libraryMenu_edit),
           ),
           ListTile(
-            enabled: false,
-            onTap: null,
+            enabled: library.musics.isNotEmpty,
+            onTap: () async {
+              Navigator.pop(context);
+              var orderedMusics = await Navigator.of(context).push<List<Music>>(
+                MaterialPageRoute(
+                  builder:
+                      (context) =>
+                          ReorderableMusicListPage(musics: library.musics),
+                ),
+              );
+
+              if (orderedMusics != null) {
+                final musicIds = orderedMusics.map((e) => e.id).toList();
+                await libraryService.reorderMusicsInLibrary(
+                  libraryId: library.id,
+                  musicIds: musicIds,
+                );
+                onRefresh();
+              }
+            },
             leading: Icon(Icons.sort_rounded),
             title: Text(tr().libraryMenu_sortItems),
           ),
           ListTile(
+            enabled: library.musics.isNotEmpty,
             onTap: () => getThumbnails(context),
             leading: Icon(Icons.image),
             title: Text(tr().libraryMenu_downloadItemThumbnails),

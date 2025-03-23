@@ -285,5 +285,7 @@
     "okTitle": "OK",
     "notFoundFileName": "Không tìm thấy tệp \"{name}\"",
     "deleteMusicSuccess": "Đã xóa \"{name}\n",
-    "deleteMusicConfirmMessage": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi thiết bị?"
+    "deleteMusicConfirmMessage": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi thiết bị?",
+    "customTitle": "Tùy chỉnh",
+    "defaultTitle": "Mặc định"
 }
