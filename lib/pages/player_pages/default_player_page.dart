@@ -123,9 +123,7 @@ class _DefaultPlayerPageState extends BasePlayerWidgetState
 
             Container(
               color:
-                  backgroundImage != null
-                      ? Colors.transparent
-                      : Theme.of(context).scaffoldBackgroundColor,
+                  backgroundImage != null ? Colors.transparent : Colors.black,
               child: Column(
                 children: [
                   SizedBox(height: SharedData.statusBarHeight),
@@ -135,14 +133,19 @@ class _DefaultPlayerPageState extends BasePlayerWidgetState
                         tabIndex == 0 ? PlayerTab.playlist : PlayerTab.audio,
                   ),
                   Expanded(
-                    child: SimpleTab(
-                      initialIndex: tabIndex,
-                      tabViews: [MusicPlaylist(), _DefaultPlayer()],
-                      onTabChanged: (value) {
-                        setState(() {
-                          tabIndex = value;
-                        });
-                      },
+                    child: Theme(
+                      data: ThemeData.dark().copyWith(
+                        scaffoldBackgroundColor: Colors.black,
+                      ),
+                      child: SimpleTab(
+                        initialIndex: tabIndex,
+                        tabViews: [MusicPlaylist(), _DefaultPlayer()],
+                        onTabChanged: (value) {
+                          setState(() {
+                            tabIndex = value;
+                          });
+                        },
+                      ),
                     ),
                   ),
                 ],
