@@ -95,6 +95,11 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       return true;
     }
 
+    if (!_musics.any((x) => x.path == item.id)) {
+      Music music = await _musicService.getMusicAsync(path: item.id);
+      _musics.add(music);
+    }
+
     if (_player.audioSource == null) {
       await _setPlaylist([item]);
       notifyListeners();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_offline_music/i18n/app_localizations.dart';
 import 'package:flutter_offline_music/i18n/time_ago_vi_message.dart';
@@ -17,6 +18,13 @@ import 'package:toastification/toastification.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Lock orientation to portrait only
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
   var initialThemeMode = (await SettingProvider().loadSetting()).themeMode;
   timeago.setLocaleMessages('vi', CustomViMessages());
   await AppAudioHandler.createInstance();

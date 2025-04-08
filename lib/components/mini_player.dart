@@ -76,7 +76,7 @@ class _MiniPlayerState extends State<MiniPlayer> {
       if (_pageController.page?.toInt() == _pageController.page &&
           _playerProvider.audioHandler.currentIndex != _pageController.page &&
           _pageController.page != null &&
-          _pageController.page!.toInt() < audioHandler.playlist.length - 1 &&
+          _pageController.page!.toInt() <= audioHandler.playlist.length - 1 &&
           _pageController.position.userScrollDirection !=
               ScrollDirection.idle) {
         audioHandler.playMediaItem(
