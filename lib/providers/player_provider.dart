@@ -46,7 +46,7 @@ class PlayerProvider extends ChangeNotifier {
       }
 
       if (music.path != audioHandler.currentMediaItem?.id) {
-        await audioHandler.stop();
+        // await audioHandler.stop();
         await audioHandler.playMusic(music);
       }
     }

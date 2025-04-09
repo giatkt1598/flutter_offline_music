@@ -287,5 +287,10 @@
     "deleteMusicSuccess": "Đã xóa \"{name}\n",
     "deleteMusicConfirmMessage": "Bạn có chắc chắn muốn xóa \"{title}\" khỏi thiết bị?",
     "customTitle": "Tùy chỉnh",
-    "defaultTitle": "Mặc định"
+    "defaultTitle": "Mặc định",
+    "allowTitle": "Cho phép",
+    "requestNotificationPermissionTitle": "Cấp quyền Thông báo",
+    "requestNotificationPermissionMessage": "Vui lòng cấp quyền thông báo để hiển thị và tạm dừng hoặc chuyển bài hát nhanh chóng trên Trung tâm thông báo.",
+    "requestStoragePermissionTitle": "Cấp quyền Quản lý tệp",
+    "requestStoragePermissionMessage": "Vui lòng cấp quyền \"Quản lý tất cả tệp\" để ứng dụng có thể truy cập bộ nhớ và quét các tệp tin âm thanh có trong thiết bị của bạn."
 }

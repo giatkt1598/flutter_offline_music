@@ -700,4 +700,19 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get defaultTitle => 'Mặc định';
+
+  @override
+  String get allowTitle => 'Cho phép';
+
+  @override
+  String get requestNotificationPermissionTitle => 'Cấp quyền Thông báo';
+
+  @override
+  String get requestNotificationPermissionMessage => 'Vui lòng cấp quyền thông báo để hiển thị và tạm dừng hoặc chuyển bài hát nhanh chóng trên Trung tâm thông báo.';
+
+  @override
+  String get requestStoragePermissionTitle => 'Cấp quyền Quản lý tệp';
+
+  @override
+  String get requestStoragePermissionMessage => 'Vui lòng cấp quyền \"Quản lý tất cả tệp\" để ứng dụng có thể truy cập bộ nhớ và quét các tệp tin âm thanh có trong thiết bị của bạn.';
 }

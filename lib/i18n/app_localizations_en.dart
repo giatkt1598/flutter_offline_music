@@ -732,4 +732,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get defaultTitle => 'Default';
+
+  @override
+  String get allowTitle => 'Allow';
+
+  @override
+  String get requestNotificationPermissionTitle => 'Grant Notification Permission';
+
+  @override
+  String get requestNotificationPermissionMessage => 'Please grant notification permission to display and quickly pause or skip songs from the Notification Center.';
+
+  @override
+  String get requestStoragePermissionTitle => 'Grant File Management Permission';
+
+  @override
+  String get requestStoragePermissionMessage => 'Please grant \"Manage all files\" permission so the app can access storage and scan for audio files on your device.';
 }

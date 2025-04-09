@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_offline_music/components/app_button.dart';
+import 'package:flutter_offline_music/i18n/i18n.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionService {
@@ -19,7 +20,7 @@ class PermissionService {
               Row(
                 children: [
                   Text(
-                    'Cấp quyền Quản lý tệp',
+                    tr().requestStoragePermissionTitle,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   Spacer(),
@@ -33,7 +34,7 @@ class PermissionService {
               ),
               SizedBox(height: 4),
               Text(
-                'Vui lòng cấp quyền "Quản lý tất cả tệp" để ứng dụng có thể truy cập bộ nhớ và quét các tệp tin âm thanh có trong thiết bị của bạn.',
+                tr().requestStoragePermissionMessage,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               Padding(
@@ -46,7 +47,7 @@ class PermissionService {
                   Expanded(
                     child: AppButton(
                       type: AppButtonType.primary,
-                      child: Text('Cho phép'),
+                      child: Text(tr().allowTitle),
                       onPressed: () {
                         Navigator.of(context).pop(true);
                       },
@@ -83,7 +84,7 @@ class PermissionService {
                 Row(
                   children: [
                     Text(
-                      'Cấp quyền Thông báo',
+                      tr().requestNotificationPermissionTitle,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Spacer(),
@@ -97,7 +98,7 @@ class PermissionService {
                 ),
                 SizedBox(height: 4),
                 Text(
-                  'Vui lòng cấp quyền thông báo để hiển thị và tạm dừng hoặc chuyển bài hát nhanh chóng trên Trung tâm thông báo.',
+                  tr().requestNotificationPermissionMessage,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Image.asset('assets/player_notification.png'),
@@ -107,7 +108,7 @@ class PermissionService {
                     Expanded(
                       child: AppButton(
                         type: AppButtonType.primary,
-                        child: Text('Cho phép'),
+                        child: Text(tr().allowTitle),
                         onPressed: () {
                           Navigator.of(context).pop(true);
                         },

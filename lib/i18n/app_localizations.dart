@@ -1168,6 +1168,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Default'**
   String get defaultTitle;
+
+  /// No description provided for @allowTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow'**
+  String get allowTitle;
+
+  /// No description provided for @requestNotificationPermissionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Grant Notification Permission'**
+  String get requestNotificationPermissionTitle;
+
+  /// No description provided for @requestNotificationPermissionMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please grant notification permission to display and quickly pause or skip songs from the Notification Center.'**
+  String get requestNotificationPermissionMessage;
+
+  /// No description provided for @requestStoragePermissionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Grant File Management Permission'**
+  String get requestStoragePermissionTitle;
+
+  /// No description provided for @requestStoragePermissionMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please grant \"Manage all files\" permission so the app can access storage and scan for audio files on your device.'**
+  String get requestStoragePermissionMessage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

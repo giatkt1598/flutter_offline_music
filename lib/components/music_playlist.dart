@@ -116,22 +116,22 @@ class _MusicPlaylistState extends State<MusicPlaylist>
                 },
                 icon: Icon(Icons.shuffle),
               ),
-              IconButton(
-                onPressed: () {
-                  showConfirmDialog(
-                    context: context,
-                    message: tr().playlist_removeAllItemsConfirmMessage,
-                  ).then((isConfirm) {
-                    if (isConfirm == true) {
-                      Navigator.of(context).pop(true);
-                      audioHandler.stop().then((_) {
-                        audioHandler.setPlaylistFromMusics([]);
-                      });
-                    }
-                  });
-                },
-                icon: Icon(Icons.delete),
-              ),
+              // IconButton(
+              //   onPressed: () {
+              //     showConfirmDialog(
+              //       context: context,
+              //       message: tr().playlist_removeAllItemsConfirmMessage,
+              //     ).then((isConfirm) {
+              //       if (isConfirm == true) {
+              //         Navigator.of(context).pop(true);
+              //         audioHandler.stop().then((_) {
+              //           audioHandler.setPlaylistFromMusics([]);
+              //         });
+              //       }
+              //     });
+              //   },
+              //   icon: Icon(Icons.delete),
+              // ),
             ],
           ),
         ),
