@@ -9,7 +9,6 @@ class AppSetting {
   String playerBackgroundImage;
   double backgroundBlurValue; // Value from 0 -> 1.0
   String playerTheme;
-  bool keepScreenOn;
 
   AppSetting({
     this.themeMode = ThemeMode.system,
@@ -20,7 +19,6 @@ class AppSetting {
     this.playerBackgroundImage = '',
     this.backgroundBlurValue = 1.0,
     this.playerTheme = 'default',
-    this.keepScreenOn = false,
   });
 
   Map<String, dynamic> toJson() {
@@ -33,7 +31,6 @@ class AppSetting {
       'playerBackgroundImage': playerBackgroundImage,
       'backgroundBlurValue': backgroundBlurValue,
       'playerTheme': playerTheme,
-      'keepScreenOn': keepScreenOn,
     };
   }
 
@@ -47,7 +44,6 @@ class AppSetting {
       playerBackgroundImage: json['playerBackgroundImage'],
       backgroundBlurValue: json['backgroundBlurValue'],
       playerTheme: json['playerTheme'],
-      keepScreenOn: json['keepScreenOn'],
     );
   }
 }

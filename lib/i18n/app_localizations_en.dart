@@ -16,11 +16,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String langOptionDisplayName(String languageCode) {
-    String _temp0 = intl.Intl.selectLogic(languageCode, {
-      'vi': 'Tiếng Việt',
-      'en': 'English',
-      'other': 'System',
-    });
+    String _temp0 = intl.Intl.selectLogic(
+      languageCode,
+      {
+        'vi': 'Tiếng Việt',
+        'en': 'English',
+        'other': 'System',
+      },
+    );
     return '$_temp0';
   }
 
@@ -46,8 +49,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingPlayer_skipSilence => 'Skip silence';
 
   @override
-  String get settingPlayer_autoVolume =>
-      'Fade in/out when playing/pausing or switching tracks';
+  String get settingPlayer_autoVolume => 'Fade in/out when playing/pausing or switching tracks';
 
   @override
   String get settingPlayer_autoScan => 'Auto scan files';
@@ -71,15 +73,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get setting_deleteDataPermanently => 'Delete data';
 
   @override
-  String get setting_deleteDataPermanentlyConfirmMessage =>
-      'Are you sure to delete all data?. After deletion, you need to restart the app.';
+  String get setting_deleteDataPermanentlyConfirmMessage => 'Are you sure to delete all data?. After deletion, you need to restart the app.';
 
   @override
-  String get setting_deleteDataPermanentlySuccess =>
-      'All data is deleted, please restart the application...';
-
-  @override
-  String get setting_keepScreenOn => 'Always keep the screen on';
+  String get setting_deleteDataPermanentlySuccess => 'All data is deleted, please restart the application...';
 
   @override
   String get dashboard_playingRecently => 'Recently Played';
@@ -112,8 +109,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get musicMenu_removeFromFavorite => 'Remove from favorites';
 
   @override
-  String get musicMenu_removeFromFavoriteSuccess =>
-      'Remove from favorites is success';
+  String get musicMenu_removeFromFavoriteSuccess => 'Remove from favorites is success';
 
   @override
   String get musicMenu_addToLibrary => 'Add to library';
@@ -199,8 +195,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get libraryMenu_sortItems => 'Sort Songs';
 
   @override
-  String get libraryMenu_downloadItemThumbnails =>
-      'Download cover images for all Songs';
+  String get libraryMenu_downloadItemThumbnails => 'Download cover images for all Songs';
 
   @override
   String get libraryMenu_deleteLibrary => 'Delete Library';
@@ -221,8 +216,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get error_existedName => 'Name is exists';
 
   @override
-  String get error_cannotDeletePlayingMusic =>
-      'This file is playing now, cannot delete!';
+  String get error_cannotDeletePlayingMusic => 'This file is playing now, cannot delete!';
 
   @override
   String get searchPlaceholder => 'Search';
@@ -327,6 +321,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String nHours(num hour) {
     final intl.NumberFormat hourNumberFormat = intl.NumberFormat.compact(
       locale: localeName,
+      
     );
     final String hourString = hourNumberFormat.format(hour);
 
@@ -344,6 +339,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String nMinutes(num minute) {
     final intl.NumberFormat minuteNumberFormat = intl.NumberFormat.compact(
       locale: localeName,
+      
     );
     final String minuteString = minuteNumberFormat.format(minute);
 
@@ -361,6 +357,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String nSeconds(num seconds) {
     final intl.NumberFormat secondsNumberFormat = intl.NumberFormat.compact(
       locale: localeName,
+      
     );
     final String secondsString = secondsNumberFormat.format(seconds);
 
@@ -391,19 +388,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String home_tab(String id) {
-    String _temp0 = intl.Intl.selectLogic(id, {
-      'recommended': 'For you',
-      'songs': 'Songs',
-      'libraries': 'Libraries',
-      'folders': 'Folders',
-      'other': '',
-    });
+    String _temp0 = intl.Intl.selectLogic(
+      id,
+      {
+        'recommended': 'For you',
+        'songs': 'Songs',
+        'libraries': 'Libraries',
+        'folders': 'Folders',
+        'other': '',
+      },
+    );
     return '$_temp0';
   }
 
   @override
-  String get message_addMusicToLibrarySuccess =>
-      'This song is added to library';
+  String get message_addMusicToLibrarySuccess => 'This song is added to library';
 
   @override
   String get library_musicExists => ' (this song is existed)';
@@ -465,8 +464,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get save => 'Save';
 
   @override
-  String get folderMenu_createLibraryDuplicatedMessage =>
-      'The library already exists. Do you want to add all songs from this folder to the library with the same name?';
+  String get folderMenu_createLibraryDuplicatedMessage => 'The library already exists. Do you want to add all songs from this folder to the library with the same name?';
 
   @override
   String folderMenu_createLibrarySuccess(Object name) {
@@ -529,8 +527,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get scanMusic_noPermission =>
-      'No storage access permission to scan music. Please grant \"Manage all files\" permission.';
+  String get scanMusic_noPermission => 'No storage access permission to scan music. Please grant \"Manage all files\" permission.';
 
   @override
   String get hiddenFolder => 'Hidden folder';
@@ -616,8 +613,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get removeAllFromFavorite => 'Remove all songs';
 
   @override
-  String get removeAllFromFavoriteSuccess =>
-      'All songs are removed from Favorites';
+  String get removeAllFromFavoriteSuccess => 'All songs are removed from Favorites';
 
   @override
   String get emptyList => 'Empty list!';
@@ -702,8 +698,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get playlist_shuffleSuccess => 'List is shuffled';
 
   @override
-  String get playlist_removeAllItemsConfirmMessage =>
-      'Delete all songs from playlist?';
+  String get playlist_removeAllItemsConfirmMessage => 'Delete all songs from playlist?';
 
   @override
   String get confirmDialog_defaultTitle => 'Confirm';
@@ -742,18 +737,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get allowTitle => 'Allow';
 
   @override
-  String get requestNotificationPermissionTitle =>
-      'Grant Notification Permission';
+  String get requestNotificationPermissionTitle => 'Grant Notification Permission';
 
   @override
-  String get requestNotificationPermissionMessage =>
-      'Please grant notification permission to display and quickly pause or skip songs from the Notification Center.';
+  String get requestNotificationPermissionMessage => 'Please grant notification permission to display and quickly pause or skip songs from the Notification Center.';
 
   @override
-  String get requestStoragePermissionTitle =>
-      'Grant File Management Permission';
+  String get requestStoragePermissionTitle => 'Grant File Management Permission';
 
   @override
-  String get requestStoragePermissionMessage =>
-      'Please grant \"Manage all files\" permission so the app can access storage and scan for audio files on your device.';
+  String get requestStoragePermissionMessage => 'Please grant \"Manage all files\" permission so the app can access storage and scan for audio files on your device.';
 }

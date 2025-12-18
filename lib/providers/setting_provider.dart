@@ -31,7 +31,6 @@ class SettingProvider extends ChangeNotifier {
     String? playerBackgroundImage,
     double? backgroundBlurValue,
     String? playerTheme,
-    bool? keepScreenOn,
   }) async {
     _appSetting.autoScanFiles = autoScanFiles ?? _appSetting.autoScanFiles;
     _appSetting.autoVolumnPausePlay =
@@ -44,7 +43,6 @@ class SettingProvider extends ChangeNotifier {
     _appSetting.backgroundBlurValue =
         backgroundBlurValue ?? _appSetting.backgroundBlurValue;
     _appSetting.playerTheme = playerTheme ?? _appSetting.playerTheme;
-    _appSetting.keepScreenOn = keepScreenOn ?? _appSetting.keepScreenOn;
     final pref = await SharedPreferences.getInstance();
     pref.setString('appSetting', jsonEncode(_appSetting.toJson()));
 

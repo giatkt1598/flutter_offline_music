@@ -12,11 +12,9 @@ class LanguageFlagIcon extends StatelessWidget {
         ? Icon(Icons.language)
         : CountryFlag.fromLanguageCode(
           languageCode,
-          theme: const ImageTheme(
-            height: 16,
-            width: 24,
-            shape: RoundedRectangle(2),
-          ),
+          height: 16,
+          width: 24,
+          shape: RoundedRectangle(2),
         );
   }
 }

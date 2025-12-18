@@ -16,11 +16,14 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String langOptionDisplayName(String languageCode) {
-    String _temp0 = intl.Intl.selectLogic(languageCode, {
-      'vi': 'Tiếng Việt',
-      'en': 'English',
-      'other': 'Hệ Thống',
-    });
+    String _temp0 = intl.Intl.selectLogic(
+      languageCode,
+      {
+        'vi': 'Tiếng Việt',
+        'en': 'English',
+        'other': 'Hệ Thống',
+      },
+    );
     return '$_temp0';
   }
 
@@ -46,8 +49,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get settingPlayer_skipSilence => 'Bỏ qua khoảng lặng';
 
   @override
-  String get settingPlayer_autoVolume =>
-      'To/nhỏ dần khi phát/tạm dừng, chuyển bài';
+  String get settingPlayer_autoVolume => 'To/nhỏ dần khi phát/tạm dừng, chuyển bài';
 
   @override
   String get settingPlayer_autoScan => 'Tự động quét nhạc';
@@ -71,15 +73,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get setting_deleteDataPermanently => 'Xóa dữ liệu';
 
   @override
-  String get setting_deleteDataPermanentlyConfirmMessage =>
-      'Xóa tất cả dữ liệu, sau khi xóa, bạn cần khởi động lại app?';
+  String get setting_deleteDataPermanentlyConfirmMessage => 'Xóa tất cả dữ liệu, sau khi xóa, bạn cần khởi động lại app?';
 
   @override
-  String get setting_deleteDataPermanentlySuccess =>
-      'Đã xóa dữ liệu, vui lòng khởi động lại app...';
-
-  @override
-  String get setting_keepScreenOn => 'Giữ màn hình luôn sáng';
+  String get setting_deleteDataPermanentlySuccess => 'Đã xóa dữ liệu, vui lòng khởi động lại app...';
 
   @override
   String get dashboard_playingRecently => 'Đã phát gần đây';
@@ -198,8 +195,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get libraryMenu_sortItems => 'Sắp xếp bài hát';
 
   @override
-  String get libraryMenu_downloadItemThumbnails =>
-      'Tải ảnh bìa cho tất cả bài hát';
+  String get libraryMenu_downloadItemThumbnails => 'Tải ảnh bìa cho tất cả bài hát';
 
   @override
   String get libraryMenu_deleteLibrary => 'Xóa thư viện';
@@ -220,8 +216,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get error_existedName => 'Tên đã tồn tại';
 
   @override
-  String get error_cannotDeletePlayingMusic =>
-      'Bài hát đang phát, không thể xóa';
+  String get error_cannotDeletePlayingMusic => 'Bài hát đang phát, không thể xóa';
 
   @override
   String get searchPlaceholder => 'Tìm kiếm';
@@ -326,6 +321,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String nHours(num hour) {
     final intl.NumberFormat hourNumberFormat = intl.NumberFormat.compact(
       locale: localeName,
+      
     );
     final String hourString = hourNumberFormat.format(hour);
 
@@ -341,6 +337,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String nMinutes(num minute) {
     final intl.NumberFormat minuteNumberFormat = intl.NumberFormat.compact(
       locale: localeName,
+      
     );
     final String minuteString = minuteNumberFormat.format(minute);
 
@@ -356,6 +353,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String nSeconds(num seconds) {
     final intl.NumberFormat secondsNumberFormat = intl.NumberFormat.compact(
       locale: localeName,
+      
     );
     final String secondsString = secondsNumberFormat.format(seconds);
 
@@ -377,13 +375,16 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String home_tab(String id) {
-    String _temp0 = intl.Intl.selectLogic(id, {
-      'recommended': 'Đề xuất',
-      'songs': 'Bài hát',
-      'libraries': 'Thư viện',
-      'folders': 'Thư mục',
-      'other': '',
-    });
+    String _temp0 = intl.Intl.selectLogic(
+      id,
+      {
+        'recommended': 'Đề xuất',
+        'songs': 'Bài hát',
+        'libraries': 'Thư viện',
+        'folders': 'Thư mục',
+        'other': '',
+      },
+    );
     return '$_temp0';
   }
 
@@ -450,8 +451,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get save => 'Lưu';
 
   @override
-  String get folderMenu_createLibraryDuplicatedMessage =>
-      'Thư viện đã tồn tại, bạn có muốn thêm tất cả bài hát trong thư mục này vào thư viện cùng tên hay không?';
+  String get folderMenu_createLibraryDuplicatedMessage => 'Thư viện đã tồn tại, bạn có muốn thêm tất cả bài hát trong thư mục này vào thư viện cùng tên hay không?';
 
   @override
   String folderMenu_createLibrarySuccess(Object name) {
@@ -505,8 +505,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get scanMusic_noPermission =>
-      'Không có quyền truy cập bộ nhớ để quét nhạc. Vui lòng cấp quyền \"Quản lý tất cả tệp\"';
+  String get scanMusic_noPermission => 'Không có quyền truy cập bộ nhớ để quét nhạc. Vui lòng cấp quyền \"Quản lý tất cả tệp\"';
 
   @override
   String get hiddenFolder => 'Thư mục ẩn';
@@ -583,8 +582,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get removeAllFromFavorite => 'Gỡ bỏ tất cả';
 
   @override
-  String get removeAllFromFavoriteSuccess =>
-      'Đã gỡ bỏ tất cả bài hát khỏi mục Yêu thích';
+  String get removeAllFromFavoriteSuccess => 'Đã gỡ bỏ tất cả bài hát khỏi mục Yêu thích';
 
   @override
   String get emptyList => 'Danh sách trống!';
@@ -668,8 +666,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get playlist_shuffleSuccess => 'Đã trộn danh sách';
 
   @override
-  String get playlist_removeAllItemsConfirmMessage =>
-      'Xóa tất cả bài hát khỏi danh sách phát?';
+  String get playlist_removeAllItemsConfirmMessage => 'Xóa tất cả bài hát khỏi danh sách phát?';
 
   @override
   String get confirmDialog_defaultTitle => 'Xác nhận';
@@ -711,13 +708,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get requestNotificationPermissionTitle => 'Cấp quyền Thông báo';
 
   @override
-  String get requestNotificationPermissionMessage =>
-      'Vui lòng cấp quyền thông báo để hiển thị và tạm dừng hoặc chuyển bài hát nhanh chóng trên Trung tâm thông báo.';
+  String get requestNotificationPermissionMessage => 'Vui lòng cấp quyền thông báo để hiển thị và tạm dừng hoặc chuyển bài hát nhanh chóng trên Trung tâm thông báo.';
 
   @override
   String get requestStoragePermissionTitle => 'Cấp quyền Quản lý tệp';
 
   @override
-  String get requestStoragePermissionMessage =>
-      'Vui lòng cấp quyền \"Quản lý tất cả tệp\" để ứng dụng có thể truy cập bộ nhớ và quét các tệp tin âm thanh có trong thiết bị của bạn.';
+  String get requestStoragePermissionMessage => 'Vui lòng cấp quyền \"Quản lý tất cả tệp\" để ứng dụng có thể truy cập bộ nhớ và quét các tệp tin âm thanh có trong thiết bị của bạn.';
 }

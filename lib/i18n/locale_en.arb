@@ -27,7 +27,6 @@
     "setting_deleteDataPermanently": "Delete data",
     "setting_deleteDataPermanentlyConfirmMessage": "Are you sure to delete all data?. After deletion, you need to restart the app.",
     "setting_deleteDataPermanentlySuccess": "All data is deleted, please restart the application...",
-    "setting_keepScreenOn": "Always keep the screen on",
     "dashboard_playingRecently": "Recently Played",
     "dashboard_viewMore": "View more >",
     "dashboard_newFiles": "Recently Added",
