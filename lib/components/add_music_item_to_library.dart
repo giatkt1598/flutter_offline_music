@@ -28,7 +28,7 @@ class _AddMusicItemToLibraryState extends State<AddMusicItemToLibrary> {
     super.initState();
   }
 
-  loadLibraries() async {
+  Future<void> loadLibraries() async {
     var rs = await libraryService.getListAsync(
       orderBy: 'lastModificationTime desc',
     );
@@ -37,7 +37,7 @@ class _AddMusicItemToLibraryState extends State<AddMusicItemToLibrary> {
     });
   }
 
-  addToLibrary(Library library) async {
+  Future<void> addToLibrary(Library library) async {
     await libraryService.addMusicToLibraryAsync(
       musicId: widget.music.id,
       libraryId: library.id,

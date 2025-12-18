@@ -14,7 +14,7 @@ class CountDownIcon extends StatefulWidget {
 class _CountDownIconState extends State<CountDownIcon> {
   Duration duration = Duration.zero;
   Timer? timer;
-  calcDuration() {
+  void calcDuration() {
     setState(() {
       duration = widget.endTime?.difference(DateTime.now()) ?? Duration.zero;
 
@@ -38,7 +38,7 @@ class _CountDownIconState extends State<CountDownIcon> {
     super.didUpdateWidget(oldWidget);
   }
 
-  updateDuration() {
+  void updateDuration() {
     calcDuration();
     timer?.cancel();
     timer = Timer.periodic(Duration(seconds: 1), (timer) {

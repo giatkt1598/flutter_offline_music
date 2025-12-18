@@ -41,7 +41,7 @@ class _MusicSelectToLibraryPageState extends State<MusicSelectToLibraryPage> {
     super.initState();
   }
 
-  loadSelectedMusicList() async {
+  Future<void> loadSelectedMusicList() async {
     var lib = await libraryService.getListAsync(id: widget.libraryId);
     setState(() {
       library = lib.first;

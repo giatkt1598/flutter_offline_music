@@ -36,7 +36,7 @@ Future<NonSilentFoundedResult?> findNonSilentPosition(String filePath) async {
   return completer.future;
 }
 
-abs(int num) {
+int abs(int num) {
   if (num < 0) {
     return -num;
   }
