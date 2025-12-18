@@ -6,6 +6,7 @@ import 'package:flutter_offline_music/pages/player_pages/player_ver_two_page.dar
 import 'package:flutter_offline_music/providers/player_provider.dart';
 import 'package:flutter_offline_music/providers/setting_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 class PlayerPage extends StatefulWidget {
   const PlayerPage({super.key});
@@ -20,6 +21,17 @@ class _PlayerPageState extends State<PlayerPage> {
     super.initState();
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     playerProvider.isShowMiniPlayer = false;
+    final setting =
+        Provider.of<SettingProvider>(context, listen: false).appSetting;
+    if (setting.keepScreenOn) {
+      WakelockPlus.enable();
+    }
+  }
+
+  @override
+  void dispose() {
+    WakelockPlus.disable();
+    super.dispose();
   }
 
   @override

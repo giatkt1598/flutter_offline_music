@@ -203,6 +203,13 @@ class _SettingPageState extends State<SettingPage> {
                 },
                 title: tr().settingPlayer_autoScan,
               ),
+              SettingItemSwitch(
+                value: appSetting.keepScreenOn,
+                onChanged: (val) {
+                  settingProvider.setting(keepScreenOn: val);
+                },
+                title: tr().setting_keepScreenOn,
+              ),
               SettingItemSelect(
                 settingName: tr().settingPlayer_background,
                 settingPage: SettingPlayerBackgroundPage(),
