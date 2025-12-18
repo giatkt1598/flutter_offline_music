@@ -27,6 +27,7 @@
     "setting_deleteDataPermanently": "Xóa dữ liệu",
     "setting_deleteDataPermanentlyConfirmMessage": "Xóa tất cả dữ liệu, sau khi xóa, bạn cần khởi động lại app?",
     "setting_deleteDataPermanentlySuccess": "Đã xóa dữ liệu, vui lòng khởi động lại app...",
+    "setting_keepScreenOn": "Giữ màn hình luôn sáng",
     "dashboard_playingRecently": "Đã phát gần đây",
     "dashboard_viewMore": "Xem thêm >",
     "dashboard_newFiles": "Đã thêm gần đây",
