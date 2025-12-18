@@ -30,7 +30,7 @@ class TabProvider extends ChangeNotifier {
 
   int get tabIndex => _tabIndex;
 
-  void animateToPage(int value) {
+  animateToPage(int value) {
     bool isSide = value + 1 == _tabIndex || value - 1 == _tabIndex;
     if (isSide) {
       _pageController?.animateToPage(
@@ -44,7 +44,7 @@ class TabProvider extends ChangeNotifier {
     _setTabIndex(value);
   }
 
-  void animateToTab(int value) {
+  animateToTab(int value) {
     _tabController?.animateTo(value);
     _setTabIndex(value);
   }
@@ -63,12 +63,12 @@ class TabProvider extends ChangeNotifier {
     return index;
   }
 
-  void initTabController({required TickerProvider vsync}) {
+  initTabController({required TickerProvider vsync}) {
     _tabController ??= TabController(length: tabDataList.length, vsync: vsync);
     _pageController ??= PageController();
   }
 
-  void _setTabIndex(int value) {
+  _setTabIndex(int value) {
     bool isNotify = value != _tabIndex;
     _tabIndex = value;
     if (isNotify) notifyListeners();

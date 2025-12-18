@@ -22,7 +22,7 @@ class _DurationPickerState extends State<DurationPicker> {
   final GlobalKey<NumberWheelState> _hourWheelKey = GlobalKey();
   final GlobalKey<NumberWheelState> _minuteWheelKey = GlobalKey();
 
-  void _handleValueChanged() {
+  _handleValueChanged() {
     if (widget.onChanged != null) {
       widget.onChanged!(Duration(minutes: selectMinute, hours: selectedHour));
     }
@@ -152,7 +152,7 @@ class NumberWheelState extends State<NumberWheel> {
 
   bool disableScroll = false;
 
-  void scrollToIndex(int index) {
+  scrollToIndex(int index) {
     disableScroll = true;
     _controller
         .animateToItem(
@@ -170,7 +170,7 @@ class NumberWheelState extends State<NumberWheel> {
         });
   }
 
-  void jumpToIndex(int index) {
+  jumpToIndex(int index) {
     _controller.jumpToItem(index);
     if (widget.onChanged != null) {
       widget.onChanged!(index);

@@ -323,7 +323,7 @@ ${orderBy != null ? 'ORDER BY $orderBy' : ''}
 
   static bool _isFetchedSkipSilent = false;
   @Deprecated('Crash app')
-  Future<void> fetchSkipSilentDurations() async {
+  fetchSkipSilentDurations() async {
     if (_isFetchedSkipSilent) return;
     _isFetchedSkipSilent = true;
     var musics = await getListMusicAsync(isHidden: null);

@@ -10,6 +10,7 @@ import 'package:flutter_offline_music/services/music_service.dart';
 import 'package:flutter_offline_music/services/toast_service.dart';
 import 'package:flutter_offline_music/utilities/debug_helper.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:toastification/toastification.dart';
 
 class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   static late AppAudioHandler instance;
@@ -43,6 +44,8 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   bool get isShuffle => _player.shuffleModeEnabled;
   AudioPlayer get player => _player;
   List<MediaItem> get playlist => _playlist;
+  ConcatenatingAudioSource? get _audioSource =>
+      _player.audioSource as ConcatenatingAudioSource?;
 
   DateTime? get stopTime => _stopTime;
   Duration get _duration => _player.duration ?? Duration.zero;
@@ -71,7 +74,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     if (newIndex > oldIndex) newIndex--;
     final item = _playlist.removeAt(oldIndex);
     _playlist.insert(newIndex, item);
-    await player.moveAudioSource(oldIndex, newIndex);
+    await _audioSource?.move(oldIndex, newIndex);
   }
 
   Future<void> removeItemInPlaylist(String musicPath) async {
@@ -79,7 +82,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     _playlist.removeAt(index);
     _originPlaylist.removeWhere((x) => x.id == musicPath);
     _musics.removeWhere((x) => x.path == musicPath);
-    await player.removeAudioSourceAt(index);
+    await _audioSource?.removeAt(index);
     notifyListeners();
   }
 
@@ -106,12 +109,12 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       if (!_originPlaylist.any((x) => x.id == item.id)) {
         _originPlaylist.add(item);
       }
-      await player.insertAudioSource(
-        index ?? player.audioSources.length,
+      await _audioSource!.insert(
+        index ?? _audioSource!.length,
         AudioSource.file(item.id),
       );
       notifyListeners();
-      return player.audioSources.any(
+      return _audioSource!.children.any(
         (x) => (x as ProgressiveAudioSource).uri.toFilePath() == item.id,
       );
     }
@@ -212,11 +215,18 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       }
 
       playingMediaItemId = mediaItem.id;
-      final audioSourceIndex = _player.sequence.indexWhere(
+      final audioSourceIndex = _player.sequence?.indexWhere(
         (x) => (x as ProgressiveAudioSource).uri.toFilePath() == mediaItem.id,
       );
 
-      await _player.seek(Duration.zero, index: audioSourceIndex);
+      if (audioSourceIndex != null) {
+        await _player.seek(Duration.zero, index: audioSourceIndex);
+      } else {
+        ToastService.show(
+          message: "Lỗi không tìm thấy audioSource",
+          type: ToastificationType.error,
+        );
+      }
 
       await _setCurrentMediaItem(mediaItem);
     } else if (_position >= _duration) {
@@ -263,8 +273,10 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     _playlist.addAll(playlist);
     _originPlaylist = [...playlist];
     try {
-      await _player.setAudioSources(
-        playlist.map((m) => AudioSource.file(m.id)).toList(),
+      await _player.setAudioSource(
+        ConcatenatingAudioSource(
+          children: playlist.map((m) => AudioSource.file(m.id)).toList(),
+        ),
       );
     } catch (e) {
       logDebug('[Exception] $e');
@@ -290,25 +302,25 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   }
 
   Future<void> setShuffle(bool isShuffle) async {
-    if (_player.sequence.length < 2) return;
+    if (_player.sequence == null || _player.sequence!.length < 2) return;
     if (isShuffle) {
       await _player.setShuffleModeEnabled(true);
       await _player.shuffle();
       _playlist.clear();
-      _playlist.addAll(_player.shuffleIndices.map((x) => _findMediaItem(x)!));
+      _playlist.addAll(_player.shuffleIndices!.map((x) => _findMediaItem(x)!));
     } else {
       await _player.setShuffleModeEnabled(false);
       _playlist.clear();
       _playlist.addAll(
-        _player.sequence.map(
-          (x) => _findMediaItem(_player.sequence.indexOf(x))!,
+        _player.sequence!.map(
+          (x) => _findMediaItem(_player.sequence!.indexOf(x))!,
         ),
       );
     }
     notifyListeners();
   }
 
-  void setStopTime({Duration? duration}) {
+  setStopTime({Duration? duration}) {
     if (duration == null) {
       // off feature auto stop
       _stopTime = null;
@@ -449,7 +461,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   MediaItem? _findMediaItem(int audioSourceIndex) {
     final audioSource =
-        _player.sequence[audioSourceIndex] as ProgressiveAudioSource?;
+        _player.sequence?[audioSourceIndex] as ProgressiveAudioSource?;
     final item =
         _originPlaylist
             .where((x) => x.id == audioSource?.uri.toFilePath())

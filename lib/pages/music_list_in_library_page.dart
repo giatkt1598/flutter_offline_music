@@ -27,7 +27,7 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
   late Library library;
   bool loaded = false;
 
-  void addMusicToLibrary() {
+  addMusicToLibrary() {
     Navigator.of(context)
         .push(
           MaterialPageRoute(
@@ -108,7 +108,7 @@ class _MusicListInLibraryPageState extends State<MusicListInLibraryPage> {
     super.initState();
   }
 
-  Future<Library> loadLibrary() async {
+  loadLibrary() async {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     playerProvider.currentLibraryId = widget.libraryId;
     var libs = await libraryService.getListAsync(id: widget.libraryId);

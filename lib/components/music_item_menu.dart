@@ -43,7 +43,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
   final musicService = MusicService();
   final libraryService = LibraryService();
   final youtubeService = YoutubeService();
-  Future<void> showMusicInfo() async {
+  showMusicInfo() async {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     playerProvider.hideMiniPlayer();
 
@@ -76,7 +76,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
     }
   }
 
-  Future<void> showAddToLibraryModal() async {
+  showAddToLibraryModal() async {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     playerProvider.hideMiniPlayer();
     await showModalBottomSheet(
@@ -100,7 +100,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
     }
   }
 
-  Future<void> toggleHide() async {
+  toggleHide() async {
     widget.music.isHidden = !widget.music.isHidden;
     await musicService.updateMusicAsync(widget.music);
     if (widget.afterToggleHide != null) {
@@ -108,7 +108,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
     }
   }
 
-  Future<void> setStopTime() async {
+  setStopTime() async {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     await playerProvider.setStopTime(context);
     if (widget.showMiniPlayer) {
@@ -116,7 +116,7 @@ class _MusicItemMenuState extends State<MusicItemMenu> {
     }
   }
 
-  Future<void> showMenu() async {
+  showMenu() async {
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     final audioHandler = playerProvider.audioHandler;
     playerProvider.hideMiniPlayer();
