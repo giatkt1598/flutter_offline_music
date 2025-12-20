@@ -99,7 +99,7 @@ class _SongListSortButtonState extends State<SongListSortButton> {
                           groupValue: sortBy,
                           onChanged:
                               (val) => setState(() {
-                                sortField = val!;
+                                sortField = 'creationTime';
                                 sortDirection = 'desc';
 
                                 closeModal();
@@ -123,7 +123,7 @@ class _SongListSortButtonState extends State<SongListSortButton> {
                           groupValue: sortBy,
                           onChanged:
                               (val) => setState(() {
-                                sortField = val!;
+                                sortField = 'creationTime';
                                 sortDirection = 'asc';
 
                                 closeModal();
