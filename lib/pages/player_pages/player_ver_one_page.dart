@@ -333,11 +333,11 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                           ),
                           IconButton(
                             onPressed: () {
-                              var newPos = position + Duration(seconds: 30);
+                              var newPos = position + Duration(seconds: 10);
                               if (newPos > duration) newPos = duration;
                               seek(newPos);
                             },
-                            icon: Icon(Icons.forward_30_rounded),
+                            icon: Icon(Icons.forward_10_rounded),
                           ),
                           IconButton(
                             onPressed: hasNext ? skipToNext : null,
