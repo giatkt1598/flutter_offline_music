@@ -27,7 +27,7 @@ jobs:
         run: flutter pub get
 
       - name: Scan vulnerabilities (OSV)
-        uses: google/osv-scanner-action@v2
+        uses: google/osv-scanner-action@v2.3.3
         with:
           scan-args: |-
             --lockfile=pubspec.lock
