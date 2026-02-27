@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_offline_music/components/audio_slider_flat.dart';
 import 'package:flutter_offline_music/components/audio_waves.dart';
 import 'package:flutter_offline_music/components/count_down_icon.dart';
@@ -33,6 +34,7 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
   late PageController _pageController;
   late PlayerProvider _playerProvider;
   Timer? _onPageChangedDebounce;
+  bool _isUserScrollingPage = false;
 
   @override
   void onInitState() {
@@ -55,18 +57,23 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
   }
 
   void moveToPage() {
+    if (!_pageController.hasClients || _isUserScrollingPage) return;
+    final targetIndex = _playerProvider.audioHandler.currentIndex;
+    if (targetIndex < 0) return;
+    if (_pageController.page?.round() == targetIndex) return;
+
     if (_playerProvider.audioHandler.playingMediaItemId !=
         _playerProvider.audioHandler.currentMediaItem?.id) {
       //tracking current music auto change
       _pageController.animateToPage(
-        _playerProvider.audioHandler.currentIndex,
+        targetIndex,
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOutCubic,
       );
     } else if (_pageController.page?.round() !=
-        _playerProvider.audioHandler.currentIndex) {
+        targetIndex) {
       //Set current index to new index when shuffle
-      _pageController.jumpToPage(_playerProvider.audioHandler.currentIndex);
+      _pageController.jumpToPage(targetIndex);
     }
   }
 
@@ -130,31 +137,45 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                   spacing: 16,
                   children: [
                     Expanded(
-                      child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: playlist.length,
-                        onPageChanged: (page) {
-                          _onPageChangedDebounce?.cancel();
-                          _onPageChangedDebounce = Timer(
-                            Duration(milliseconds: 100),
-                            () {
-                              if (!mounted) return;
-                              if (page < 0 || page >= playlist.length) return;
-
-                              final targetItem =
-                                  _playerProvider.audioHandler.playlist[page];
-                              if (_playerProvider
-                                      .audioHandler
-                                      .playingMediaItemId !=
-                                  targetItem.id) {
-                                _playerProvider.audioHandler.playMediaItem(
-                                  targetItem,
-                                );
-                              }
-                            },
-                          );
+                      child: NotificationListener<ScrollNotification>(
+                        onNotification: (notification) {
+                          if (notification.depth != 0 ||
+                              notification.metrics is! PageMetrics) {
+                            return false;
+                          }
+                          if (notification is UserScrollNotification) {
+                            _isUserScrollingPage =
+                                notification.direction != ScrollDirection.idle;
+                          } else if (notification is ScrollEndNotification) {
+                            _isUserScrollingPage = false;
+                          }
+                          return false;
                         },
-                        itemBuilder: (context, index) {
+                        child: PageView.builder(
+                          controller: _pageController,
+                          itemCount: playlist.length,
+                          onPageChanged: (page) {
+                            _onPageChangedDebounce?.cancel();
+                            _onPageChangedDebounce = Timer(
+                              Duration(milliseconds: 100),
+                              () {
+                                if (!mounted) return;
+                                if (page < 0 || page >= playlist.length) return;
+
+                                final targetItem =
+                                    _playerProvider.audioHandler.playlist[page];
+                                if (_playerProvider
+                                        .audioHandler
+                                        .playingMediaItemId !=
+                                    targetItem.id) {
+                                  _playerProvider.audioHandler.playMediaItem(
+                                    targetItem,
+                                  );
+                                }
+                              },
+                            );
+                          },
+                          itemBuilder: (context, index) {
                           final item = playlist[index];
                           final thumbnail = item.artUri?.toFilePath();
                           return Center(
@@ -222,7 +243,8 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                               ),
                             ),
                           );
-                        },
+                          },
+                        ),
                       ),
                     ),
                     Padding(
