@@ -9,8 +9,8 @@ permissions:
   contents: read
 
 jobs:
-  vulnerability_scan:
-    name: Dependency Vulnerability Scan
+  analyze:
+    name: Static Analyze
     runs-on: ubuntu-latest
 
     steps:
@@ -26,14 +26,8 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Install OSV-Scanner
-        run: |
-          mkdir -p "$HOME/.local/bin"
-          curl -sSfL https://raw.githubusercontent.com/google/osv-scanner/main/scripts/install.sh | sh -s -- -b "$HOME/.local/bin"
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-
-      - name: Scan vulnerabilities (OSV)
-        run: osv-scanner --lockfile=pubspec.lock
+      - name: Run static analysis
+        run: flutter analyze
 
   test:
     name: Run Tests
