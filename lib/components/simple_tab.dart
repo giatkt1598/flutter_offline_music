@@ -40,7 +40,7 @@ class SimpleTabState extends State<SimpleTab> with TickerProviderStateMixin {
     super.initState();
   }
 
-  activeTab(int index) {
+  void activeTab(int index) {
     _tabController.animateTo(index);
   }
 

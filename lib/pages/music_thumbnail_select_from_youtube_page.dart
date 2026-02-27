@@ -55,7 +55,7 @@ class _MusicThumbnailSelectFromYoutubePageState
     }
   }
 
-  handleNextPage() async {
+  Future<void> handleNextPage() async {
     if (videos == null) return;
     setState(() {
       _isLoading = true;
@@ -72,7 +72,7 @@ class _MusicThumbnailSelectFromYoutubePageState
     });
   }
 
-  handleSearch() async {
+  Future<void> handleSearch() async {
     _isLoading = true;
     _isFullResult = false;
     _selectedVideo = null;
@@ -90,7 +90,7 @@ class _MusicThumbnailSelectFromYoutubePageState
     }
   }
 
-  handleSave() async {
+  Future<void> handleSave() async {
     EasyLoading.show(status: tr().status_saving);
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     if (_selectedVideo == null) return;

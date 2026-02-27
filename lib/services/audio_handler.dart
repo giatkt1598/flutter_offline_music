@@ -218,11 +218,11 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       }
 
       playingMediaItemId = mediaItem.id;
-      final audioSourceIndex = _player.sequence?.indexWhere(
+      final audioSourceIndex = _player.sequence.indexWhere(
         (x) => (x as ProgressiveAudioSource).uri.toFilePath() == mediaItem.id,
       );
 
-      if (audioSourceIndex != null) {
+      if (audioSourceIndex >= 0) {
         await _player.seek(Duration.zero, index: audioSourceIndex);
       } else {
         ToastService.show(
@@ -303,25 +303,25 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   }
 
   Future<void> setShuffle(bool isShuffle) async {
-    if (_player.sequence == null || _player.sequence!.length < 2) return;
+    if (_player.sequence.length < 2) return;
     if (isShuffle) {
       await _player.setShuffleModeEnabled(true);
       await _player.shuffle();
       _playlist.clear();
-      _playlist.addAll(_player.shuffleIndices!.map((x) => _findMediaItem(x)!));
+      _playlist.addAll(_player.shuffleIndices.map((x) => _findMediaItem(x)!));
     } else {
       await _player.setShuffleModeEnabled(false);
       _playlist.clear();
       _playlist.addAll(
-        _player.sequence!.map(
-          (x) => _findMediaItem(_player.sequence!.indexOf(x))!,
+        _player.sequence.map(
+          (x) => _findMediaItem(_player.sequence.indexOf(x))!,
         ),
       );
     }
     notifyListeners();
   }
 
-  setStopTime({Duration? duration}) {
+  void setStopTime({Duration? duration}) {
     if (duration == null) {
       // off feature auto stop
       _stopTime = null;
@@ -475,7 +475,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   MediaItem? _findMediaItem(int audioSourceIndex) {
     final audioSource =
-        _player.sequence?[audioSourceIndex] as ProgressiveAudioSource?;
+        _player.sequence[audioSourceIndex] as ProgressiveAudioSource?;
     final item =
         _originPlaylist
             .where((x) => x.id == audioSource?.uri.toFilePath())
