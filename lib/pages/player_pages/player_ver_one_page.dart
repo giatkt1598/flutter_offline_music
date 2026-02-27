@@ -32,6 +32,7 @@ class PlayerVerOnePage extends BasePlayerWidget {
 class _PlayerVerOnePageState extends BasePlayerWidgetState {
   late PageController _pageController;
   late PlayerProvider _playerProvider;
+  Timer? _onPageChangedDebounce;
 
   @override
   void onInitState() {
@@ -71,6 +72,7 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
 
   @override
   void onDispose() {
+    _onPageChangedDebounce?.cancel();
     _playerProvider.removeListener(moveToPage);
     _pageController.dispose();
     super.onDispose();
@@ -132,19 +134,25 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                         controller: _pageController,
                         itemCount: playlist.length,
                         onPageChanged: (page) {
-                          Future.delayed(Duration(milliseconds: 100)).then((_) {
-                            if (_playerProvider
-                                    .audioHandler
-                                    .playingMediaItemId !=
-                                _playerProvider
-                                    .audioHandler
-                                    .playlist[page]
-                                    .id) {
-                              _playerProvider.audioHandler.playMediaItem(
-                                _playerProvider.audioHandler.playlist[page],
-                              );
-                            }
-                          });
+                          _onPageChangedDebounce?.cancel();
+                          _onPageChangedDebounce = Timer(
+                            Duration(milliseconds: 100),
+                            () {
+                              if (!mounted) return;
+                              if (page < 0 || page >= playlist.length) return;
+
+                              final targetItem =
+                                  _playerProvider.audioHandler.playlist[page];
+                              if (_playerProvider
+                                      .audioHandler
+                                      .playingMediaItemId !=
+                                  targetItem.id) {
+                                _playerProvider.audioHandler.playMediaItem(
+                                  targetItem,
+                                );
+                              }
+                            },
+                          );
                         },
                         itemBuilder: (context, index) {
                           final item = playlist[index];

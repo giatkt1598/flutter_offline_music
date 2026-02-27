@@ -13,6 +13,7 @@ abstract class BasePlayerWidgetState extends State<BasePlayerWidget>
     with AutomaticKeepAliveClientMixin {
   Duration position = Duration.zero;
   StreamSubscription<Duration?>? positionSubscription;
+  int _lastPositionSecond = -1;
   final musicService = MusicService();
 
   @override
@@ -25,11 +26,16 @@ abstract class BasePlayerWidgetState extends State<BasePlayerWidget>
     final playerProvider = Provider.of<PlayerProvider>(context, listen: false);
     final audioHandler = playerProvider.audioHandler;
 
-    setState(() {
-      positionSubscription = audioHandler.player.positionStream.listen((p) {
-        setState(() {
-          position = p;
-        });
+    positionSubscription = audioHandler.player.positionStream.listen((p) {
+      if (!mounted) return;
+
+      // Rebuild once per second instead of each position tick to reduce UI jank.
+      final currentSecond = p.inSeconds;
+      if (currentSecond == _lastPositionSecond) return;
+      _lastPositionSecond = currentSecond;
+
+      setState(() {
+        position = p;
       });
     });
   }
