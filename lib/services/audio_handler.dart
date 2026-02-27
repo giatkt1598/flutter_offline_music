@@ -44,8 +44,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   bool get isShuffle => _player.shuffleModeEnabled;
   AudioPlayer get player => _player;
   List<MediaItem> get playlist => _playlist;
-  ConcatenatingAudioSource? get _audioSource =>
-      _player.audioSource as ConcatenatingAudioSource?;
+  List<AudioSource> get _audioSources => _player.audioSources;
 
   DateTime? get stopTime => _stopTime;
   Duration get _duration => _player.duration ?? Duration.zero;
@@ -76,7 +75,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     if (newIndex > oldIndex) newIndex--;
     final item = _playlist.removeAt(oldIndex);
     _playlist.insert(newIndex, item);
-    await _audioSource?.move(oldIndex, newIndex);
+    await _player.moveAudioSource(oldIndex, newIndex);
   }
 
   Future<void> removeItemInPlaylist(String musicPath) async {
@@ -84,7 +83,9 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     _playlist.removeAt(index);
     _originPlaylist.removeWhere((x) => x.id == musicPath);
     _musics.removeWhere((x) => x.path == musicPath);
-    await _audioSource?.removeAt(index);
+    if (index >= 0 && index < _audioSources.length) {
+      await _player.removeAudioSourceAt(index);
+    }
     notifyListeners();
   }
 
@@ -102,7 +103,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       _musics.add(music);
     }
 
-    if (_player.audioSource == null) {
+    if (_audioSources.isEmpty) {
       await _setPlaylist([item]);
       notifyListeners();
       return true;
@@ -111,13 +112,13 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       if (!_originPlaylist.any((x) => x.id == item.id)) {
         _originPlaylist.add(item);
       }
-      await _audioSource!.insert(
-        index ?? _audioSource!.length,
+      await _player.insertAudioSource(
+        index ?? _audioSources.length,
         AudioSource.file(item.id),
       );
       notifyListeners();
-      return _audioSource!.children.any(
-        (x) => (x as ProgressiveAudioSource).uri.toFilePath() == item.id,
+      return _audioSources.any(
+        (x) => x is UriAudioSource && x.uri.toFilePath() == item.id,
       );
     }
   }
@@ -275,10 +276,8 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     _playlist.addAll(playlist);
     _originPlaylist = [...playlist];
     try {
-      await _player.setAudioSource(
-        ConcatenatingAudioSource(
-          children: playlist.map((m) => AudioSource.file(m.id)).toList(),
-        ),
+      await _player.setAudioSources(
+        playlist.map((m) => AudioSource.file(m.id)).toList(),
       );
     } catch (e) {
       logDebug('[Exception] $e');

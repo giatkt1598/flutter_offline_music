@@ -59,120 +59,134 @@ class _SongListSortButtonState extends State<SongListSortButton> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ModalTitle(title: tr().sortByTitle),
-                      for (var item in sortFieldOptions.entries)
-                        ListTile(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                          minTileHeight: 30,
-
-                          onTap: () {
-                            setState(() {
-                              sortField = item.key;
-                            });
-                            closeModal();
-                          },
-                          title: Text(item.value.keys.first),
-                          leading: Icon(item.value.values.first),
-                          trailing: Radio(
-                            value: item.key,
-                            groupValue: sortField,
-                            onChanged:
-                                (val) => setState(() {
-                                  sortField = val!;
-                                  closeModal();
-                                }),
-                          ),
-                        ),
-                      ListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        onTap: () {
+                      RadioGroup<String>(
+                        groupValue: sortField,
+                        onChanged: (val) {
+                          if (val == null) return;
                           setState(() {
-                            sortField = 'creationTime';
-                            sortDirection = 'desc';
+                            sortField = val;
+                            closeModal();
                           });
-                          closeModal();
                         },
-                        minTileHeight: 30,
-                        title: Text(tr().sortField_newest),
-                        leading: Icon(Icons.fiber_new_rounded),
-                        trailing: Radio(
-                          value: 'creationTime desc',
-                          groupValue: sortBy,
-                          onChanged:
-                              (val) => setState(() {
-                                sortField = 'creationTime';
-                                sortDirection = 'desc';
-
-                                closeModal();
-                              }),
+                        child: Column(
+                          children: [
+                            for (var item in sortFieldOptions.entries)
+                              ListTile(
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 0,
+                                ),
+                                minTileHeight: 30,
+                                onTap: () {
+                                  setState(() {
+                                    sortField = item.key;
+                                  });
+                                  closeModal();
+                                },
+                                title: Text(item.value.keys.first),
+                                leading: Icon(item.value.values.first),
+                                trailing: Radio<String>(value: item.key),
+                              ),
+                          ],
                         ),
                       ),
-                      ListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        minTileHeight: 30,
-                        onTap: () {
+                      RadioGroup<String>(
+                        groupValue: sortBy,
+                        onChanged: (val) {
+                          if (val == null) return;
+                          final values = val.split(' ');
+                          if (values.length != 2) return;
                           setState(() {
-                            sortField = 'creationTime';
-                            sortDirection = 'asc';
+                            sortField = values[0];
+                            sortDirection = values[1];
+                            closeModal();
                           });
-                          closeModal();
                         },
-                        title: Text(tr().sortField_oldest),
-                        leading: Icon(Icons.history),
-                        trailing: Radio(
-                          value: 'creationTime asc',
-                          groupValue: sortBy,
-                          onChanged:
-                              (val) => setState(() {
-                                sortField = 'creationTime';
-                                sortDirection = 'asc';
-
+                        child: Column(
+                          children: [
+                            ListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 0,
+                              ),
+                              onTap: () {
+                                setState(() {
+                                  sortField = 'creationTime';
+                                  sortDirection = 'desc';
+                                });
                                 closeModal();
-                              }),
+                              },
+                              minTileHeight: 30,
+                              title: Text(tr().sortField_newest),
+                              leading: Icon(Icons.fiber_new_rounded),
+                              trailing: Radio<String>(
+                                value: 'creationTime desc',
+                              ),
+                            ),
+                            ListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 0,
+                              ),
+                              minTileHeight: 30,
+                              onTap: () {
+                                setState(() {
+                                  sortField = 'creationTime';
+                                  sortDirection = 'asc';
+                                });
+                                closeModal();
+                              },
+                              title: Text(tr().sortField_oldest),
+                              leading: Icon(Icons.history),
+                              trailing: Radio<String>(
+                                value: 'creationTime asc',
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Divider(),
                       SizedBox(height: 16),
                       ModalTitle(title: tr().sortDirectionTitle),
-                      ListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        title: Text(tr().sortDirection_ascending),
-                        leading: Icon(Icons.arrow_upward_rounded),
-                        minTileHeight: 30,
-                        onTap: () {
+                      RadioGroup<String>(
+                        groupValue: sortDirection,
+                        onChanged: (val) {
+                          if (val == null) return;
                           setState(() {
-                            sortDirection = 'asc';
+                            sortDirection = val;
                             closeModal();
                           });
                         },
-                        trailing: Radio(
-                          value: 'asc',
-                          groupValue: sortDirection,
-                          onChanged:
-                              (val) => setState(() {
-                                sortDirection = val!;
+                        child: Column(
+                          children: [
+                            ListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 0,
+                              ),
+                              title: Text(tr().sortDirection_ascending),
+                              leading: Icon(Icons.arrow_upward_rounded),
+                              minTileHeight: 30,
+                              onTap: () {
+                                setState(() {
+                                  sortDirection = 'asc';
+                                  closeModal();
+                                });
+                              },
+                              trailing: Radio<String>(value: 'asc'),
+                            ),
+                            ListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 0,
+                              ),
+                              title: Text(tr().sortDirection_descending),
+                              leading: Icon(Icons.arrow_downward_rounded),
+                              minTileHeight: 30,
+                              onTap: () {
+                                setState(() {
+                                  sortDirection = 'desc';
+                                });
                                 closeModal();
-                              }),
-                        ),
-                      ),
-                      ListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                        title: Text(tr().sortDirection_descending),
-                        leading: Icon(Icons.arrow_downward_rounded),
-                        minTileHeight: 30,
-                        onTap: () {
-                          setState(() {
-                            sortDirection = 'desc';
-                          });
-                          closeModal();
-                        },
-                        trailing: Radio(
-                          value: 'desc',
-                          groupValue: sortDirection,
-                          onChanged:
-                              (val) => setState(() {
-                                sortDirection = val!;
-                                closeModal();
-                              }),
+                              },
+                              trailing: Radio<String>(value: 'desc'),
+                            ),
+                          ],
                         ),
                       ),
                     ],

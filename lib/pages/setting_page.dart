@@ -81,73 +81,76 @@ class _SettingPageState extends State<SettingPage> {
             children: [
               SettingGroup(title: tr().setting_themeTitle),
               SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  for (var mode in [
-                    ThemeMode.light,
-                    ThemeMode.dark,
-                    ThemeMode.system,
-                  ])
-                    Column(
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            settingProvider.setting(themeMode: mode);
-                          },
-                          child: SizedBox(
-                            width: 100,
-                            height: 100,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(4),
-                                ),
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    {
-                                      ThemeMode.system:
-                                          'assets/moon_mix_sun.jpg',
-                                      ThemeMode.dark: 'assets/moon.png',
-                                      ThemeMode.light: 'assets/sun.png',
-                                    }[mode]!,
+              RadioGroup<ThemeMode>(
+                groupValue: appSetting.themeMode,
+                onChanged: (ThemeMode? val) {
+                  if (val == null) return;
+                  settingProvider.setting(themeMode: val);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    for (var mode in [
+                      ThemeMode.light,
+                      ThemeMode.dark,
+                      ThemeMode.system,
+                    ])
+                      Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              settingProvider.setting(themeMode: mode);
+                            },
+                            child: SizedBox(
+                              width: 100,
+                              height: 100,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(4),
                                   ),
-                                  fit: BoxFit.cover,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.1),
-                                    spreadRadius: 3,
-                                    blurRadius: 7,
-                                    offset: Offset(0, 3),
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                      {
+                                        ThemeMode.system:
+                                            'assets/moon_mix_sun.jpg',
+                                        ThemeMode.dark: 'assets/moon.png',
+                                        ThemeMode.light: 'assets/sun.png',
+                                      }[mode]!,
+                                    ),
+                                    fit: BoxFit.cover,
                                   ),
-                                ],
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(
+                                        alpha: 0.1,
+                                      ),
+                                      spreadRadius: 3,
+                                      blurRadius: 7,
+                                      offset: Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          {
-                            ThemeMode.system: tr().theme_auto,
-                            ThemeMode.dark: tr().theme_darkMode,
-                            ThemeMode.light: tr().theme_lightMode,
-                          }[mode]!,
-                        ),
-                        Transform.translate(
-                          offset: Offset(0, -10),
-                          child: Radio(
-                            value: mode,
-                            groupValue: appSetting.themeMode,
-                            onChanged: (val) {
-                              settingProvider.setting(themeMode: val);
-                            },
+                          SizedBox(height: 8),
+                          Text(
+                            {
+                              ThemeMode.system: tr().theme_auto,
+                              ThemeMode.dark: tr().theme_darkMode,
+                              ThemeMode.light: tr().theme_lightMode,
+                            }[mode]!,
                           ),
-                        ),
-                      ],
-                    ),
-                ],
+                          Transform.translate(
+                            offset: Offset(0, -10),
+                            child: Radio<ThemeMode>(value: mode),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
               ),
               SettingItemSelect(
                 settingName: tr().languageTitle,
