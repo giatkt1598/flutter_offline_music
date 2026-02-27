@@ -61,7 +61,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: "17"
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
@@ -74,9 +74,6 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
-
-      - name: Regenerate launcher icons
-        run: dart run flutter_launcher_icons
 
       - name: Build release APK
         run: flutter build apk --release
