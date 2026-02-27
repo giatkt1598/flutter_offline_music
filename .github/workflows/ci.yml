@@ -51,7 +51,7 @@ jobs:
 
   build_release:
     name: Build Release APK
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
