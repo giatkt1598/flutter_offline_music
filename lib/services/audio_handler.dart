@@ -55,6 +55,8 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
   Timer? _audioListeningTimer;
   bool _isPlayedCounted = false;
   final double playedCountThreshold = 0.6; // >= 60% of duration of audio
+  DateTime? _skipLockUntil;
+  static const int _skipDebounceTimeMs = 800;
 
   @override
   Future customAction(String name, [Map<String, dynamic>? extras]) async {
@@ -333,6 +335,8 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   @override
   Future<void> skipToNext() async {
+    if (_isSkipLocked()) return;
+    _lockSkipFor(const Duration(milliseconds: _skipDebounceTimeMs));
     if (!canNext) return;
     final nextMediaItem = _playlist[currentIndex + 1];
     _setCurrentMediaItem(nextMediaItem);
@@ -345,6 +349,8 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
 
   @override
   Future<void> skipToPrevious() async {
+    if (_isSkipLocked()) return;
+    _lockSkipFor(const Duration(milliseconds: _skipDebounceTimeMs));
     if (!canPrevious) return;
     final preMediaItem = _playlist[currentIndex - 1];
     _setCurrentMediaItem(preMediaItem);
@@ -353,6 +359,15 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
       await fadeOutAudio();
     }
     await playMediaItem(preMediaItem);
+  }
+
+  bool _isSkipLocked() {
+    final lockUntil = _skipLockUntil;
+    return lockUntil != null && DateTime.now().isBefore(lockUntil);
+  }
+
+  void _lockSkipFor(Duration duration) {
+    _skipLockUntil = DateTime.now().add(duration);
   }
 
   @override
