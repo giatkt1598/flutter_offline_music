@@ -3,7 +3,7 @@
 [![CI](https://github.com/giatkt1598/flutter_offline_music/actions/workflows/ci.yml/badge.svg)](https://github.com/giatkt1598/flutter_offline_music/actions/workflows/ci.yml)
 [![Latest Release](https://img.shields.io/github/v/release/giatkt1598/flutter_offline_music)](https://github.com/giatkt1598/flutter_offline_music/releases)
 [![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter)](https://flutter.dev)
-[![License](https://img.shields.io/badge/License-Private-lightgrey)](#notes)
+[![License](https://img.shields.io/github/license/giatkt1598/flutter_offline_music)](LICENSE)
 
 Offline music player built with Flutter, focused on smooth local playback, practical library management, and reliable background audio.
 
@@ -125,4 +125,4 @@ build-scripts/  versioning and publish scripts
 ## Notes
 
 - Current release target is Android APK.
-- If the repository is private, release assets require repository access.
+- Licensed under the MIT License.
