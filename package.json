@@ -13,7 +13,7 @@
     "icon": "flutter pub run flutter_launcher_icons:main",
     "apk": "flutter build apk --release",
     "build": "node build-scripts/up-version.js && yarn apk && node build-scripts/rename-apk.js",
-    "deploy": "npm run build && git push --follow-tags",
+    "deploy": "npm run build && git push --follow-tags origin master",
     "lint": "dart fix --apply"
   },
   "keywords": [],
