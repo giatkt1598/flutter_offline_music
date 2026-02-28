@@ -12,7 +12,7 @@
     "splash": "flutter pub run flutter_native_splash:create",
     "icon": "flutter pub run flutter_launcher_icons:main",
     "build": "flutter build apk --release && node build-scripts/rename-apk.js",
-    "deploy": "node build-scripts/up-version.js && npm run build && node build-scripts/publish.js",
+    "deploy": "node build-scripts/up-version.js && node build-scripts/publish.js",
     "lint": "dart fix --apply"
   },
   "keywords": [],
