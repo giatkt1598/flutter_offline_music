@@ -427,7 +427,7 @@ class AppAudioHandler extends BaseAudioHandler with ChangeNotifier {
     });
 
     _player.currentIndexStream.listen((index) {
-      if (index == null) {
+      if (index == null || index == currentIndex) {
         return;
       }
       if (SettingProvider.staticAppSetting.autoVolumnPausePlay) {
