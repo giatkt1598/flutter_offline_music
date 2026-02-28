@@ -2,8 +2,8 @@ name: CI
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - 'v*'
 
 permissions:
   contents: read
@@ -12,7 +12,6 @@ jobs:
   analyze:
     name: Static Analyze
     runs-on: ubuntu-latest
-    if: startsWith(github.event.head_commit.message, '[Build APK]')
 
     steps:
       - name: Checkout
@@ -33,7 +32,6 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
-    if: startsWith(github.event.head_commit.message, '[Build APK]')
 
     steps:
       - name: Checkout
@@ -54,7 +52,6 @@ jobs:
   build_release:
     name: Build Release APK
     runs-on: ubuntu-latest
-    if: startsWith(github.event.head_commit.message, '[Build APK]')
 
     steps:
       - name: Checkout
