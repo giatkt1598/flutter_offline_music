@@ -25,7 +25,7 @@ try {
   cp.execSync(`git tag ${tagVersion}`, { stdio: 'inherit' });
   console.log(`Created tag: ${tagVersion}`);
 
-  cp.execSync('git push --follow-tags', { stdio: 'inherit' });
+  cp.execSync('git push -u', { stdio: 'inherit' });
   cp.execSync(`git push origin ${tagVersion}`, { stdio: 'inherit' });
   console.log(`Published version: ${version}`);
 }
