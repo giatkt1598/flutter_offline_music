@@ -11,9 +11,8 @@
   "scripts": {
     "splash": "flutter pub run flutter_native_splash:create",
     "icon": "flutter pub run flutter_launcher_icons:main",
-    "apk": "flutter build apk --release",
-    "build": "node build-scripts/up-version.js && yarn apk && node build-scripts/rename-apk.js",
-    "deploy": "npm run build && git push --follow-tags origin master",
+    "build": "flutter build apk --release && node build-scripts/rename-apk.js",
+    "deploy": "node build-scripts/up-version.js && npm run build && node build-scripts/publish.js",
     "lint": "dart fix --apply"
   },
   "keywords": [],
