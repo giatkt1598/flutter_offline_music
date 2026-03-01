@@ -70,8 +70,7 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOutCubic,
       );
-    } else if (_pageController.page?.round() !=
-        targetIndex) {
+    } else if (_pageController.page?.round() != targetIndex) {
       //Set current index to new index when shuffle
       _pageController.jumpToPage(targetIndex);
     }
@@ -176,73 +175,75 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                             );
                           },
                           itemBuilder: (context, index) {
-                          final item = playlist[index];
-                          final thumbnail = item.artUri?.toFilePath();
-                          return Center(
-                            child: Container(
-                              width: SharedData.fullWidth * 0.7,
-                              height: SharedData.fullWidth * 0.7,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color:
-                                        Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white.withValues(
-                                              alpha: 0.2,
-                                            )
-                                            : Colors.black.withValues(
-                                              alpha: 0.2,
-                                            ),
-                                    blurRadius: 10,
-                                    spreadRadius: 2,
-                                    offset: Offset.zero,
-                                  ),
-                                ],
-                                color: Theme.of(context).cardColor,
-                              ),
-                              child: Stack(
-                                children: [
-                                  Positioned.fill(
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(16),
-                                      child:
-                                          thumbnail != null
-                                              ? Image.file(
-                                                File(thumbnail),
-                                                fit: BoxFit.cover,
+                            final item = playlist[index];
+                            final thumbnail = item.artUri?.toFilePath();
+                            return Center(
+                              child: Container(
+                                width: SharedData.fullWidth * 0.7,
+                                height: SharedData.fullWidth * 0.7,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color:
+                                          Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? Colors.white.withValues(
+                                                alpha: 0.2,
                                               )
-                                              : Image.asset(
-                                                'assets/music_note_2.png',
-                                                width: 100,
-                                                height: 100,
-                                                fit: BoxFit.none,
+                                              : Colors.black.withValues(
+                                                alpha: 0.2,
                                               ),
+                                      blurRadius: 10,
+                                      spreadRadius: 2,
+                                      offset: Offset.zero,
                                     ),
-                                  ),
-                                  Positioned(
-                                    bottom: 4,
-                                    right: 4,
-                                    child: Container(
-                                      padding: EdgeInsets.all(4),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: Colors.black12,
+                                  ],
+                                  color: Theme.of(context).cardColor,
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Positioned.fill(
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(16),
+                                        child:
+                                            thumbnail != null
+                                                ? Image.file(
+                                                  File(thumbnail),
+                                                  fit: BoxFit.cover,
+                                                )
+                                                : Image.asset(
+                                                  'assets/music_note_2.png',
+                                                  width: 100,
+                                                  height: 100,
+                                                  fit: BoxFit.none,
+                                                ),
                                       ),
-                                      child: Text(
-                                        '${audioHandler.currentIndex + 1}/${playlist.length}',
-                                        style: TextStyle(
-                                          fontSize: 8,
-                                          color: Colors.white,
+                                    ),
+                                    Positioned(
+                                      bottom: 4,
+                                      right: 4,
+                                      child: Container(
+                                        padding: EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                          color: Colors.black12,
+                                        ),
+                                        child: Text(
+                                          '${audioHandler.currentIndex + 1}/${playlist.length}',
+                                          style: TextStyle(
+                                            fontSize: 8,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
+                            );
                           },
                         ),
                       ),
@@ -288,10 +289,10 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                       padding: const EdgeInsets.only(top: 16),
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 24),
-                            child: AudioWaves(playing: isPlaying),
-                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.symmetric(horizontal: 24),
+                          //   child: AudioWaves(playing: isPlaying),
+                          // ),
                           SizedBox(height: 16),
                           AudioSliderFlat(
                             value: min(
