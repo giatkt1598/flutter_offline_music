@@ -289,10 +289,10 @@ class _PlayerVerOnePageState extends BasePlayerWidgetState {
                       padding: const EdgeInsets.only(top: 16),
                       child: Column(
                         children: [
-                          // Padding(
-                          //   padding: const EdgeInsets.symmetric(horizontal: 24),
-                          //   child: AudioWaves(playing: isPlaying),
-                          // ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: AudioWaves(playing: isPlaying),
+                          ),
                           SizedBox(height: 16),
                           AudioSliderFlat(
                             value: min(
